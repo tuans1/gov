@@ -22,7 +22,7 @@ export default function Navbar() {
         <Toolbar>
           <img src={logo} width={40} height={40} alt="Kitty Katty!" />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 2 }}>
-            ChelShit
+            LogoAAA
           </Typography>
           <Button
             id="basic-button"
