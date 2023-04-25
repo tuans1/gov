@@ -1,7 +1,11 @@
-import { Box, Button, Grid } from "@mui/material";
+import Form from "react-bootstrap/Form";
 import { useState } from "react";
 import BaseInput from "../../components/BaseInput";
 import PDFViewer from "../../components/PDFViewer";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { Button } from "react-bootstrap";
 export default function FormInput() {
   const [formObj, setFormObj] = useState({
     soKyHieuVaHoSo: {
@@ -44,47 +48,32 @@ export default function FormInput() {
   const handleChangeInput = () => {};
   return (
     <>
-      <Grid
-        container
-        // rowSpacing={10}
-        // columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-        height={"calc(100vh - 100.5px)"}
-      >
-        <Grid item xl={5} xs={5} padding={2}>
-          <Box>
-            <Button size="small" variant="contained">
-              LƯU
+      <Row>
+        <Col sm={4}>
+          <Form>
+            <Row>
+              <Col sm={6}>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label className="underline">Email address</Form.Label>
+                  <Form.Control type="email" placeholder="Enter email" />
+                </Form.Group>
+              </Col>
+              <Col sm={6}>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label className="text-red-500">Password</Form.Label>
+                  <Form.Control type="password" placeholder="Password" />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Button variant="primary" type="submit">
+              Submit
             </Button>
-            <Button size="small" variant="contained" sx={{ marginLeft: 2 }}>
-              TRỞ VỀ
-            </Button>
-          </Box>
-          <Grid container columnSpacing={5} rowGap={8} marginTop={4}>
-            {Object.keys(formObj).map((key, index) => {
-              return (
-                <Grid item md={6} xl={6} sm={12} key={key}>
-                  <BaseInput
-                    label={formObj[key].label}
-                    value="xxx"
-                    onChange={handleChangeInput}
-                  />
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Grid>
-        <Grid
-          item
-          xl={7}
-          xs={7}
-          bgcolor={"green"}
-          width={"100%"}
-          height={"calc(100vh - 100.5px)"}
-          sx={{ overflowY: "scroll" }}
-        >
+          </Form>
+        </Col>
+        <Col sm={8}>
           <PDFViewer />
-        </Grid>
-      </Grid>
+        </Col>
+      </Row>
     </>
   );
 }

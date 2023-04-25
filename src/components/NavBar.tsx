@@ -1,71 +1,60 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { Menu, MenuItem } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
 import logo from "../static/images/twitter-logo.png";
-export default function Navbar() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const open = Boolean(anchorEl);
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+import { Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+
+export default function MenuNav() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <img src={logo} width={40} height={40} alt="Kitty Katty!" />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 2 }}>
-            LogoAAA
-          </Typography>
-          <Button
-            id="basic-button"
-            color="inherit"
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
-          >
-            User
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
-          >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
-          </Menu>
-        </Toolbar>
-      </AppBar>
-      <Box
-        justifyContent="center"
-        display="flex"
-        gap={10}
-        sx={{
-          backgroundColor: "white",
-          // "&:hover": {
-          //   backgroundColor: "primary.main",
-          //   opacity: [0.9, 0.8, 0.7],
-          // },
-        }}
-      >
-        <Button startIcon={<HomeIcon />}>Trang Chủ</Button>
-        <Button startIcon={<HomeIcon />}>Thống Kê</Button>
-        <Button startIcon={<HomeIcon />}>Lịch Sử</Button>
-        <Button startIcon={<HomeIcon />}>Trang Chủ</Button>
-      </Box>
-    </Box>
+    <>
+      <Navbar bg="light" expand="lg">
+        <Container fluid>
+          <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbarScroll" />
+          <Navbar.Collapse id="navbarScroll">
+            <Nav
+              className="me-auto my-2 my-lg-0"
+              style={{ maxHeight: "100px" }}
+              navbarScroll
+            >
+              <Link to="/" className="nav-link">
+                <Nav.Link href="#action1">List</Nav.Link>
+              </Link>
+              <Link to="/lich-su" className="nav-link">
+                <Nav.Link href="#action1">Detail List</Nav.Link>
+              </Link>{" "}
+              <Link to="/nhap-ho-so" className="nav-link">
+                <Nav.Link href="#action1">Form</Nav.Link>
+              </Link>
+            </Nav>
+            <NavDropdown title="User" id="navbarScrollingDropdown">
+              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
+              <NavDropdown.Item href="#action4">
+                Another action
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action5">
+                Something else here
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      {/* <Link to="/" className="nav-link">
+        <Button>Trang Chủ</Button>
+      </Link>
+      <Link to="/" className="nav-link">
+        <Button>Thống Kê</Button>
+      </Link>
+      <Link to="/lich-su" className="nav-link">
+        <Button>Lịch Sử</Button>
+      </Link>
+      <Link to="/nhap-ho-so" className="nav-link">
+        <Button>Nhập Hồ sơ</Button>
+      </Link> */}
+    </>
   );
 }
