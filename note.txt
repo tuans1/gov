@@ -5,3 +5,32 @@ sm, small: 600px
 md, medium: 900px
 lg, large: 1200px
 xl, extra-large: 1536px
+
+
+const headCells = [
+    {
+      id: "name",
+      numeric: true,
+      disablePadding: true,
+      label: "STT",
+    },
+    {
+      id: "tenFile",
+      numeric: true,
+      disablePadding: false,
+      label: "Tên File",
+    },
+    {
+      id: "tieuDeVanBan",
+      numeric: true,
+      disablePadding: false,
+      label: "Tiêu đề văn bản",
+    },
+  
+    {
+      id: "dateVanBan",
+      numeric: true,
+      disablePadding: false,
+      label: "Ngày thêm",
+    },
+  ];

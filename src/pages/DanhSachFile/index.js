@@ -1,10 +1,10 @@
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
-export default function EnhancedTable() {
+export default function DanhSachFile() {
   return (
     <>
-      <Button>Thêm File</Button>
-      <Button>Giao Việc</Button>
+      <p>Trang này dành cho nhân viên nhập, sau khi click sẽ chuyển sang Form hiển thị file PDF</p>
+      <p>Chọn file bạn muốn nhập</p>
       <Table striped bordered hover size="sm">
         <thead>
           <tr>

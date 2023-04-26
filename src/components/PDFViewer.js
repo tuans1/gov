@@ -6,6 +6,7 @@ import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 // Import the styles
 import "@react-pdf-viewer/core/lib/styles/index.css";
+import { Button } from "react-bootstrap";
 function PDFViewer() {
   const [pdfFile, setPdfFile] = useState(null);
   const [viewPdf, setViewPdf] = useState(null);
@@ -30,7 +31,7 @@ function PDFViewer() {
     <div>
       <form onSubmit={handleSubmit}>
         <input type="file" onChange={handleChange} />
-        <button type="submit">View PDF</button>
+        <Button type="submit">View PDF XXXX</Button>
       </form>
       <h2>View PDF</h2>
       <div>

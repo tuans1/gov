@@ -48,32 +48,41 @@ export default function FormInput() {
   const handleChangeInput = () => {};
   return (
     <>
-      <Row>
-        <Col sm={4}>
-          <Form>
-            <Row>
-              <Col sm={6}>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label className="underline">Email address</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" />
-                </Form.Group>
-              </Col>
-              <Col sm={6}>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label className="text-red-500">Password</Form.Label>
-                  <Form.Control type="password" placeholder="Password" />
-                </Form.Group>
-              </Col>
-            </Row>
-            <Button variant="primary" type="submit">
-              Submit
+      <div className="grid grid-cols-12 gap-4 p-4">
+        <div className="col-span-4">
+          <div className="flex">
+            <Button variant="primary" size="sm" className="mb-4 mr-2 text-white">
+              Trở về danh sách
             </Button>
+            <Button variant="primary" size="sm" className="mb-4">
+              Lưu File
+            </Button>
+            <Button variant="success" size="sm" className="mb-4 ml-auto">
+              File tiếp theo
+            </Button>
+          </div>
+          <Form>
+            <div className="grid grid-cols-12 gap-4">
+              {Object.keys(formObj).map((x) => {
+                return (
+                  <div className="col-span-6">
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                      <Form.Label>{formObj[x].label}</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder={"Nhập " + formObj[x].label}
+                      />
+                    </Form.Group>
+                  </div>
+                );
+              })}
+            </div>
           </Form>
-        </Col>
-        <Col sm={8}>
+        </div>
+        <div className="col-span-8">
           <PDFViewer />
-        </Col>
-      </Row>
+        </div>
+      </div>
     </>
   );
 }

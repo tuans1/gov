@@ -29,6 +29,12 @@ export default function MenuNav() {
               <Link to="/nhap-ho-so" className="nav-link">
                 <Nav.Link href="#action1">Form</Nav.Link>
               </Link>
+              <Link to="/danh-sach-file" className="nav-link">
+                <Nav.Link href="#action1">Danh sách File</Nav.Link>
+              </Link>
+              <Link to="/thong-ke" className="nav-link">
+                <Nav.Link href="#action1">Thống Kê</Nav.Link>
+              </Link>
             </Nav>
             <NavDropdown title="User" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
