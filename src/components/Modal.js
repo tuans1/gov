@@ -1,7 +1,14 @@
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-export default function ModalComp({ children, size, title, show, onHide }) {
+export default function ModalComp({
+  children,
+  size,
+  title,
+  show,
+  onHide,
+  onConfirm,
+}) {
   return (
     <Modal onHide={onHide} show={show} size={size} centered>
       <Modal.Header closeButton>
@@ -9,7 +16,7 @@ export default function ModalComp({ children, size, title, show, onHide }) {
       </Modal.Header>
       <Modal.Body className="text-center">{children}</Modal.Body>
       <Modal.Footer>
-        <Button onClick={onHide}>Close</Button>
+        <Button onClick={onConfirm}>Đồng ý</Button>
       </Modal.Footer>
     </Modal>
   );

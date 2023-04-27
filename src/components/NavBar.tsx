@@ -25,7 +25,7 @@ export default function MenuNav() {
               </Link>
               <Link to="/lich-su" className="nav-link">
                 <Nav.Link href="#action1">Detail List</Nav.Link>
-              </Link>{" "}
+              </Link>
               <Link to="/nhap-ho-so" className="nav-link">
                 <Nav.Link href="#action1">Form</Nav.Link>
               </Link>

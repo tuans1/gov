@@ -1,6 +1,8 @@
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import { useState } from "react";
 export default function ThongKe() {
   const headCells = [
     {
@@ -40,6 +42,7 @@ export default function ThongKe() {
       label: "Ngày nhập",
     },
   ];
+  const [show, setShow] = useState(false);
   return (
     <>
       <div className="container">
@@ -114,7 +117,7 @@ export default function ThongKe() {
               <td>02</td>
               <td>12:53 25/04/2023 </td>
             </tr>
-            <tr>
+            <tr onClick={() => setShow(true)}>
               <td>2</td>
               <td>latuan3</td>
               <td>62</td>
@@ -133,8 +136,26 @@ export default function ThongKe() {
             </tr>
           </tbody>
         </Table>
-        <p>Có thể click vào Row -> mở modal lên để hiện thị Form + file PDF và có thể chỉnh sửa </p>
+        <p>
+          Có thể click vào Row -> mở modal lên để hiện thị Form + file PDF và có
+          thể chỉnh sửa{" "}
+        </p>
       </div>
+      <Modal
+        show={show}
+        fullscreen={true}
+        onHide={() => setShow(!show)}
+        aria-labelledby="example-custom-modal-styling-title"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-custom-modal-styling-title">
+            Custom Modal Styling
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>CONTENT HERE</p>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }
