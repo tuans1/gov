@@ -17,7 +17,7 @@ export default function EnhancedTable() {
     },
     {
       id: "3215asd6236asd",
-      user: "latuan3",
+      user: "natuan3",
       tenFile: "00.0093.HS.49.2019.pdf",
       ngayThem: "15/10/2018",
       isCheck: "",
@@ -32,19 +32,19 @@ export default function EnhancedTable() {
   ]);
   const [listUser, setListUser] = useState([
     {
-      id: "latuan3",
-      ten: "latuan3",
+      id: "natuan3",
+      ten: "Nguyễn A Tuấn",
     },
     {
-      id: "maomaomao",
-      ten: "Mao Mao Mao",
+      id: "hvkhanh1",
+      ten: "Hoàng văn Khánh",
     },
     {
-      id: "chumotmi",
-      ten: "Chu Một Mi",
+      id: "hslam4",
+      ten: "Hảo Sơn Lâm",
     },
   ]);
-  const [assigner, setAssigner] = useState({ id: "", name: "" });
+  const [assigner, setAssigner] = useState({ id: "", ten: "" });
   const [viewModal, setViewModal] = useState(null);
   useEffect(() => {
     setModalShow(viewModal ? true : false);
@@ -69,21 +69,28 @@ export default function EnhancedTable() {
     setData(newState);
   };
 
-  const ModalGiaoViec = listUser.map((user) => {
+  const ModalAssignJob = listUser.map((user) => {
     return (
       <div
         onClick={() => setAssigner(user)}
         key={user.id}
-        className={`hover:bg-slate-200 py-2 cursor-pointer ${
-          assigner === user.id ? " bg-red-400" : ""
-        }`}
+        className={
+          "hover:bg-slate-200 py-2 cursor-pointer " +
+          (assigner.id === user.id && "  bg-slate-200")
+        }
       >
         {user.ten}
       </div>
     );
   });
 
-  const ModalThemFile = (
+  useEffect(() => {
+    if (viewModal) {
+      setViewModal(ModalAssignJob);
+    }
+  }, [assigner]);
+
+  const ModalAddFile = (
     <>
       <Button variant="primary" size="sm" className="mb-4 mr-2 text-white">
         Trở về danh sách
@@ -110,8 +117,8 @@ export default function EnhancedTable() {
       console.log("Hủy");
     }
   };
-  const handleDeleteFile = () => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa File?") == true) {
+  const handleDeleteFile = (file) => {
+    if (window.confirm(`Bạn có chắc chắn muốn xóa File ${file.tenFile} ?`) == true) {
       console.log("Xóa ");
     } else {
       console.log("Hủy");
@@ -119,12 +126,16 @@ export default function EnhancedTable() {
   };
   return (
     <>
-      <Button onClick={() => setViewModal(ModalThemFile)}>Thêm File</Button>
-      <Button onClick={() => setViewModal(ModalGiaoViec)}>Giao Việc</Button>
+      <Button onClick={() => setViewModal(ModalAddFile)}>Thêm File</Button>
       {data.some((x) => x.isCheck) && (
-        <Button onClick={() => handleDeletePersonInCharge()} variant="danger">
-          Xóa người Phụ trách
-        </Button>
+        <>
+          <Button onClick={() => setViewModal(ModalAssignJob)}>
+            Giao Việc
+          </Button>
+          <Button onClick={() => handleDeletePersonInCharge()} variant="danger">
+            Xóa người Phụ trách
+          </Button>
+        </>
       )}
       <Table striped bordered hover size="sm">
         <thead>
@@ -163,7 +174,7 @@ export default function EnhancedTable() {
                   <Button
                     size="sm"
                     variant="danger"
-                    onClick={() => handleDeleteFile(x.id)}
+                    onClick={() => handleDeleteFile(x)}
                   >
                     Xóa
                   </Button>
