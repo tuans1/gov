@@ -2,7 +2,8 @@ import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import { useState, useEffect } from "react";
-import ModalComp from "../../components/Modal";
+import ModalComp from "../../components/BaseModal";
+import Pagination from "../../components/Pagination";
 export default function EnhancedTable() {
   const [listIdChecked, setListIdChecked] = useState([]);
   const [checkAll, setCheckAll] = useState("");
@@ -13,6 +14,7 @@ export default function EnhancedTable() {
       user: "",
       tenFile: "00.0092.HS.49.2019.pdf",
       ngayThem: "15/10/2018",
+      boPhan: "Văn Thư",
       isCheck: "",
     },
     {
@@ -20,6 +22,7 @@ export default function EnhancedTable() {
       user: "natuan3",
       tenFile: "00.0093.HS.49.2019.pdf",
       ngayThem: "15/10/2018",
+      boPhan: "Văn Thư",
       isCheck: "",
     },
     {
@@ -27,6 +30,7 @@ export default function EnhancedTable() {
       user: "",
       tenFile: "00.0093.HS.22.2019.pdf",
       ngayThem: "15/10/2018",
+      boPhan: "Công Chứng",
       isCheck: "",
     },
   ]);
@@ -69,20 +73,14 @@ export default function EnhancedTable() {
     setData(newState);
   };
 
-  const ModalAssignJob = listUser.map((user) => {
+  const ModalAssignJob = () => {
     return (
-      <div
-        onClick={() => setAssigner(user)}
-        key={user.id}
-        className={
-          "hover:bg-slate-200 py-2 cursor-pointer " +
-          (assigner.id === user.id && "  bg-slate-200")
-        }
-      >
-        {user.ten}
-      </div>
+      <>
+        <p className="!text-left">Bộ Phận</p>
+        <Form.Control type="text" placeholder="Nhập Bộ Phận" />
+      </>
     );
-  });
+  };
 
   useEffect(() => {
     if (viewModal) {
@@ -92,15 +90,8 @@ export default function EnhancedTable() {
 
   const ModalAddFile = (
     <>
-      <Button variant="primary" size="sm" className="mb-4 mr-2 text-white">
-        Trở về danh sách
-      </Button>
-      <Button variant="primary" size="sm" className="mb-4">
-        Lưu File
-      </Button>
-      <Button variant="success" size="sm" className="mb-4 ml-auto">
-        File tiếp theo
-      </Button>
+      <p className="!text-left">Bộ Phận</p>
+      <Form.Control type="text" placeholder="Nhập Bộ Phận" />
     </>
   );
   const handleConfirm = (name) => {
@@ -118,7 +109,9 @@ export default function EnhancedTable() {
     }
   };
   const handleDeleteFile = (file) => {
-    if (window.confirm(`Bạn có chắc chắn muốn xóa File ${file.tenFile} ?`) == true) {
+    if (
+      window.confirm(`Bạn có chắc chắn muốn xóa File ${file.tenFile} ?`) == true
+    ) {
       console.log("Xóa ");
     } else {
       console.log("Hủy");
@@ -151,6 +144,7 @@ export default function EnhancedTable() {
             <th>Người Phụ Trách</th>
             <th>Tên File</th>
             <th>Ngày Thêm</th>
+            <th>Bộ Phận</th>
           </tr>
         </thead>
         <tbody>
@@ -170,6 +164,7 @@ export default function EnhancedTable() {
                 <td>{x.user}</td>
                 <td>{x.tenFile}</td>
                 <td>{x.ngayThem}</td>
+                <td>{x.boPhan}</td>
                 <td>
                   <Button
                     size="sm"
@@ -184,15 +179,19 @@ export default function EnhancedTable() {
           })}
         </tbody>
       </Table>
+      <Pagination />
       <ModalComp
         show={modalShow}
         size="sm"
         onHide={() => setModalShow(!modalShow)}
-        title="Chọn Nhân viên"
+        title={data.some((x) => x.isCheck) ? "Chọn Nhân viên" : "Nhập File"}
         onConfirm={() => handleConfirm(assigner.ten)}
       >
         {viewModal}
       </ModalComp>
+      NOTE **** : Cột <span className="text-red-400 text-lg">Bộ Phận</span> khi
+      ADMIN import sẽ điền vào và import 1 loạt file PDF, để sau này xuất ra sẽ
+      biết File này ở BP nào
     </>
   );
 }

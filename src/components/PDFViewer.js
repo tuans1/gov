@@ -35,7 +35,7 @@ function PDFViewer() {
       </form>
       <h2>View PDF</h2>
       <div>
-        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+        <Worker textLayerRendered={true} workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
           {viewPdf && <Viewer fileUrl={viewPdf} plugins={[plugin]} />}
         </Worker>
       </div>

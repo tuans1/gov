@@ -1,11 +1,9 @@
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
-import BaseInput from "../../components/BaseInput";
 import PDFViewer from "../../components/PDFViewer";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 export default function FormInput() {
   const [formObj, setFormObj] = useState({
     soKyHieuVaHoSo: {
@@ -45,13 +43,21 @@ export default function FormInput() {
       value: "",
     },
   });
+  const location = useLocation();
+  console.log(location);
+  const navigate = useNavigate("");
   const handleChangeInput = () => {};
   return (
     <>
       <div className="grid grid-cols-12 gap-4 p-4">
         <div className="col-span-4">
           <div className="flex">
-            <Button variant="primary" size="sm" className="mb-4 mr-2 text-white">
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => navigate("/danh-sach-file")}
+              className="mb-4 mr-2 text-white"
+            >
               Trở về danh sách
             </Button>
             <Button variant="primary" size="sm" className="mb-4">

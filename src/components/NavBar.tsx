@@ -20,20 +20,26 @@ export default function MenuNav() {
               style={{ maxHeight: "100px" }}
               navbarScroll
             >
+              <Link to="/dang-nhap" className="nav-link">
+                <Nav.Link href="#action1">Đăng Nhập</Nav.Link>
+              </Link>
+              <Link to="/nhan-vien" className="nav-link">
+                <Nav.Link href="#action1">Trang Quản trị User cho ADMIN</Nav.Link>
+              </Link>
               <Link to="/" className="nav-link">
-                <Nav.Link href="#action1">List</Nav.Link>
+                <Nav.Link href="#action1">Danh sách File cho ADMIN</Nav.Link>
               </Link>
-              <Link to="/lich-su" className="nav-link">
+              {/* <Link to="/lich-su" className="nav-link">
                 <Nav.Link href="#action1">Detail List</Nav.Link>
-              </Link>
-              <Link to="/nhap-ho-so" className="nav-link">
+              </Link> */}
+              {/* <Link to="/nhap-ho-so" className="nav-link">
                 <Nav.Link href="#action1">Form</Nav.Link>
-              </Link>
+              </Link> */}
               <Link to="/danh-sach-file" className="nav-link">
-                <Nav.Link href="#action1">Danh sách File</Nav.Link>
+                <Nav.Link href="#action1">Danh sách File cho USER</Nav.Link>
               </Link>
               <Link to="/thong-ke" className="nav-link">
-                <Nav.Link href="#action1">Thống Kê</Nav.Link>
+                <Nav.Link href="#action1">Thống Kê Cho ADMIN</Nav.Link>
               </Link>
             </Nav>
             <NavDropdown title="User" id="navbarScrollingDropdown">

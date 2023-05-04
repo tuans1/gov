@@ -2,7 +2,12 @@ import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+import Collapse from "react-bootstrap/Collapse";
 import { useState } from "react";
+import FormInput from "../form/FormInput";
+import { ReactComponent as ArrowIcon } from "../../static/icons/down-arrow.svg";
+import { ReactComponent as ExportIcon } from "../../static/icons/export-file.svg";
+import Pagination from "../../components/Pagination";
 export default function ThongKe() {
   const headCells = [
     {
@@ -39,9 +44,13 @@ export default function ThongKe() {
       label: "Số lượng trang của văn bản",
     },
     {
+      label: "Người chỉnh sửa cuối",
+    },
+    {
       label: "Ngày nhập",
     },
   ];
+  const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
   return (
     <>
@@ -51,46 +60,61 @@ export default function ThongKe() {
           từng user nhập dc trong ngày
         </div>
         <div className="mt-8">
-          <p>Báo cáo Tổng File đã hoàn thành</p>
-          <Table striped bordered hover size="sm">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Tên Nhân viên</th>
-                <th>Đã nhập / Còn</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>latuan3</td>
-                <td>0 / 200</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Mao Mao Mao</td>
-                <td>100 / 200</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Chu Một Mi</td>
-                <td>100 / 200</td>
-              </tr>
-              <tr>
-                <td colSpan={3}>Tổng Đã Nhập : 200/600</td>
-              </tr>
-            </tbody>
-          </Table>
+          <Button
+            onClick={() => setOpen(!open)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open}
+          >
+            Tổng File đã hoàn thành
+            <ArrowIcon className="mt-1 ml-2 w-4 h-4 float-right" fill="white" />
+          </Button>
+          <Collapse in={open}>
+            <div id="example-collapse-text">
+              <Table striped bordered hover size="sm">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Tên Nhân viên</th>
+                    <th>Đã nhập / Còn</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>latuan3</td>
+                    <td>0 / 200</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Mao Mao Mao</td>
+                    <td>100 / 200</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Chu Một Mi</td>
+                    <td>100 / 200</td>
+                  </tr>
+                  <tr>
+                    <td colSpan={3}>Tổng Đã Nhập : 200/600</td>
+                  </tr>
+                </tbody>
+              </Table>
+            </div>
+          </Collapse>
         </div>
         <p>Chọn nhân viên để xem lịch sử</p>
-        <Form.Select>
-          <option defaultChecked="1" disabled>
-            #
-          </option>
-          <option value="1">latuan3</option>
-          <option value="2">Mao Mao Mao</option>
-          <option value="3">Chu Một Mi</option>
-        </Form.Select>
+        <div className="flex">
+          <Form.Select className="!w-80">
+            <option defaultChecked="0">Tất cả</option>
+            <option value="1">latuan3</option>
+            <option value="2">Mao Mao Mao</option>
+            <option value="3">Chu Một Mi</option>
+          </Form.Select>
+          <Button onClick={() => {}}>
+            <ExportIcon className="mr-2 w-5 h-5 float-left" fill="white" />
+            Xuất EXCEL
+          </Button>
+        </div>
         <Table striped bordered hover size="sm">
           <thead>
             <tr>
@@ -100,7 +124,7 @@ export default function ThongKe() {
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr onClick={() => setShow(true)}>
               <td>1</td>
               <td>latuan3</td>
               <td>82</td>
@@ -115,6 +139,7 @@ export default function ThongKe() {
               <td>12/01/2015</td>
               <td>UBND phường Cẩm Bình</td>
               <td>02</td>
+              <td>latuan3</td>
               <td>12:53 25/04/2023 </td>
             </tr>
             <tr onClick={() => setShow(true)}>
@@ -132,13 +157,15 @@ export default function ThongKe() {
               <td>12/01/2015</td>
               <td>UBND phường Cẩm Bình</td>
               <td>01</td>
+              <td>admin</td>
               <td>12:53 25/04/2023 </td>
             </tr>
           </tbody>
         </Table>
+        <Pagination />
         <p>
           Có thể click vào Row -> mở modal lên để hiện thị Form + file PDF và có
-          thể chỉnh sửa{" "}
+          thể chỉnh sửa
         </p>
       </div>
       <Modal
@@ -149,11 +176,11 @@ export default function ThongKe() {
       >
         <Modal.Header closeButton>
           <Modal.Title id="example-custom-modal-styling-title">
-            Custom Modal Styling
+            Chỉnh sửa Form
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <p>CONTENT HERE</p>
+        <Modal.Body className="test">
+          <FormInput />
         </Modal.Body>
       </Modal>
     </>
