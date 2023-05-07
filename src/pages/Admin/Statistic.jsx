@@ -4,11 +4,11 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Collapse from "react-bootstrap/Collapse";
 import { useState } from "react";
-import FormInput from "../form/FormInput";
+import FormInput from "../Users/AddDocument";
 import { ReactComponent as ArrowIcon } from "../../static/icons/down-arrow.svg";
 import { ReactComponent as ExportIcon } from "../../static/icons/export-file.svg";
 import Pagination from "../../components/Pagination";
-export default function ThongKe() {
+export default function Statistic() {
   const headCells = [
     {
       label: "STT",

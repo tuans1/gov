@@ -1,10 +1,10 @@
 import Form from "react-bootstrap/Form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PDFViewer from "../../components/PDFViewer";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-export default function FormInput() {
+export default function AddDocument() {
   const [formObj, setFormObj] = useState({
     soKyHieuVaHoSo: {
       label: "Số và ký hiệu hồ sơ",
@@ -43,10 +43,13 @@ export default function FormInput() {
       value: "",
     },
   });
+  useEffect(()=>{
+    console.log(location)
+  },[])
   const location = useLocation();
-  console.log(location);
   const navigate = useNavigate("");
   const handleChangeInput = () => {};
+
   return (
     <>
       <div className="grid grid-cols-12 gap-4 p-4">
@@ -71,7 +74,7 @@ export default function FormInput() {
             <div className="grid grid-cols-12 gap-4">
               {Object.keys(formObj).map((x) => {
                 return (
-                  <div className="col-span-6">
+                  <div className="col-span-6" key={x}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                       <Form.Label>{formObj[x].label}</Form.Label>
                       <Form.Control

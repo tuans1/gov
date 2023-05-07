@@ -2,8 +2,8 @@ import React from "react";
 import { Form, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
-import Alert from 'react-bootstrap/Alert';
-export default function DanhSachFile() {
+import Alert from "react-bootstrap/Alert";
+export default function UserFileList() {
   const headCells = [
     {
       label: "STT",
@@ -107,7 +107,7 @@ export default function DanhSachFile() {
   const navigate = useNavigate();
   const handleRedirectToForm = (data) => {
     navigate("/nhap-ho-so", {
-      data,
+      state: data,
     });
   };
   return (
@@ -118,7 +118,8 @@ export default function DanhSachFile() {
         paging
       </p>
       <Alert key={"success"} variant="success">
-        Tổng Đã Nhập : 200/600</Alert>
+        Tổng Đã Nhập : 200/600
+      </Alert>
       <p>Filter theo Status</p>
       <Form.Select className="!w-80">
         <option defaultChecked="0">Tất cả</option>

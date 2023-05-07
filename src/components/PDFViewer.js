@@ -9,34 +9,20 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import { Button } from "react-bootstrap";
 function PDFViewer() {
   const [pdfFile, setPdfFile] = useState(null);
-  const [viewPdf, setViewPdf] = useState(null);
-  const handleChange = (e) => {
-    let reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = (e) => {
-      setPdfFile(e.target?.result);
-    };
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (pdfFile !== null) {
-      console.log(pdfFile);
-      setViewPdf(pdfFile);
-    } else {
-      setViewPdf(null);
-    }
-  };
+  // const handleChange = (e) => {
+  //   let reader = new FileReader();
+  //   reader.readAsDataURL(e.target.files[0]);
+  //   reader.onload = (e) => {
+  //     setPdfFile(e.target?.result);
+  //   };
+  // };
   const plugin = defaultLayoutPlugin();
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input type="file" onChange={handleChange} />
-        <Button type="submit">View PDF XXXX</Button>
-      </form>
       <h2>View PDF</h2>
       <div>
         <Worker textLayerRendered={true} workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-          {viewPdf && <Viewer fileUrl={viewPdf} plugins={[plugin]} />}
+          <Viewer fileUrl="https://test-gov-demo.s3.ap-southeast-1.amazonaws.com/Job_Offer_i2solutions.pdf" plugins={[plugin]} />
         </Worker>
       </div>
     </div>
