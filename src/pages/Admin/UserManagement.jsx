@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { Button, Form, Table } from "react-bootstrap";
 import apiService from "../../api";
+import { formatDateTime } from "../../utils/dateTimeUtil";
 export default function User() {
   const [account, setAccount] = useState({
     name: "",
     password: "",
   });
+  const [listUser, setListUser] = useState([]);
   useEffect(() => {
-    apiService.getListUser();
+    apiService.getListUser().then((res) => setListUser(res.data.items));
   }, []);
   const handleCreateUser = () => {
     apiService.createUser(account);
@@ -55,45 +57,29 @@ export default function User() {
         <thead>
           <tr>
             <th>#</th>
-            {/* <th>Tên Nhân viên</th> */}
+            <th>Tên Nhân viên</th>
             <th>Tài Khoản</th>
             <th>Mật Khẩu</th>
+            <th>Ngày Tạo</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            {/* <td>Trần Văn Hung</td> */}
-            <td>tvhung</td>
-            <td>tvhung</td>
-            <td>
-              <Button variant="danger" size="sm">
-                Xóa
-              </Button>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            {/* <td>Trần Văn Hung</td> */}
-            <td>tvhung</td>
-            <td>tvhung</td>
-            <td>
-              <Button variant="danger" size="sm">
-                Xóa
-              </Button>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            {/* <td>Trần Văn Hung</td> */}
-            <td>tvhung</td>
-            <td>tvhung</td>
-            <td>
-              <Button variant="danger" size="sm">
-                Xóa
-              </Button>
-            </td>
-          </tr>
+          {listUser.map((user, index) => {
+            return (
+              <tr key={user.id}>
+                <td>{index + 1}</td>
+                <td>{user.fullName}</td>
+                <td>{user.username}</td>
+                <td>{user.password}</td>
+                <td>{formatDateTime(user.createTime)}</td>
+                <td>
+                  <Button variant="danger" size="sm">
+                    Xóa
+                  </Button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
     </>

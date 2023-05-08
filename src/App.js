@@ -15,9 +15,9 @@ export default function App() {
       <Box height={"calc(100vh - 100.5px)"}>
         <Navbar />
         <Routes>
-          <Route path="/" element={<AddFile />} />
+          <Route path="/" element={<UserFileList />} />
+          <Route path="/danh-sach-file" element={<AddFile />} />
           <Route path="/nhap-ho-so" element={<AddDocument />} />
-          <Route path="/danh-sach-file" element={<UserFileList />} />
           <Route path="/thong-ke" element={<Statistic />} />
           <Route path="/dang-nhap" element={<Login />} />
           <Route path="/nhan-vien" element={<UserManagement />} />

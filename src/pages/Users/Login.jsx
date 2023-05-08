@@ -1,10 +1,12 @@
 import { useState } from "react";
 import apiService from "../../api/index";
+import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [account, setAccount] = useState({
     username: "",
     password: "",
   });
+  const navigate = useNavigate("");
   const handleChange = (e, key) => {
     setAccount({
       ...account,
@@ -12,7 +14,13 @@ export default function Login() {
     });
   };
   const handleSubmit = () => {
-    apiService.login(account).then((res) => console.log(res));
+    localStorage.setItem("role", "ADMIN");
+    localStorage.setItem("isLogin", "true");
+    navigate("/danh-sach-file")
+    apiService
+      .login(account)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
   return (
     <div>

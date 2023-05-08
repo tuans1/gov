@@ -2,8 +2,7 @@ import Form from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import PDFViewer from "../../components/PDFViewer";
 import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 export default function AddDocument() {
   const [formObj, setFormObj] = useState({
     soKyHieuVaHoSo: {

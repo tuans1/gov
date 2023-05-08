@@ -6,8 +6,42 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function MenuNav() {
+  const navigate = useNavigate("");
+  useEffect(() => {
+    if (localStorage.getItem("isLogin") !== "true") {
+      navigate("/dang-nhap");
+    }
+  }, []);
+  const ADMIN_MENUS = [
+    { text: "Danh Sách File", url: "/danh-sach-file" },
+    { text: "Thống Kê", url: "/thong-ke" },
+    { text: "Quản Trị Nhân Viên", url: "/nhan-vien" },
+  ];
+  const USER_MENUS = [{ text: "Danh Sách Nhập", url: "/" }];
+  const CURRENT_ROLE = localStorage.getItem("role");
+  const ROLE_MENU =
+    CURRENT_ROLE === "ADMIN"
+      ? ADMIN_MENUS
+      : CURRENT_ROLE === "USER"
+      ? USER_MENUS
+      : null;
+  const MENU =
+    ROLE_MENU &&
+    ROLE_MENU.map((item) => {
+      return (
+        <Link key={item.url} to={item.url} className="nav-link">
+          <Nav.Link>{item.text}</Nav.Link>
+        </Link>
+      );
+    });
+  const handleLogOut = () => {
+    localStorage.clear();
+    navigate("/dang-nhap");
+  };
   return (
     <>
       <Navbar bg="light" expand="lg">
@@ -20,27 +54,7 @@ export default function MenuNav() {
               style={{ maxHeight: "100px" }}
               navbarScroll
             >
-              <Link to="/dang-nhap" className="nav-link">
-                <Nav.Link href="#action1">Đăng Nhập</Nav.Link>
-              </Link>
-              <Link to="/nhan-vien" className="nav-link">
-                <Nav.Link href="#action1">Trang Quản trị User cho ADMIN</Nav.Link>
-              </Link>
-              <Link to="/" className="nav-link">
-                <Nav.Link href="#action1">Danh sách File cho ADMIN</Nav.Link>
-              </Link>
-              {/* <Link to="/lich-su" className="nav-link">
-                <Nav.Link href="#action1">Detail List</Nav.Link>
-              </Link> */}
-              {/* <Link to="/nhap-ho-so" className="nav-link">
-                <Nav.Link href="#action1">Form</Nav.Link>
-              </Link> */}
-              <Link to="/danh-sach-file" className="nav-link">
-                <Nav.Link href="#action1">Danh sách File cho USER</Nav.Link>
-              </Link>
-              <Link to="/thong-ke" className="nav-link">
-                <Nav.Link href="#action1">Thống Kê Cho ADMIN</Nav.Link>
-              </Link>
+              {MENU}
             </Nav>
             <NavDropdown title="User" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
@@ -49,7 +63,7 @@ export default function MenuNav() {
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action5">
-                Something else here
+                <Nav.Link onClick={handleLogOut}>Đăng Xuất</Nav.Link>
               </NavDropdown.Item>
             </NavDropdown>
           </Navbar.Collapse>
