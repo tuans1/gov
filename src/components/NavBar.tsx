@@ -1,4 +1,4 @@
-import logo from "../static/images/twitter-logo.png";
+import logo from "../assets/images/twitter-logo.png";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";

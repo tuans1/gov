@@ -2,7 +2,7 @@ import { useState } from "react";
 import apiService from "../../api/index";
 export default function Login() {
   const [account, setAccount] = useState({
-    name: "",
+    username: "",
     password: "",
   });
   const handleChange = (e, key) => {
@@ -12,7 +12,7 @@ export default function Login() {
     });
   };
   const handleSubmit = () => {
-    apiService.login(account);
+    apiService.login(account).then((res) => console.log(res));
   };
   return (
     <div>
@@ -32,8 +32,8 @@ export default function Login() {
               name="userName"
               id="userName"
               placeholder="Username"
-              value={account.name}
-              onChange={(e) => handleChange(e, "name")}
+              value={account.username}
+              onChange={(e) => handleChange(e, "username")}
             />
           </div>
           <div className="form-field d-flex align-items-center">
@@ -47,7 +47,11 @@ export default function Login() {
               onChange={(e) => handleChange(e, "password")}
             />
           </div>
-          <button className="btn mt-3" disabled={!account.password || !account.name} onClick={handleSubmit}>
+          <button
+            className="btn mt-3"
+            disabled={!account.password || !account.username}
+            onClick={handleSubmit}
+          >
             Đăng Nhập
           </button>
         </div>

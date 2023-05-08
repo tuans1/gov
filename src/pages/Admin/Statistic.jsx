@@ -5,8 +5,8 @@ import Modal from "react-bootstrap/Modal";
 import Collapse from "react-bootstrap/Collapse";
 import { useState } from "react";
 import FormInput from "../Users/AddDocument";
-import { ReactComponent as ArrowIcon } from "../../static/icons/down-arrow.svg";
-import { ReactComponent as ExportIcon } from "../../static/icons/export-file.svg";
+import { ReactComponent as ArrowIcon } from "../../assets/icons/down-arrow.svg";
+import { ReactComponent as ExportIcon } from "../../assets/icons/export-file.svg";
 import Pagination from "../../components/Pagination";
 export default function Statistic() {
   const headCells = [
