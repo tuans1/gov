@@ -2,8 +2,10 @@ import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import { useState, useEffect } from "react";
-import ModalComp from "../../components/BaseModal";
+import BaseModal from "../../components/BaseModal";
 import Pagination from "../../components/Pagination";
+import apiService from "../../api";
+
 export default function EnhancedTable() {
   const [listIdChecked, setListIdChecked] = useState([]);
   const [checkAll, setCheckAll] = useState("");
@@ -34,25 +36,23 @@ export default function EnhancedTable() {
       isCheck: "",
     },
   ]);
-  const [listUser, setListUser] = useState([
-    {
-      id: "natuan3",
-      ten: "Nguyễn A Tuấn",
-    },
-    {
-      id: "hvkhanh1",
-      ten: "Hoàng văn Khánh",
-    },
-    {
-      id: "hslam4",
-      ten: "Hảo Sơn Lâm",
-    },
-  ]);
-  const [assigner, setAssigner] = useState({ id: "", ten: "" });
+  const [assigner, setAssigner] = useState({});
   const [viewModal, setViewModal] = useState(null);
+  const [modalTitle, setModalTitle] = useState("");
+  const [listUser, setListUser] = useState([]);
   useEffect(() => {
     setModalShow(viewModal ? true : false);
   }, [viewModal]);
+  useEffect(() => {
+    if (viewModal) {
+      setViewModal(ModalAssignJob);
+    }
+  }, [assigner]);
+  useEffect(() => {
+    apiService.getListUser().then((res) => {
+      setListUser(res.data.items);
+    });
+  }, []);
   const handleChecked = (index) => {
     const newState = [...data];
     newState[index].isCheck = newState[index].isCheck ? "" : "checked";
@@ -76,22 +76,32 @@ export default function EnhancedTable() {
   const ModalAssignJob = () => {
     return (
       <>
-        <p className="!text-left">Bộ Phận</p>
-        <Form.Control type="text" placeholder="Nhập Bộ Phận" />
+        {listUser.map((user) => {
+          return (
+            <div
+              onClick={() => setAssigner(user)}
+              key={user.id}
+              className={
+                "hover:bg-slate-200 py-2 cursor-pointer " +
+                (assigner.id === user.id && "  bg-slate-200")
+              }
+            >
+              {user.fullName}
+            </div>
+          );
+        })}
       </>
     );
   };
-
-  useEffect(() => {
-    if (viewModal) {
-      setViewModal(ModalAssignJob);
-    }
-  }, [assigner]);
 
   const ModalAddFile = (
     <>
       <p className="!text-left">Bộ Phận</p>
       <Form.Control type="text" placeholder="Nhập Bộ Phận" />
+      <div className="border border-red-300">
+        <label for="myfile">Select a file:</label>
+        <input type="file" id="myfile" name="myfile" />
+      </div>
     </>
   );
   const handleConfirm = (name) => {
@@ -117,12 +127,27 @@ export default function EnhancedTable() {
       console.log("Hủy");
     }
   };
+  const handleChangePage = (page) => {
+    console.log(page);
+  };
   return (
     <>
-      <Button onClick={() => setViewModal(ModalAddFile)}>Thêm File</Button>
+      <Button
+        onClick={() => {
+          setViewModal(ModalAddFile);
+          setModalTitle("Thêm File");
+        }}
+      >
+        Thêm File
+      </Button>
       {data.some((x) => x.isCheck) && (
         <>
-          <Button onClick={() => setViewModal(ModalAssignJob)}>
+          <Button
+            onClick={() => {
+              setViewModal(ModalAssignJob);
+              setModalTitle("Giao Việc");
+            }}
+          >
             Giao Việc
           </Button>
           <Button onClick={() => handleDeletePersonInCharge()} variant="danger">
@@ -179,16 +204,16 @@ export default function EnhancedTable() {
           })}
         </tbody>
       </Table>
-      <Pagination />
-      <ModalComp
+      <Pagination onChangePage={handleChangePage} />
+      <BaseModal
         show={modalShow}
         size="sm"
         onHide={() => setModalShow(!modalShow)}
-        title={data.some((x) => x.isCheck) ? "Chọn Nhân viên" : "Nhập File"}
-        onConfirm={() => handleConfirm(assigner.ten)}
+        title={modalTitle}
+        onConfirm={() => handleConfirm(assigner.fullName)}
       >
         {viewModal}
-      </ModalComp>
+      </BaseModal>
       NOTE **** : Cột <span className="text-red-400 text-lg">Bộ Phận</span> khi
       ADMIN import sẽ điền vào và import 1 loạt file PDF, để sau này xuất ra sẽ
       biết File này ở BP nào

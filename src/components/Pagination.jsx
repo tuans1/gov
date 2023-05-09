@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 
-export default function Pagination() {
+export default function Pagination({ onChangePage }) {
   const [page, setPage] = useState(1);
 
   return (
@@ -12,7 +12,7 @@ export default function Pagination() {
       limit={20}
       changePage={(page) => {
         setPage(page);
-        console.log(page);
+        onChangePage(page);
       }}
       ellipsis={1}
     />

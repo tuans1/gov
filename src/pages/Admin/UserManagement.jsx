@@ -2,38 +2,60 @@ import { useEffect, useState } from "react";
 import { Button, Form, Table } from "react-bootstrap";
 import apiService from "../../api";
 import { formatDateTime } from "../../utils/dateTimeUtil";
+import Pagination from "../../components/Pagination";
 export default function User() {
   const [account, setAccount] = useState({
-    name: "",
+    fullName: "",
+    username: "",
     password: "",
+    roles: "USER",
   });
   const [listUser, setListUser] = useState([]);
   useEffect(() => {
-    apiService.getListUser().then((res) => setListUser(res.data.items));
+    fetchListUser();
   }, []);
-  const handleCreateUser = () => {
-    apiService.createUser(account);
+  const fetchListUser = (page = 1) => {
+    apiService.getListUser({ page }).then((res) => setListUser(res.data.items));
+  };
+  const handleCreateUser = async () => {
+    await apiService.createUser(account);
     setAccount({
       name: "",
-      password: "",
+      username: "",
+      fullName: "",
+      roles: "USER",
     });
+  };
+  const handleChangePage = (page) => {
+    fetchListUser(page);
   };
   return (
     <>
       <p>Trang này hiển thị Các User ADMIN có thể tạo User và set TK + MK</p>
       <div className="flex items-end">
-        <div className="w-80">
+        <div className="w-60">
+          <span className="!text-left">Họ Và Tên</span>
+          <Form.Control
+            type="text"
+            placeholder="Nhập tài khoản"
+            value={account.fullName}
+            onChange={(e) =>
+              setAccount({ ...account, ["fullName"]: e.target.value })
+            }
+          />
+        </div>
+        <div className="w-60">
           <span className="!text-left">Tài Khoản</span>
           <Form.Control
             type="text"
             placeholder="Nhập tài khoản"
-            value={account.name}
+            value={account.username}
             onChange={(e) =>
-              setAccount({ ...account, ["name"]: e.target.value })
+              setAccount({ ...account, ["username"]: e.target.value })
             }
           />
         </div>
-        <div className="w-80">
+        <div className="w-60">
           <span className="!text-left">Mật Khẩu</span>
           <Form.Control
             type="text"
@@ -47,7 +69,7 @@ export default function User() {
         <div>
           <Button
             onClick={handleCreateUser}
-            disabled={!account.name || !account.password}
+            disabled={Object.values(account).some((value) => !value)}
           >
             Tạo Nhân viên
           </Button>
@@ -82,6 +104,7 @@ export default function User() {
           })}
         </tbody>
       </Table>
+      <Pagination onChangePage={handleChangePage} />
     </>
   );
 }

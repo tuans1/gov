@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import apiService from "../../api/index";
 import { useNavigate } from "react-router-dom";
 export default function Login() {
@@ -6,7 +6,16 @@ export default function Login() {
     username: "",
     password: "",
   });
-  const navigate = useNavigate("");
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (localStorage.getItem("isLogin") === "true") {
+      if (localStorage.getItem("roles") === "ADMIN") {
+        navigate("/danh-sach-file");
+      } else {
+        navigate("/");
+      }
+    }
+  }, []);
   const handleChange = (e, key) => {
     setAccount({
       ...account,
@@ -14,12 +23,17 @@ export default function Login() {
     });
   };
   const handleSubmit = () => {
-    localStorage.setItem("role", "ADMIN");
-    localStorage.setItem("isLogin", "true");
-    navigate("/danh-sach-file")
     apiService
       .login(account)
-      .then((res) => console.log(res))
+      .then((res) => {
+        localStorage.setItem("roles", res.data.items.roles);
+        localStorage.setItem("isLogin", "true");
+        if (res.data.items.roles === "ADMIN") {
+          navigate("/danh-sach-file");
+        } else {
+          navigate("/");
+        }
+      })
       .catch((err) => console.log(err));
   };
   return (

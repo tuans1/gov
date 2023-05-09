@@ -22,7 +22,7 @@ export default function MenuNav() {
     { text: "Quản Trị Nhân Viên", url: "/nhan-vien" },
   ];
   const USER_MENUS = [{ text: "Danh Sách Nhập", url: "/" }];
-  const CURRENT_ROLE = localStorage.getItem("role");
+  const CURRENT_ROLE = localStorage.getItem("roles");
   const ROLE_MENU =
     CURRENT_ROLE === "ADMIN"
       ? ADMIN_MENUS
@@ -34,7 +34,7 @@ export default function MenuNav() {
     ROLE_MENU.map((item) => {
       return (
         <Link key={item.url} to={item.url} className="nav-link">
-          <Nav.Link>{item.text}</Nav.Link>
+          <Nav.Link href={item.url}>{item.text}</Nav.Link>
         </Link>
       );
     });
