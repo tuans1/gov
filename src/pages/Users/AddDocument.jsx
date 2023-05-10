@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import PDFViewer from "../../components/PDFViewer";
 import { Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 export default function AddDocument() {
   const [formObj, setFormObj] = useState({
     soKyHieuVaHoSo: {
@@ -42,13 +45,41 @@ export default function AddDocument() {
       value: "",
     },
   });
-  useEffect(()=>{
-    console.log(location)
-  },[])
+  const [speechField, setSpeechField] = useState("");
+  const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const location = useLocation();
   const navigate = useNavigate("");
-  const handleChangeInput = () => {};
-
+  useEffect(() => {
+    setFormObj({
+      ...formObj,
+      [speechField]: {
+        ...formObj[speechField],
+        value: transcript,
+      },
+    });
+  }, [transcript]);
+  const handleSpeech = (field) => {
+    if (listening) {
+      SpeechRecognition.stopListening();
+      resetTranscript();
+      setSpeechField("");
+    } else {
+      setSpeechField(field);
+      SpeechRecognition.startListening({
+        language: "vi-VN",
+        continuous: true,
+      });
+    }
+  };
+  const handleChangeInput = (key, value) => {
+    setFormObj({
+      ...formObj,
+      [key]: {
+        ...formObj[key],
+        value,
+      },
+    });
+  };
   return (
     <>
       <div className="grid grid-cols-12 gap-4 p-4">
@@ -69,18 +100,30 @@ export default function AddDocument() {
               File tiếp theo
             </Button>
           </div>
+          <p>Microphone: {listening ? "on" : "off"}</p>
+          <p>{transcript}</p>
           <Form>
             <div className="grid grid-cols-12 gap-4">
-              {Object.keys(formObj).map((x) => {
+              {Object.keys(formObj).map((key) => {
                 return (
-                  <div className="col-span-6" key={x}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Label>{formObj[x].label}</Form.Label>
+                  <div className="col-span-6" key={key}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>{formObj[key].label}</Form.Label>
                       <Form.Control
                         type="text"
-                        placeholder={"Nhập " + formObj[x].label}
+                        placeholder={"Nhập " + formObj[key].label}
+                        value={formObj[key].value}
+                        onChange={(e) => handleChangeInput(key, e.target.value)}
                       />
                     </Form.Group>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="mb-4"
+                      onClick={() => handleSpeech(key)}
+                    >
+                      {speechField === key ? "Tắt" : "Đọc"}
+                    </Button>
                   </div>
                 );
               })}
@@ -88,7 +131,8 @@ export default function AddDocument() {
           </Form>
         </div>
         <div className="col-span-8">
-          <PDFViewer />
+          {/* <PDFViewer /> */}
+          {JSON.stringify(formObj)}
         </div>
       </div>
     </>
