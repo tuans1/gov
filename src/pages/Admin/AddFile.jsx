@@ -40,6 +40,7 @@ export default function EnhancedTable() {
   const [viewModal, setViewModal] = useState(null);
   const [modalTitle, setModalTitle] = useState("");
   const [listUser, setListUser] = useState([]);
+  const [file, setFile] = useState(null);
   useEffect(() => {
     setModalShow(viewModal ? true : false);
   }, [viewModal]);
@@ -100,16 +101,26 @@ export default function EnhancedTable() {
       <Form.Control type="text" placeholder="Nhập Bộ Phận" />
       <div className="border border-red-300">
         <label for="myfile">Select a file:</label>
-        <input type="file" id="myfile" name="myfile" />
+        <input
+          type="file"
+          id="myfile"
+          name="myfile"
+          onChange={(e) => {
+            setFile(e.target.files[0])
+            console.log(e)
+          }}
+          accept=".zip,.rar"
+        />
       </div>
     </>
   );
   const handleConfirm = (name) => {
-    if (window.confirm(`Bạn có chắc giao việc cho ${name} ?`) == true) {
-      console.log("Xóa ");
-    } else {
-      console.log("Hủy");
-    }
+    console.log(file)
+    // if (window.confirm(`Bạn có chắc giao việc cho ${name} ?`) == true) {
+    //   console.log("Xóa ");
+    // } else {
+    //   console.log("Hủy");
+    // }
   };
   const handleDeletePersonInCharge = () => {
     if (window.confirm("Bạn có chắc chắn muốn xóa người phụ trách?") == true) {
