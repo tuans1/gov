@@ -50,18 +50,17 @@ export default function AddDocument() {
   const location = useLocation();
   const navigate = useNavigate("");
   useEffect(() => {
-    setFormObj({
-      ...formObj,
-      [speechField]: {
-        ...formObj[speechField],
-        value: transcript,
-      },
-    });
+    console.log(transcript)
+    if (speechField) {
+      const clone = structuredClone(formObj);
+      clone[speechField].value = transcript;
+      setFormObj(clone);
+      // resetTranscript();
+    }
   }, [transcript]);
   const handleSpeech = (field) => {
     if (listening) {
       SpeechRecognition.stopListening();
-      resetTranscript();
       setSpeechField("");
     } else {
       setSpeechField(field);
@@ -70,15 +69,12 @@ export default function AddDocument() {
         continuous: true,
       });
     }
+    resetTranscript();
   };
   const handleChangeInput = (key, value) => {
-    setFormObj({
-      ...formObj,
-      [key]: {
-        ...formObj[key],
-        value,
-      },
-    });
+    const clone = structuredClone(formObj);
+    clone[key].value = value;
+    setFormObj(clone);
   };
   return (
     <>
