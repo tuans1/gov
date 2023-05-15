@@ -53,18 +53,28 @@ export default function EnhancedTable() {
     apiService.getListUser().then((res) => {
       setListUser(res.data.items);
     });
-    apiService.getListFile().then((res) => {
-      setListFile(res.data.items);
-    });
+    handleFetchListUser();
   }, []);
   const handleChecked = (index) => {
-    const newState = [...data];
+    const newState = [...listFile];
     newState[index].isCheck = newState[index].isCheck ? "" : "checked";
     newState.every((x) => x.isCheck) ? setCheckAll("checked") : setCheckAll("");
     setData(newState);
   };
+  const handleFetchListUser = () => {
+    apiService.getListFile().then((res) => {
+      const convertedList = res.data.items.files.map((file) => {
+        return {
+          ...file,
+          isCheck: false,
+        };
+      });
+      setListFile(convertedList);
+      setCheckAll("");
+    });
+  };
   const handleCheckedAll = () => {
-    const newState = [...data];
+    const newState = [...listFile];
     newState.forEach((x) => {
       if (checkAll) {
         x.isCheck = "";
@@ -77,6 +87,41 @@ export default function EnhancedTable() {
     setData(newState);
   };
 
+  const handleConfirm = async (name) => {
+    if (window.confirm(`Bạn có chắc giao việc cho ${name} ?`) == true) {
+      const checkedList = listFile
+        .filter((file) => file.isCheck)
+        .map((file) => file.id);
+      const userId = localStorage.getItem("userId");
+      await apiService
+        .assignUser({ fileId: checkedList, userId })
+        .then((res) => {
+          alert("Giao viec thanh cong");
+        });
+      handleFetchListUser();
+    } else {
+      console.log("Hủy");
+    }
+  };
+  const handleDeletePersonInCharge = () => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa người phụ trách?") == true) {
+      console.log("Xóa ");
+    } else {
+      console.log("Hủy");
+    }
+  };
+  const handleDeleteFile = (file) => {
+    if (
+      window.confirm(`Bạn có chắc chắn muốn xóa File ${file.tenFile} ?`) == true
+    ) {
+      console.log("Xóa ");
+    } else {
+      console.log("Hủy");
+    }
+  };
+  const handleChangePage = (page) => {
+    console.log(page);
+  };
   const ModalAssignJob = () => {
     return (
       <>
@@ -117,33 +162,6 @@ export default function EnhancedTable() {
       </div>
     </>
   );
-  const handleConfirm = (name) => {
-    console.log(file);
-    // if (window.confirm(`Bạn có chắc giao việc cho ${name} ?`) == true) {
-    //   console.log("Xóa ");
-    // } else {
-    //   console.log("Hủy");
-    // }
-  };
-  const handleDeletePersonInCharge = () => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa người phụ trách?") == true) {
-      console.log("Xóa ");
-    } else {
-      console.log("Hủy");
-    }
-  };
-  const handleDeleteFile = (file) => {
-    if (
-      window.confirm(`Bạn có chắc chắn muốn xóa File ${file.tenFile} ?`) == true
-    ) {
-      console.log("Xóa ");
-    } else {
-      console.log("Hủy");
-    }
-  };
-  const handleChangePage = (page) => {
-    console.log(page);
-  };
   return (
     <>
       <Button
@@ -187,7 +205,7 @@ export default function EnhancedTable() {
           </tr>
         </thead>
         <tbody>
-          {data.map((x, index) => {
+          {listFile.map((x, index) => {
             return (
               <tr key={x.id}>
                 <td>
@@ -197,13 +215,11 @@ export default function EnhancedTable() {
                     checked={x.isCheck}
                   />
                 </td>
-                <td>
-                  {index + 1} {x.isCheck}
-                </td>
+                <td>{index + 1}</td>
                 <td>{x.userName}</td>
                 <td>{x.fileName}</td>
-                <td>{x.createBy}</td>
                 <td>{x.departmentName}</td>
+                <td>{x.createTime}</td>
                 <td>
                   <Button
                     size="sm"

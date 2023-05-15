@@ -7,6 +7,7 @@ const URIS = {
 export default {
   assignUser(data) {
     return axios.post(URIS.ASSIGN_USER, data).then((res) => {
+      console.log(res)
       return res;
     });
   },

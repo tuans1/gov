@@ -121,10 +121,10 @@ export default function UserFileList() {
   }, []);
 
   const handleFetchList = () => {
-    const userId = localStorage.getItem("id");
+    const userId = localStorage.getItem("userId");
     apiService
       .getListFile({
-        pageNum: pageNum.pageNum,
+        pageNum: pagination.pageNum,
         pageSize: pagination.pageSize,
         userId,
       })
