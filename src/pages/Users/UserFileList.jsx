@@ -1,114 +1,136 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Form, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import Alert from "react-bootstrap/Alert";
+import apiService from "../../api";
+const headCells = [
+  {
+    label: "STT",
+  },
+  {
+    label: "Tên File",
+  },
+  {
+    label: "Tiêu đề văn bản",
+  },
+  {
+    label: "Số và ký hiệu hồ sơ",
+  },
+  {
+    label: "Số của văn bản ( Dùng để tìm kiếm file )",
+  },
+  {
+    label: "Tờ Số",
+  },
+  {
+    label: "Mã hồ sơ",
+  },
+  {
+    label: "Số tứ tự văn bản trong hồ sơ",
+  },
+  {
+    label: "Ngày tháng năm văn bản",
+  },
+  {
+    label: "Tên cơ quan tổ chức ban hành văn bản",
+  },
+  {
+    label: "Số lượng trang của văn bản",
+  },
+  {
+    label: "Ngày nhập",
+  },
+];
+const list = [
+  {
+    id: "12m51285v78215",
+    fileName: "00.0092.HS.49.2019.pdf",
+    docTitle:
+      "Tờ khai cấp giấy xác nhận tình trạng hôn nhân: Phạm Thu Thảo ( Tổ 8 Minh Tiến A )",
+    docNumberAndSymbol: "82",
+    docNumber: "",
+    docId: "HS99",
+    sheetNumber: "12",
+    docOrderInFile: "12",
+    docDate: "12:53 25/04/2023 ",
+    docNameOfOrganization: "UBND phường Cẩm Bình",
+    docNumberOfPage: "2",
+    createdDate: "12:53 25/04/2023",
+  },
+  {
+    id: "vv68m9326mvy8392",
+    fileName: "00.0092.HS.49.2019.pdf",
+    docTitle:
+      "Tờ khai cấp giấy xác nhận tình trạng hôn nhân: Phạm Thu Thảo ( Tổ 8 Minh Tiến A )",
+    docNumberAndSymbol: "82",
+    docNumber: "",
+    docId: "HS99",
+    sheetNumber: "12",
+    docOrderInFile: "12",
+    docDate: "12:53 25/04/2023 ",
+    docNameOfOrganization: "UBND phường Cẩm Bình",
+    docNumberOfPage: "2",
+    createdDate: "12:53 25/04/2023",
+  },
+  {
+    id: "m932b60u23",
+    fileName: "00.0092.HS.49.2019.pdf",
+    docTitle:
+      "Tờ khai cấp giấy xác nhận tình trạng hôn nhân: Phạm Thu Thảo ( Tổ 8 Minh Tiến A )",
+    docNumberAndSymbol: null,
+    docNumber: null,
+    docId: null,
+    sheetNumber: null,
+    docOrderInFile: null,
+    docDate: null,
+    docNameOfOrganization: null,
+    docNumberOfPage: null,
+    createdDate: "12:53 25/04/2023",
+  },
+  {
+    id: "b5901mb26mu186",
+    fileName: "00.0092.HS.55.2019.pdf",
+    docTitle: null,
+    docNumberAndSymbol: null,
+    docNumber: null,
+    docId: null,
+    sheetNumber: null,
+    docOrderInFile: null,
+    docDate: null,
+    docNameOfOrganization: null,
+    docNumberOfPage: null,
+    createdDate: "12:53 25/04/2023",
+  },
+];
 export default function UserFileList() {
-  const headCells = [
-    {
-      label: "STT",
-    },
-    {
-      label: "Tên File",
-    },
-    {
-      label: "Tiêu đề văn bản",
-    },
-    {
-      label: "Số và ký hiệu hồ sơ",
-    },
-    {
-      label: "Số của văn bản ( Dùng để tìm kiếm file )",
-    },
-    {
-      label: "Tờ Số",
-    },
-    {
-      label: "Mã hồ sơ",
-    },
-    {
-      label: "Số tứ tự văn bản trong hồ sơ",
-    },
-    {
-      label: "Ngày tháng năm văn bản",
-    },
-    {
-      label: "Tên cơ quan tổ chức ban hành văn bản",
-    },
-    {
-      label: "Số lượng trang của văn bản",
-    },
-    {
-      label: "Ngày nhập",
-    },
-  ];
-  const list = [
-    {
-      id: "12m51285v78215",
-      fileName: "00.0092.HS.49.2019.pdf",
-      docTitle:
-        "Tờ khai cấp giấy xác nhận tình trạng hôn nhân: Phạm Thu Thảo ( Tổ 8 Minh Tiến A )",
-      docNumberAndSymbol: "82",
-      docNumber: "",
-      docId: "HS99",
-      sheetNumber: "12",
-      docOrderInFile: "12",
-      docDate: "12:53 25/04/2023 ",
-      docNameOfOrganization: "UBND phường Cẩm Bình",
-      docNumberOfPage: "2",
-      createdDate: "12:53 25/04/2023",
-    },
-    {
-      id: "vv68m9326mvy8392",
-      fileName: "00.0092.HS.49.2019.pdf",
-      docTitle:
-        "Tờ khai cấp giấy xác nhận tình trạng hôn nhân: Phạm Thu Thảo ( Tổ 8 Minh Tiến A )",
-      docNumberAndSymbol: "82",
-      docNumber: "",
-      docId: "HS99",
-      sheetNumber: "12",
-      docOrderInFile: "12",
-      docDate: "12:53 25/04/2023 ",
-      docNameOfOrganization: "UBND phường Cẩm Bình",
-      docNumberOfPage: "2",
-      createdDate: "12:53 25/04/2023",
-    },
-    {
-      id: "m932b60u23",
-      fileName: "00.0092.HS.49.2019.pdf",
-      docTitle:
-        "Tờ khai cấp giấy xác nhận tình trạng hôn nhân: Phạm Thu Thảo ( Tổ 8 Minh Tiến A )",
-      docNumberAndSymbol: null,
-      docNumber: null,
-      docId: null,
-      sheetNumber: null,
-      docOrderInFile: null,
-      docDate: null,
-      docNameOfOrganization: null,
-      docNumberOfPage: null,
-      createdDate: "12:53 25/04/2023",
-    },
-    {
-      id: "b5901mb26mu186",
-      fileName: "00.0092.HS.55.2019.pdf",
-      docTitle: null,
-      docNumberAndSymbol: null,
-      docNumber: null,
-      docId: null,
-      sheetNumber: null,
-      docOrderInFile: null,
-      docDate: null,
-      docNameOfOrganization: null,
-      docNumberOfPage: null,
-      createdDate: "12:53 25/04/2023",
-    },
-  ];
-
+  const [pagination, setPagination] = useState({
+    pageNum: 0,
+    totalPages: 1,
+    pageSize: 10,
+  });
+  const [listFile, setListFile] = useState([]);
   const navigate = useNavigate();
   const handleRedirectToForm = (data) => {
     navigate("/nhap-ho-so", {
       state: data,
     });
+  };
+  useEffect(() => {
+    handleFetchList();
+  }, []);
+
+  const handleFetchList = () => {
+    const userId = localStorage.getItem("id");
+    apiService
+      .getListFile({
+        pageNum: pageNum.pageNum,
+        pageSize: pagination.pageSize,
+        userId,
+      })
+      .then((res) => {
+        setListFile(res.data.items);
+      });
   };
   return (
     <>

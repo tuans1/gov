@@ -7,8 +7,9 @@ import Pagination from "../../components/Pagination";
 import apiService from "../../api";
 
 export default function EnhancedTable() {
-  const [listIdChecked, setListIdChecked] = useState([]);
-  const [checkAll, setCheckAll] = useState("");
+  const [listFile, setListFile] = useState([]);
+  const [listUser, setListUser] = useState([]);
+  const [checkAll, setCheckAll] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [data, setData] = useState([
     {
@@ -39,7 +40,6 @@ export default function EnhancedTable() {
   const [assigner, setAssigner] = useState({});
   const [viewModal, setViewModal] = useState(null);
   const [modalTitle, setModalTitle] = useState("");
-  const [listUser, setListUser] = useState([]);
   const [file, setFile] = useState(null);
   useEffect(() => {
     setModalShow(viewModal ? true : false);
@@ -52,6 +52,9 @@ export default function EnhancedTable() {
   useEffect(() => {
     apiService.getListUser().then((res) => {
       setListUser(res.data.items);
+    });
+    apiService.getListFile().then((res) => {
+      setListFile(res.data.items);
     });
   }, []);
   const handleChecked = (index) => {
@@ -106,8 +109,8 @@ export default function EnhancedTable() {
           id="myfile"
           name="myfile"
           onChange={(e) => {
-            setFile(e.target.files[0])
-            console.log(e)
+            setFile(e.target.files[0]);
+            console.log(e);
           }}
           accept=".zip,.rar"
         />
@@ -115,7 +118,7 @@ export default function EnhancedTable() {
     </>
   );
   const handleConfirm = (name) => {
-    console.log(file)
+    console.log(file);
     // if (window.confirm(`Bạn có chắc giao việc cho ${name} ?`) == true) {
     //   console.log("Xóa ");
     // } else {
@@ -179,8 +182,8 @@ export default function EnhancedTable() {
             <th>#</th>
             <th>Người Phụ Trách</th>
             <th>Tên File</th>
-            <th>Ngày Thêm</th>
             <th>Bộ Phận</th>
+            <th>Ngày Thêm</th>
           </tr>
         </thead>
         <tbody>
@@ -197,10 +200,10 @@ export default function EnhancedTable() {
                 <td>
                   {index + 1} {x.isCheck}
                 </td>
-                <td>{x.user}</td>
-                <td>{x.tenFile}</td>
-                <td>{x.ngayThem}</td>
-                <td>{x.boPhan}</td>
+                <td>{x.userName}</td>
+                <td>{x.fileName}</td>
+                <td>{x.createBy}</td>
+                <td>{x.departmentName}</td>
                 <td>
                   <Button
                     size="sm"

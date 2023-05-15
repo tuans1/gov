@@ -28,6 +28,7 @@ export default function Login() {
       .then((res) => {
         localStorage.setItem("roles", res.data.items.roles);
         localStorage.setItem("isLogin", "true");
+        localStorage.setItem("userId", 3);
         if (res.data.items.roles === "ADMIN") {
           navigate("/danh-sach-file");
         } else {

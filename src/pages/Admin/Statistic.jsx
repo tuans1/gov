@@ -3,55 +3,63 @@ import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Collapse from "react-bootstrap/Collapse";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormInput from "../Users/AddDocument";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/down-arrow.svg";
 import { ReactComponent as ExportIcon } from "../../assets/icons/export-file.svg";
 import Pagination from "../../components/Pagination";
+import apiService from "../../api";
+const headCells = [
+  {
+    label: "STT",
+  },
+  {
+    label: "Người Đảm Nhiệm",
+  },
+  {
+    label: "Số và ký hiệu hồ sơ",
+  },
+  {
+    label: "Số của văn bản ( Dùng để tìm kiếm file )",
+  },
+  {
+    label: "Tiêu đề văn bản",
+  },
+  {
+    label: "Tờ Số",
+  },
+  {
+    label: "Mã hồ sơ",
+  },
+  {
+    label: "Số tứ tự văn bản trong hồ sơ",
+  },
+  {
+    label: "Ngày tháng năm văn bản",
+  },
+  {
+    label: "Tên cơ quan tổ chức ban hành văn bản",
+  },
+  {
+    label: "Số lượng trang của văn bản",
+  },
+  {
+    label: "Người chỉnh sửa cuối",
+  },
+  {
+    label: "Ngày nhập",
+  },
+];
 export default function Statistic() {
-  const headCells = [
-    {
-      label: "STT",
-    },
-    {
-      label: "Người Đảm Nhiệm",
-    },
-    {
-      label: "Số và ký hiệu hồ sơ",
-    },
-    {
-      label: "Số của văn bản ( Dùng để tìm kiếm file )",
-    },
-    {
-      label: "Tiêu đề văn bản",
-    },
-    {
-      label: "Tờ Số",
-    },
-    {
-      label: "Mã hồ sơ",
-    },
-    {
-      label: "Số tứ tự văn bản trong hồ sơ",
-    },
-    {
-      label: "Ngày tháng năm văn bản",
-    },
-    {
-      label: "Tên cơ quan tổ chức ban hành văn bản",
-    },
-    {
-      label: "Số lượng trang của văn bản",
-    },
-    {
-      label: "Người chỉnh sửa cuối",
-    },
-    {
-      label: "Ngày nhập",
-    },
-  ];
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
+  const [listUser, setListUser] = useState([]);
+
+  useEffect(() => {
+    apiService.getListUser().then((res) => {
+      setListUser(res.data.items);
+    });
+  });
   return (
     <>
       <div className="container">
@@ -105,10 +113,10 @@ export default function Statistic() {
         <p>Chọn nhân viên để xem lịch sử</p>
         <div className="flex">
           <Form.Select className="!w-80">
-            <option defaultChecked="0">Tất cả</option>
-            <option value="1">latuan3</option>
-            <option value="2">Mao Mao Mao</option>
-            <option value="3">Chu Một Mi</option>
+            <option defaultChecked={true}>Tất cả</option>
+            {listUser.map((user) => {
+              return <option value={user.id}>{user.fullName}</option>;
+            })}
           </Form.Select>
           <Button onClick={() => {}}>
             <ExportIcon className="mr-2 w-5 h-5 float-left" fill="white" />
