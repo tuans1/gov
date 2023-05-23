@@ -42,67 +42,6 @@ const headCells = [
     label: "Ngày nhập",
   },
 ];
-const list = [
-  {
-    id: "12m51285v78215",
-    fileName: "00.0092.HS.49.2019.pdf",
-    docTitle:
-      "Tờ khai cấp giấy xác nhận tình trạng hôn nhân: Phạm Thu Thảo ( Tổ 8 Minh Tiến A )",
-    docNumberAndSymbol: "82",
-    docNumber: "",
-    docId: "HS99",
-    sheetNumber: "12",
-    docOrderInFile: "12",
-    docDate: "12:53 25/04/2023 ",
-    docNameOfOrganization: "UBND phường Cẩm Bình",
-    docNumberOfPage: "2",
-    createdDate: "12:53 25/04/2023",
-  },
-  {
-    id: "vv68m9326mvy8392",
-    fileName: "00.0092.HS.49.2019.pdf",
-    docTitle:
-      "Tờ khai cấp giấy xác nhận tình trạng hôn nhân: Phạm Thu Thảo ( Tổ 8 Minh Tiến A )",
-    docNumberAndSymbol: "82",
-    docNumber: "",
-    docId: "HS99",
-    sheetNumber: "12",
-    docOrderInFile: "12",
-    docDate: "12:53 25/04/2023 ",
-    docNameOfOrganization: "UBND phường Cẩm Bình",
-    docNumberOfPage: "2",
-    createdDate: "12:53 25/04/2023",
-  },
-  {
-    id: "m932b60u23",
-    fileName: "00.0092.HS.49.2019.pdf",
-    docTitle:
-      "Tờ khai cấp giấy xác nhận tình trạng hôn nhân: Phạm Thu Thảo ( Tổ 8 Minh Tiến A )",
-    docNumberAndSymbol: null,
-    docNumber: null,
-    docId: null,
-    sheetNumber: null,
-    docOrderInFile: null,
-    docDate: null,
-    docNameOfOrganization: null,
-    docNumberOfPage: null,
-    createdDate: "12:53 25/04/2023",
-  },
-  {
-    id: "b5901mb26mu186",
-    fileName: "00.0092.HS.55.2019.pdf",
-    docTitle: null,
-    docNumberAndSymbol: null,
-    docNumber: null,
-    docId: null,
-    sheetNumber: null,
-    docOrderInFile: null,
-    docDate: null,
-    docNameOfOrganization: null,
-    docNumberOfPage: null,
-    createdDate: "12:53 25/04/2023",
-  },
-];
 export default function UserFileList() {
   const [pagination, setPagination] = useState({
     pageNum: 0,
@@ -129,7 +68,7 @@ export default function UserFileList() {
         userId,
       })
       .then((res) => {
-        setListFile(res.data.items);
+        setListFile(res.data.items.files);
       });
   };
   return (
@@ -158,7 +97,7 @@ export default function UserFileList() {
           </tr>
         </thead>
         <tbody>
-          {list.map((item, index) => {
+          {listFile.map((item, index) => {
             return (
               <tr
                 className="cursor-pointer"
@@ -166,17 +105,17 @@ export default function UserFileList() {
                 onClick={() => handleRedirectToForm(item)}
               >
                 <td>{index + 1}</td>
-                <td>{item.fileName}</td>
-                <td>{item.docTitle}</td>
-                <td>{item.docNumberAndSymbol}</td>
-                <td>{item.docNumber}</td>
-                <td>{item.docId}</td>
-                <td>{item.sheetNumber}</td>
-                <td>{item.docOrderInFile}</td>
-                <td>{item.docNameOfOrganization}</td>
-                <td>{item.docDate}</td>
-                <td>{item.docNumberOfPage}</td>
-                <td>{item.createdDate}</td>
+                <td>{item.subject}</td>
+                <td>{item.profileNo}</td>
+                <td>{item.numOfText}</td>
+                <td>{item.folio}</td>
+                <td>{item.profileCode}</td>
+                <td>{item.seq}</td>
+                <td>{item.fileDate}</td>
+                <td>{item.organizationName}</td>
+                <td>{item.numberOfPage}</td>
+                <td>{item.subject}</td>
+                <td>{item.updateTime}</td>
               </tr>
             );
           })}
