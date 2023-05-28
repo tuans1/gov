@@ -27,7 +27,7 @@ const headCells = [
     label: "Mã hồ sơ",
   },
   {
-    label: "Số tứ tự văn bản trong hồ sơ",
+    label: "Số thứ tự văn bản trong hồ sơ",
   },
   {
     label: "Ngày tháng năm văn bản",
@@ -105,6 +105,7 @@ export default function UserFileList() {
                 onClick={() => handleRedirectToForm(item)}
               >
                 <td>{index + 1}</td>
+                <td>{item.fileName}</td>
                 <td>{item.subject}</td>
                 <td>{item.profileNo}</td>
                 <td>{item.numOfText}</td>
@@ -114,7 +115,6 @@ export default function UserFileList() {
                 <td>{item.fileDate}</td>
                 <td>{item.organizationName}</td>
                 <td>{item.numberOfPage}</td>
-                <td>{item.subject}</td>
                 <td>{item.updateTime}</td>
               </tr>
             );

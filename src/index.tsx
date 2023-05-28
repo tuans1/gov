@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AppProvider } from "./contexts/AppContext";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-notifications/lib/notifications.css";
 import "./config/axios";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

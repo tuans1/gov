@@ -56,7 +56,7 @@ export default function MenuNav() {
             >
               {MENU}
             </Nav>
-            <NavDropdown title="User" id="navbarScrollingDropdown">
+            <NavDropdown title={localStorage.getItem("roles") === "ADMIN" ? "ADMIN" : "USER"} id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Another action

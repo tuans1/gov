@@ -8,7 +8,7 @@ import Statistic from "./pages/Admin/Statistic";
 import UserManagement from "./pages/Admin/UserManagement";
 import UserFileList from "./pages/Users/UserFileList";
 import Login from "./pages/Users/Login";
-
+import { NotificationContainer } from "react-notifications";
 export default function App() {
   return (
     <>
@@ -23,6 +23,7 @@ export default function App() {
           <Route path="/nhan-vien" element={<UserManagement />} />
         </Routes>
       </Box>
+      <NotificationContainer />
     </>
   );
 }

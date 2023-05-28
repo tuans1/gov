@@ -9,6 +9,7 @@ import { ReactComponent as ArrowIcon } from "../../assets/icons/down-arrow.svg";
 import { ReactComponent as ExportIcon } from "../../assets/icons/export-file.svg";
 import Pagination from "../../components/Pagination";
 import apiService from "../../api";
+import createNotification from "../../utils/notification";
 const headCells = [
   {
     label: "STT",
@@ -59,6 +60,9 @@ export default function Statistic() {
     apiService.getListUser().then((res) => {
       setListUser(res.data.items);
     });
+    apiService.getListFile().then((res) => {
+      console.log(res.data.items);
+    });
   });
   return (
     <>
@@ -87,21 +91,15 @@ export default function Statistic() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>latuan3</td>
-                    <td>0 / 200</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Mao Mao Mao</td>
-                    <td>100 / 200</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Chu Một Mi</td>
-                    <td>100 / 200</td>
-                  </tr>
+                  {listUser.map((user, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{user.fullName}</td>
+                        <td>0 / 200</td>
+                      </tr>
+                    );
+                  })}
                   <tr>
                     <td colSpan={3}>Tổng Đã Nhập : 200/600</td>
                   </tr>
@@ -172,8 +170,8 @@ export default function Statistic() {
         </Table>
         <Pagination />
         <p>
-          Có thể click vào Row -> mở modal lên để hiện thị Form + file PDF và có
-          thể chỉnh sửa
+          Có thể click vào Row {"->"} mở modal lên để hiện thị Form + file PDF
+          và có thể chỉnh sửa
         </p>
       </div>
       <Modal

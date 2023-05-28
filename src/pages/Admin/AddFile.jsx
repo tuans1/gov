@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import BaseModal from "../../components/BaseModal";
 import Pagination from "../../components/Pagination";
 import apiService from "../../api";
+import createNotification from "../../utils/notification";
 
 export default function EnhancedTable() {
   const [listFile, setListFile] = useState([]);
@@ -105,6 +106,7 @@ export default function EnhancedTable() {
   };
   const handleDeletePersonInCharge = () => {
     if (window.confirm("Bạn có chắc chắn muốn xóa người phụ trách?") == true) {
+      createNotification("success", "Xóa người đảm nhiệm thành công");
       console.log("Xóa ");
     } else {
       console.log("Hủy");
