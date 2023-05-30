@@ -48,15 +48,100 @@ export default function UserFileList() {
     totalPages: 1,
     pageSize: 10,
   });
-  const [listFile, setListFile] = useState([]);
+  const [listFile, setListFile] = useState([
+    {
+      id: 14,
+      fileName: "filename3",
+      organizationName: "UBND Quận Cầu Giấy",
+      departmentName: "chủ tịch",
+      userName: "DVN",
+      subject: "tieu de3",
+      profileNo: "sokyhieu3",
+      numOfText: "sovanban3",
+      folio: "toso3",
+      profileCode: "mahoso3",
+      seq: 3,
+      fileDate: "12:22 14/05/2023",
+      numberOfPage: 4,
+      createTime: "12:22 14/05/2023",
+      createBy: "admin",
+      updateTime: "13:51 14/05/2023",
+      updateBy: "admin",
+      fileUrl:
+        "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
+    },
+    {
+      id: 1,
+      fileName: "filename0",
+      organizationName: "UBND Quận Cầu Giấy",
+      departmentName: "chủ tịch",
+      userName: "DVN",
+      subject: "tieu de0",
+      profileNo: "sokyhieu0",
+      numOfText: "sovanban0",
+      folio: "toso0",
+      profileCode: "mahoso0",
+      seq: 0,
+      fileDate: "12:22 14/05/2020",
+      numberOfPage: 4,
+      createTime: "12:22 14/05/2020",
+      createBy: "admin",
+      updateTime: "10:51 14/05/2020",
+      updateBy: "admin",
+      fileUrl:
+        "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
+    },
+    {
+      id: 10,
+      fileName: "xxxxxx",
+      organizationName: "UBND Quận Cầu Giấy",
+      departmentName: "chủ tịch",
+      userName: "DVN",
+      subject: "xxxxxx",
+      profileNo: "xxxxxx",
+      numOfText: "sovanbxxxxxxan0",
+      folio: "xxxxxx",
+      profileCode: "xxxxxx",
+      seq: 0,
+      fileDate: "12:22 14/05/2020",
+      numberOfPage: 4,
+      createTime: "12:22 14/05/2020",
+      createBy: "admin",
+      updateTime: "10:51 14/05/2020",
+      updateBy: "admin",
+      fileUrl:
+        "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
+    },
+    {
+      id: 19,
+      fileName: "lololololol",
+      organizationName: "UBND Quận Cầu Giấy",
+      departmentName: "chủ tịch",
+      userName: "DVN",
+      subject: "lololololol",
+      profileNo: "lololololol",
+      numOfText: "sovanblolololololan0",
+      folio: "lololololol",
+      profileCode: "lololololol",
+      seq: 0,
+      fileDate: "12:22 14/05/2020",
+      numberOfPage: 4,
+      createTime: "12:22 14/05/2020",
+      createBy: "admin",
+      updateTime: "10:51 14/05/2020",
+      updateBy: "admin",
+      fileUrl:
+        "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
+    },
+  ]);
   const navigate = useNavigate();
-  const handleRedirectToForm = (data) => {
+  const handleRedirectToForm = (data, index) => {
     navigate("/nhap-ho-so", {
-      state: data,
+      state: { data, listFile: listFile, index },
     });
   };
   useEffect(() => {
-    handleFetchList();
+    // handleFetchList();
   }, []);
 
   const handleFetchList = () => {
@@ -102,7 +187,7 @@ export default function UserFileList() {
               <tr
                 className="cursor-pointer"
                 key={item.id}
-                onClick={() => handleRedirectToForm(item)}
+                onClick={() => handleRedirectToForm(item, index)}
               >
                 <td>{index + 1}</td>
                 <td>{item.fileName}</td>

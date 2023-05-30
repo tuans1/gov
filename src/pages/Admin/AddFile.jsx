@@ -64,6 +64,7 @@ export default function EnhancedTable() {
   };
   const handleFetchListUser = () => {
     apiService.getListFile().then((res) => {
+      console.log(res);
       const convertedList = res.data.items.files.map((file) => {
         return {
           ...file,

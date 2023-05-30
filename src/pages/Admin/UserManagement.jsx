@@ -3,6 +3,7 @@ import { Button, Form, Table } from "react-bootstrap";
 import apiService from "../../api";
 import { formatDateTime } from "../../utils/dateTimeUtil";
 import Pagination from "../../components/Pagination";
+import createNotification from "../../utils/notification";
 export default function User() {
   const [account, setAccount] = useState({
     fullName: "",
@@ -19,6 +20,8 @@ export default function User() {
   };
   const handleCreateUser = async () => {
     await apiService.createUser(account);
+    fetchListUser();
+    createNotification("success", "Tạo User thành công");
     setAccount({
       name: "",
       username: "",

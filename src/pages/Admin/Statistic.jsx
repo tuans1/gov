@@ -18,13 +18,13 @@ const headCells = [
     label: "Người Đảm Nhiệm",
   },
   {
+    label: "Tiêu đề văn bản",
+  },
+  {
     label: "Số và ký hiệu hồ sơ",
   },
   {
     label: "Số của văn bản ( Dùng để tìm kiếm file )",
-  },
-  {
-    label: "Tiêu đề văn bản",
   },
   {
     label: "Tờ Số",
@@ -55,15 +55,27 @@ export default function Statistic() {
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [listUser, setListUser] = useState([]);
-
+  const [listFile, setListFile] = useState([]);
+  const [fileDetail, setFileDetail] = useState({});
   useEffect(() => {
     apiService.getListUser().then((res) => {
+      console.log(res.data.items);
       setListUser(res.data.items);
     });
     apiService.getListFile().then((res) => {
-      console.log(res.data.items);
+      setListFile(res.data.items.files);
     });
-  });
+  }, []);
+  const handleEditDocument = (file) => {
+    setShow(true);
+    setFileDetail(file);
+  };
+  const handleExport = () => {
+    window.open(
+      "https://document-manager.herokuapp.com/api/v1/export-file?userId=&pageNum=0&pageSize=10",
+      "_blank"
+    );
+  };
   return (
     <>
       <div className="container">
@@ -116,7 +128,7 @@ export default function Statistic() {
               return <option value={user.id}>{user.fullName}</option>;
             })}
           </Form.Select>
-          <Button onClick={() => {}}>
+          <Button onClick={handleExport}>
             <ExportIcon className="mr-2 w-5 h-5 float-left" fill="white" />
             Xuất EXCEL
           </Button>
@@ -130,42 +142,25 @@ export default function Statistic() {
             </tr>
           </thead>
           <tbody>
-            <tr onClick={() => setShow(true)}>
-              <td>1</td>
-              <td>latuan3</td>
-              <td>82</td>
-              <td></td>
-              <td>
-                Tờ khai cấp giấy xác nhận tình trạng hôn nhân: Phạm Thu Thảo (
-                Tổ 8 Minh Tiến A)
-              </td>
-              <td>@HS99</td>
-              <td>18</td>
-              <td>12</td>
-              <td>12/01/2015</td>
-              <td>UBND phường Cẩm Bình</td>
-              <td>02</td>
-              <td>latuan3</td>
-              <td>12:53 25/04/2023 </td>
-            </tr>
-            <tr onClick={() => setShow(true)}>
-              <td>2</td>
-              <td>latuan3</td>
-              <td>62</td>
-              <td></td>
-              <td>
-                Giấy xác nhận tình trạng hôn nhân: Phạm Quang Hải ( Tổ 4 Khu
-                Minh Tiến B ) Vũ Đình Hoa ( Tổ 9 Khu Diêm Thuỷ )
-              </td>
-              <td>HS15</td>
-              <td>Quyển 06</td>
-              <td>12</td>
-              <td>12/01/2015</td>
-              <td>UBND phường Cẩm Bình</td>
-              <td>01</td>
-              <td>admin</td>
-              <td>12:53 25/04/2023 </td>
-            </tr>
+            {listFile.map((file, index) => {
+              return (
+                <tr onClick={() => handleEditDocument(file)} key={file.id}>
+                  <td>{index + 1}</td>
+                  <td>{file.userName}</td>
+                  <td>{file.subject}</td>
+                  <td>{file.profileNo}</td>
+                  <td>{file.numOfText}</td>
+                  <td>{file.seq}</td>
+                  <td>{file.folio}</td>
+                  <td>{file.profileCode}</td>
+                  <td>{file.fileDate}</td>
+                  <td>{file.organizationName}</td>
+                  <td>{file.numberOfPage}</td>
+                  <td>{file.updateBy}</td>
+                  <td>{file.updateTime}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </Table>
         <Pagination />
@@ -186,7 +181,7 @@ export default function Statistic() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="test">
-          <FormInput />
+          <FormInput fileDetail={fileDetail} />
         </Modal.Body>
       </Modal>
     </>

@@ -7,7 +7,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import apiService from "../../api";
-export default function AddDocument() {
+export default function AddDocument({ fileDetail }) {
   const [formObj, setFormObj] = useState({
     subject: {
       label: "Tiêu đề văn bản",
@@ -56,7 +56,6 @@ export default function AddDocument() {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const location = useLocation();
   const navigate = useNavigate("");
-  console.log(location);
   useEffect(() => {
     console.log(transcript);
     if (speechField) {
@@ -68,8 +67,9 @@ export default function AddDocument() {
   }, [transcript]);
   useEffect(() => {
     const newFormObj = { ...formObj };
+    const formDetail = fileDetail.id ? fileDetail : location.state.data;
     Object.keys(newFormObj).forEach((key) => {
-      newFormObj[key].value = location.state[key];
+      newFormObj[key].value = formDetail[key];
     });
     setFormObj(newFormObj);
   }, []);
@@ -98,19 +98,24 @@ export default function AddDocument() {
     });
     apiService.saveDocument({ id: location.state.id, payload });
   };
+  const handleNextFile = () => {
+    console.log(location);
+  };
   return (
     <>
       <div className="grid grid-cols-12 gap-4 p-4">
         <div className="col-span-5">
           <div className="flex">
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => navigate("/")}
-              className="mb-4 mr-2 text-white"
-            >
-              Trở về danh sách
-            </Button>
+            {!fileDetail.id && (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => navigate("/")}
+                className="mb-4 mr-2 text-white"
+              >
+                Trở về danh sách
+              </Button>
+            )}
             <Button
               variant="primary"
               size="sm"
@@ -119,7 +124,12 @@ export default function AddDocument() {
             >
               Lưu File
             </Button>
-            <Button variant="success" size="sm" className="mb-4 ml-auto">
+            <Button
+              variant="success"
+              size="sm"
+              className="mb-4 ml-auto"
+              onClick={handleNextFile}
+            >
               File tiếp theo
             </Button>
           </div>
@@ -168,3 +178,6 @@ export default function AddDocument() {
     </>
   );
 }
+AddDocument.defaultProps = {
+  fileDetail: {},
+};
