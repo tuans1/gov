@@ -71,10 +71,7 @@ export default function Statistic() {
     setFileDetail(file);
   };
   const handleExport = () => {
-    window.open(
-      "https://document-manager.herokuapp.com/api/v1/export-file?userId=&pageNum=0&pageSize=10",
-      "_blank"
-    );
+    apiService.exportDocument();
   };
   return (
     <>
