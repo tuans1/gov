@@ -7,6 +7,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import apiService from "../../api";
+import createNotification from "../../utils/notification";
 export default function AddDocument({ fileDetail }) {
   const [formObj, setFormObj] = useState({
     subject: {
@@ -54,6 +55,7 @@ export default function AddDocument({ fileDetail }) {
   });
   const [speechField, setSpeechField] = useState("");
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
+  const [currentIndex, setCurrentIndex] = useState("");
   const location = useLocation();
   const navigate = useNavigate("");
   useEffect(() => {
@@ -69,9 +71,10 @@ export default function AddDocument({ fileDetail }) {
     const newFormObj = { ...formObj };
     const formDetail = fileDetail.id ? fileDetail : location.state.data;
     Object.keys(newFormObj).forEach((key) => {
-      newFormObj[key].value = formDetail[key];
+      newFormObj[key].value = formDetail[key] || "";
     });
     setFormObj(newFormObj);
+    setCurrentIndex(location.state.index);
   }, []);
   const handleSpeech = (field) => {
     if (listening) {
@@ -96,10 +99,17 @@ export default function AddDocument({ fileDetail }) {
     Object.keys(formObj).forEach((key) => {
       payload[key] = formObj[key].value;
     });
-    apiService.saveDocument({ id: location.state.id, payload });
+    apiService.saveDocument({ id: location.state.listFile[currentIndex].id, payload }).then(res=>{
+      createNotification("success","Lưu File thành công")
+    });
   };
   const handleNextFile = () => {
-    console.log(location);
+    const { index, listFile } = location.state;
+    if (currentIndex + 1 === listFile.length) {
+      createNotification("warning", "Heest");
+      return;
+    }
+    
   };
   return (
     <>

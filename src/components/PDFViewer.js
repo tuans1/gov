@@ -1,29 +1,111 @@
 import React, { useState } from "react";
-// Import the main component
-import { Viewer, Worker } from "@react-pdf-viewer/core";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-// Import styles
-import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-// Import the styles
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import { Button } from "react-bootstrap";
+import { Document, Page, pdfjs } from "react-pdf";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.js",
+  import.meta.url
+).toString();
 function PDFViewer() {
-  const [pdfFile, setPdfFile] = useState(null);
-  // const handleChange = (e) => {
-  //   let reader = new FileReader();
-  //   reader.readAsDataURL(e.target.files[0]);
-  //   reader.onload = (e) => {
-  //     setPdfFile(e.target?.result);
-  //   };
-  // };
-  const plugin = defaultLayoutPlugin();
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(null);
+  const URL =
+    "https://filegovmanagement.s3.ap-southeast-1.amazonaws.com/TfInag6sQ2X3qfU9_3Jun2023130207GMT_1685797327432.Mky6enSxYoHaJ4PP_3Jun2023130207GMT_1685797327419.000.32.63.H49.2011.128.12.pdf";
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+    const docs = [];
+    const docName = "XXX",
+      pages = [];
+    docs.push({
+      name: docName,
+      pages,
+    });
+
+    pdfjs
+      .getDocument({
+        url: URL,
+        //password: "test",
+      })
+      .promise.then(function (doc) {
+        for (let p = 1; p <= doc.numPages; p++) {
+          const pageInfo = {
+            number: p,
+            name: docName + "-" + p,
+            images: [],
+            svg: {},
+          };
+          pages.push(pageInfo);
+
+          doc.getPage(p).then((page) => console.log(page));
+        }
+      })
+      .catch(function (error) {
+        alert("Failed to open " + docName);
+        console.log(error);
+      });
+  }
+  function parsePage(page, pageInfo) {
+    page.getOperatorList().then(function (ops) {
+      console.log("ops", ops);
+      const fns = ops.fnArray,
+        args = ops.argsArray;
+
+      let imgsFound = 0;
+      args.forEach((arg, i) => {
+        //Not a JPEG resource:
+        if (fns[i] !== pdfjs.OPS.paintJpegXObject) {
+          return;
+        }
+
+        console.log("loading", arg);
+        imgsFound++;
+
+        const imgKey = arg[0],
+          imgInfo = {
+            name: pageInfo.name + "-" + imgsFound + ".jpg",
+            url: "",
+          };
+        pageInfo.images.push(imgInfo);
+
+        page.objs.get(imgKey, (img) => {
+          imgInfo.url = img.src;
+        });
+      });
+    });
+
+    //Full SVG:
+
+    // Get viewport (dimensions)
+    const scale = 1.5;
+    const viewport = page.getViewport({ scale });
+
+    pageInfo.svg = {
+      w: viewport.width,
+      h: viewport.height,
+      doc: "",
+    };
+
+    // SVG rendering by PDF.js
+    page
+      .getOperatorList()
+      .then((opList) => {
+        var svgGfx = new pdfjs.SVGGraphics(page.commonObjs, page.objs);
+        return svgGfx.getSVG(opList, viewport);
+      })
+      .then((svg) => {
+        //console.log(svg);
+        pageInfo.svg.doc = svg;
+      });
+  }
   return (
-    <div>
-      <h2>View PDF</h2>
+    <div className="overflow-y-scroll h-[calc(100vh-96px)]">
       <div>
-        <Worker textLayerRendered={true} workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-          <Viewer fileUrl="https://test-gov-demo.s3.ap-southeast-1.amazonaws.com/Job_Offer_i2solutions.pdf" plugins={[plugin]} />
-        </Worker>
+        <Document file={URL} onLoadSuccess={onDocumentLoadSuccess}>
+          <Page pageNumber={pageNumber} />
+        </Document>
+        <p>
+          Page {pageNumber} of {numPages}
+        </p>
       </div>
     </div>
   );

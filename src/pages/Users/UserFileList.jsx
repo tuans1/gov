@@ -141,7 +141,7 @@ export default function UserFileList() {
     });
   };
   useEffect(() => {
-    // handleFetchList();
+    handleFetchList();
   }, []);
 
   const handleFetchList = () => {

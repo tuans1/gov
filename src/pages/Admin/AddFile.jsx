@@ -98,7 +98,10 @@ export default function EnhancedTable() {
       await apiService
         .assignUser({ fileId: checkedList, userId })
         .then((res) => {
-          alert("Giao viec thanh cong");
+          createNotification("success", "Giao viec thanh cong");
+        })
+        .catch((err) => {
+          console.log(err);
         });
       handleFetchListUser();
     } else {
@@ -165,6 +168,11 @@ export default function EnhancedTable() {
       </div>
     </>
   );
+  const handleImport = () => {
+    const formData = new FormData();
+    formData.append("uploadFiles", file);
+    apiService.importFile(formData);
+  };
   return (
     <>
       <Button

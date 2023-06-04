@@ -10,11 +10,7 @@ const createNotification = (type, msg) => {
       NotificationManager.success(msg);
       break;
     case "warning":
-      NotificationManager.warning(
-        "Warning message",
-        "Close after 3000ms",
-        3000
-      );
+      NotificationManager.warning(msg, 5000);
       break;
     case "error":
       NotificationManager.error("Error message", "Click me!", 5000, () => {
