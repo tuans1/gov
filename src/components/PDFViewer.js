@@ -10,8 +10,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 function PDFViewer() {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
-  // const URL =
-  //   "https://filegovmanagement.s3.ap-southeast-1.amazonaws.com/TfInag6sQ2X3qfU9_3Jun2023130207GMT_1685797327432.Mky6enSxYoHaJ4PP_3Jun2023130207GMT_1685797327419.000.32.63.H49.2011.128.12.pdf";
+  const test =
+    "https://filegovmanagement.s3.ap-southeast-1.amazonaws.com/TfInag6sQ2X3qfU9_3Jun2023130207GMT_1685797327432.Mky6enSxYoHaJ4PP_3Jun2023130207GMT_1685797327419.000.32.63.H49.2011.128.12.pdf";
 
   const handleDocumentLoad = (e) => {
     setTimeout(() => {
@@ -36,10 +36,7 @@ function PDFViewer() {
               })
               .then((result) => {
                 // Get Confidence score
-                let confidence = result.confidence;
-
-                let text = result.text;
-                console.log(text);
+                console.log(result.data.text)
                 // setText(text);
               });
           });
@@ -50,7 +47,7 @@ function PDFViewer() {
     <div className="overflow-y-scroll h-[calc(100vh-96px)]">
       <div>
         <Viewer
-          fileUrl={Pdf}
+          fileUrl={test}
           onDocumentLoad={handleDocumentLoad}
           // renderPage={(renderPageProps) => (
           //   <CustomPageLayer renderPageProps={renderPageProps} />
