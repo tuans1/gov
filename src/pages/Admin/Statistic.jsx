@@ -75,12 +75,8 @@ export default function Statistic() {
   };
   return (
     <>
-      <div className="container">
-        <div>
-          Trang này dành cho ADMIN tổng hợp File hiện có Tổng hợp số file mà
-          từng user nhập dc trong ngày
-        </div>
-        <div className="mt-8">
+      <div>
+        <div className="mt-8 container">
           <Button
             onClick={() => setOpen(!open)}
             aria-controls="example-collapse-text"
@@ -117,9 +113,8 @@ export default function Statistic() {
             </div>
           </Collapse>
         </div>
-        <p>Chọn nhân viên để xem lịch sử</p>
-        <div className="flex">
-          <Form.Select className="!w-80">
+        <div className="flex container my-2">
+          <Form.Select className="!w-80 mr-2">
             <option defaultChecked={true}>Tất cả</option>
             {listUser.map((user) => {
               return <option value={user.id}>{user.fullName}</option>;
@@ -130,41 +125,39 @@ export default function Statistic() {
             Xuất EXCEL
           </Button>
         </div>
-        <Table striped bordered hover size="sm">
-          <thead>
-            <tr>
-              {headCells.map((x, i) => {
-                return <td key={i}>{x.label}</td>;
+        <div className="mx-2">
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                {headCells.map((x, i) => {
+                  return <td key={i}>{x.label}</td>;
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {listFile.map((file, index) => {
+                return (
+                  <tr onClick={() => handleEditDocument(file)} key={file.id}>
+                    <td>{index + 1}</td>
+                    <td>{file.userName}</td>
+                    <td>{file.subject}</td>
+                    <td>{file.profileNo}</td>
+                    <td>{file.numOfText}</td>
+                    <td>{file.seq}</td>
+                    <td>{file.folio}</td>
+                    <td>{file.profileCode}</td>
+                    <td>{file.fileDate}</td>
+                    <td>{file.organizationName}</td>
+                    <td>{file.numberOfPage}</td>
+                    <td>{file.updateBy}</td>
+                    <td>{file.updateTime}</td>
+                  </tr>
+                );
               })}
-            </tr>
-          </thead>
-          <tbody>
-            {listFile.map((file, index) => {
-              return (
-                <tr onClick={() => handleEditDocument(file)} key={file.id}>
-                  <td>{index + 1}</td>
-                  <td>{file.userName}</td>
-                  <td>{file.subject}</td>
-                  <td>{file.profileNo}</td>
-                  <td>{file.numOfText}</td>
-                  <td>{file.seq}</td>
-                  <td>{file.folio}</td>
-                  <td>{file.profileCode}</td>
-                  <td>{file.fileDate}</td>
-                  <td>{file.organizationName}</td>
-                  <td>{file.numberOfPage}</td>
-                  <td>{file.updateBy}</td>
-                  <td>{file.updateTime}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+            </tbody>
+          </Table>
+        </div>
         <Pagination />
-        <p>
-          Có thể click vào Row {"->"} mở modal lên để hiện thị Form + file PDF
-          và có thể chỉnh sửa
-        </p>
       </div>
       <Modal
         show={show}

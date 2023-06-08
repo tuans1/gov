@@ -59,7 +59,6 @@ export default function AddDocument({ fileDetail }) {
   const location = useLocation();
   const navigate = useNavigate("");
   useEffect(() => {
-    console.log(transcript);
     if (speechField) {
       const clone = structuredClone(formObj);
       clone[speechField].value = transcript;
@@ -99,17 +98,26 @@ export default function AddDocument({ fileDetail }) {
     Object.keys(formObj).forEach((key) => {
       payload[key] = formObj[key].value;
     });
-    apiService.saveDocument({ id: location.state.listFile[currentIndex].id, payload }).then(res=>{
-      createNotification("success","Lưu File thành công")
-    });
+    apiService
+      .saveDocument({ id: location.state.listFile[currentIndex].id, payload })
+      .then((res) => {
+        createNotification("success", "Lưu File thành công");
+      });
   };
   const handleNextFile = () => {
-    const { index, listFile } = location.state;
+    const { listFile } = location.state;
     if (currentIndex + 1 === listFile.length) {
       createNotification("warning", "Heest");
       return;
     }
-    
+    const newFormObj = { ...formObj };
+    console.log("RUN");
+    const formDetail = listFile[currentIndex + 1];
+    Object.keys(newFormObj).forEach((key) => {
+      newFormObj[key].value = formDetail[key] || "";
+    });
+    setFormObj(newFormObj);
+    setCurrentIndex(currentIndex + 1);
   };
   return (
     <>

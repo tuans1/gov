@@ -175,89 +175,92 @@ export default function EnhancedTable() {
   };
   return (
     <>
-      <Button
-        onClick={() => {
-          setViewModal(ModalAddFile);
-          setModalTitle("Thêm File");
-        }}
-      >
-        Thêm File
-      </Button>
-      {data.some((x) => x.isCheck) && (
-        <>
-          <Button
-            onClick={() => {
-              setViewModal(ModalAssignJob);
-              setModalTitle("Giao Việc");
-            }}
-          >
-            Giao Việc
-          </Button>
-          <Button onClick={() => handleDeletePersonInCharge()} variant="danger">
-            Xóa người Phụ trách
-          </Button>
-        </>
-      )}
-      <Table striped bordered hover size="sm">
-        <thead>
-          <tr>
-            <th>
-              <Form.Check
-                type="checkbox"
-                checked={checkAll}
-                onChange={() => handleCheckedAll()}
-              />
-            </th>
-            <th>#</th>
-            <th>Người Phụ Trách</th>
-            <th>Tên File</th>
-            <th>Bộ Phận</th>
-            <th>Ngày Thêm</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listFile.map((x, index) => {
-            return (
-              <tr key={x.id}>
-                <td>
-                  <Form.Check
-                    type="checkbox"
-                    onChange={() => handleChecked(index)}
-                    checked={x.isCheck}
-                  />
-                </td>
-                <td>{index + 1}</td>
-                <td>{x.userName}</td>
-                <td>{x.fileName}</td>
-                <td>{x.departmentName}</td>
-                <td>{x.createTime}</td>
-                <td>
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    onClick={() => handleDeleteFile(x)}
-                  >
-                    Xóa
-                  </Button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-      <Pagination onChangePage={handleChangePage} />
-      <BaseModal
-        show={modalShow}
-        size="sm"
-        onHide={() => setModalShow(!modalShow)}
-        title={modalTitle}
-        onConfirm={() => handleConfirm(assigner.fullName)}
-      >
-        {viewModal}
-      </BaseModal>
-      NOTE **** : Cột <span className="text-red-400 text-lg">Bộ Phận</span> khi
-      ADMIN import sẽ điền vào và import 1 loạt file PDF, để sau này xuất ra sẽ
-      biết File này ở BP nào
+      <div className="p-4">
+        <Button
+          onClick={() => {
+            setViewModal(ModalAddFile);
+            setModalTitle("Thêm File");
+          }}
+          className="mb-2"
+        >
+          Thêm File
+        </Button>
+        {data.some((x) => x.isCheck) && (
+          <>
+            <Button
+              onClick={() => {
+                setViewModal(ModalAssignJob);
+                setModalTitle("Giao Việc");
+              }}
+            >
+              Giao Việc
+            </Button>
+            <Button
+              onClick={() => handleDeletePersonInCharge()}
+              variant="danger"
+            >
+              Xóa người Phụ trách
+            </Button>
+          </>
+        )}
+        <Table striped bordered hover size="sm">
+          <thead>
+            <tr>
+              <th>
+                <Form.Check
+                  type="checkbox"
+                  checked={checkAll}
+                  onChange={() => handleCheckedAll()}
+                />
+              </th>
+              <th>#</th>
+              <th>Người Phụ Trách</th>
+              <th>Tên File</th>
+              <th>Bộ Phận</th>
+              <th>Ngày Thêm</th>
+            </tr>
+          </thead>
+          <tbody>
+            {listFile.map((x, index) => {
+              return (
+                <tr key={x.id}>
+                  <td>
+                    <Form.Check
+                      type="checkbox"
+                      onChange={() => handleChecked(index)}
+                      checked={x.isCheck}
+                    />
+                  </td>
+                  <td>{index + 1}</td>
+                  <td>{x.userName}</td>
+                  <td>{x.fileName}</td>
+                  <td>{x.departmentName}</td>
+                  <td>{x.createTime}</td>
+                  <td>
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      onClick={() => handleDeleteFile(x)}
+                    >
+                      Xóa
+                    </Button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+        <Pagination onChangePage={handleChangePage} />
+        <BaseModal
+          show={modalShow}
+          size="sm"
+          onHide={() => setModalShow(!modalShow)}
+          title={modalTitle}
+          onConfirm={() => handleConfirm(assigner.fullName)}
+        >
+          {viewModal}
+        </BaseModal>
+      </div>
     </>
   );
 }

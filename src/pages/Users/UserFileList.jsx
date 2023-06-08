@@ -158,11 +158,6 @@ export default function UserFileList() {
   };
   return (
     <>
-      <p>
-        Trang này hiển thị cho quyền User để chọn file, sau khi click sẽ chuyển
-        sang Form hiển thị file PD Làm thêm Filter theo Đã Nhập / Chưa nhập ,
-        paging
-      </p>
       <Alert key={"success"} variant="success">
         Tổng Đã Nhập : 200/600
       </Alert>
