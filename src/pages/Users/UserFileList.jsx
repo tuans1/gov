@@ -47,6 +47,7 @@ export default function UserFileList() {
     pageNum: 0,
     totalPages: 1,
     pageSize: 10,
+    status: "0",
   });
   const [listFile, setListFile] = useState([
     {
@@ -142,7 +143,7 @@ export default function UserFileList() {
   };
   useEffect(() => {
     handleFetchList();
-  }, []);
+  }, [pagination]);
 
   const handleFetchList = () => {
     const userId = localStorage.getItem("userId");
@@ -151,8 +152,10 @@ export default function UserFileList() {
         pageNum: pagination.pageNum,
         pageSize: pagination.pageSize,
         userId,
+        status: pagination.status,
       })
       .then((res) => {
+        console.log(res.data.items.files);
         setListFile(res.data.items.files);
       });
   };
@@ -162,10 +165,17 @@ export default function UserFileList() {
         Tổng Đã Nhập : 200/600
       </Alert>
       <p>Filter theo Status</p>
-      <Form.Select className="!w-80">
-        <option defaultChecked="0">Tất cả</option>
-        <option value="1">Đã Nhập</option>
-        <option value="2">Chưa Nhập</option>
+      <Form.Select
+        className="!w-80"
+        onChange={(e) =>
+          setPagination({ ...pagination, status: e.target.value })
+        }
+      >
+        <option value="0" defaultChecked="0">
+          Tất cả
+        </option>
+        <option value="2">Đã Nhập</option>
+        <option value="1">Chưa Nhập</option>
       </Form.Select>
       <p>Chọn file bạn muốn nhập</p>
       <Table striped bordered hover size="sm">

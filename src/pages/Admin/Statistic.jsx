@@ -57,6 +57,7 @@ export default function Statistic() {
   const [listUser, setListUser] = useState([]);
   const [listFile, setListFile] = useState([]);
   const [fileDetail, setFileDetail] = useState({});
+  const [reportStatus, setReportStatus] = useState([]);
   useEffect(() => {
     apiService.getListUser().then((res) => {
       console.log(res.data.items);
@@ -64,6 +65,10 @@ export default function Statistic() {
     });
     apiService.getListFile().then((res) => {
       setListFile(res.data.items.files);
+    });
+    apiService.reportStatus().then((res) => {
+      const { totalInputted, totalFile, reportVoList } = res.data.items;
+      setReportStatus({ totalInputted, totalFile, reportVoList });
     });
   }, []);
   const handleEditDocument = (file) => {
@@ -96,7 +101,7 @@ export default function Statistic() {
                   </tr>
                 </thead>
                 <tbody>
-                  {listUser.map((user, index) => {
+                  {reportStatus?.reportVoList.map((user, index) => {
                     return (
                       <tr key={index}>
                         <td>{index + 1}</td>
@@ -106,7 +111,7 @@ export default function Statistic() {
                     );
                   })}
                   <tr>
-                    <td colSpan={3}>Tổng Đã Nhập : 200/600</td>
+                    <td colSpan={3}>Tổng Đã Hoàn Thành : 200/600</td>
                   </tr>
                 </tbody>
               </Table>

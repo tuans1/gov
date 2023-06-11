@@ -111,7 +111,6 @@ export default function AddDocument({ fileDetail }) {
       return;
     }
     const newFormObj = { ...formObj };
-    console.log("RUN");
     const formDetail = listFile[currentIndex + 1];
     Object.keys(newFormObj).forEach((key) => {
       newFormObj[key].value = formDetail[key] || "";
@@ -190,7 +189,7 @@ export default function AddDocument({ fileDetail }) {
           </Form>
         </div>
         <div className="col-span-7">
-          <PDFViewer />
+          <PDFViewer fileUrl={location.state.listFile[currentIndex]?.fileUrl} />
         </div>
       </div>
     </>

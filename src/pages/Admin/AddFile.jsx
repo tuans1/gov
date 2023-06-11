@@ -1,4 +1,4 @@
-import { Button } from "react-bootstrap";
+import { Alert, Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import { useState, useEffect } from "react";
@@ -203,6 +203,17 @@ export default function EnhancedTable() {
             </Button>
           </>
         )}
+        <Alert key={"success"} variant="success">
+          Tổng file đã giao việc : 200/600
+        </Alert>
+        <p>Filter theo Status</p>
+        <Form.Select className="!w-80">
+          <option value="0" defaultChecked="0">
+            Tất cả
+          </option>
+          <option value="2">Đã Giao</option>
+          <option value="1">Chưa Giao</option>
+        </Form.Select>
         <Table striped bordered hover size="sm">
           <thead>
             <tr>
