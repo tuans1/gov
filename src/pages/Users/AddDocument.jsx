@@ -14,6 +14,7 @@ export default function AddDocument({ fileDetail }) {
       label: "Tiêu đề văn bản",
       value: "",
       isSpeech: true,
+      rules: "required",
     },
     profileNo: {
       label: "Số và ký hiệu hồ sơ",
@@ -56,6 +57,7 @@ export default function AddDocument({ fileDetail }) {
   const [speechField, setSpeechField] = useState("");
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const [currentIndex, setCurrentIndex] = useState("");
+  const [dirtyForm, setDirtyForm] = useState(false);
   const location = useLocation();
   const navigate = useNavigate("");
   useEffect(() => {
@@ -92,8 +94,13 @@ export default function AddDocument({ fileDetail }) {
     const clone = structuredClone(formObj);
     clone[key].value = value;
     setFormObj(clone);
+    setDirtyForm(true);
   };
   const handleSaveDocument = () => {
+    if (!formObj.subject.value) {
+      createNotification("warning", "Tiêu đề không được bỏ trống");
+      return;
+    }
     const payload = {};
     Object.keys(formObj).forEach((key) => {
       payload[key] = formObj[key].value;
@@ -102,12 +109,16 @@ export default function AddDocument({ fileDetail }) {
       .saveDocument({ id: location.state.listFile[currentIndex].id, payload })
       .then((res) => {
         createNotification("success", "Lưu File thành công");
+        setDirtyForm(false);
       });
   };
   const handleNextFile = () => {
     const { listFile } = location.state;
     if (currentIndex + 1 === listFile.length) {
-      createNotification("warning", "Heest");
+      createNotification(
+        "warning",
+        "Đã đến file cuối cùng, vui lòng trở về danh sách"
+      );
       return;
     }
     const newFormObj = { ...formObj };
@@ -118,6 +129,17 @@ export default function AddDocument({ fileDetail }) {
     setFormObj(newFormObj);
     setCurrentIndex(currentIndex + 1);
   };
+  const handleRedirectBackToList = () => {
+    if (dirtyForm) {
+      let text =
+        "Bạn có chắc chắn trở về?\nTất cả thay đổi không được Lưu sẽ mất.";
+      if (window.confirm(text) == true) {
+        navigate("/");
+      }
+    } else {
+      navigate("/");
+    }
+  };
   return (
     <>
       <div className="grid grid-cols-12 gap-4 p-4">
@@ -127,14 +149,14 @@ export default function AddDocument({ fileDetail }) {
               <Button
                 variant="primary"
                 size="sm"
-                onClick={() => navigate("/")}
+                onClick={handleRedirectBackToList}
                 className="mb-4 mr-2 text-white"
               >
                 Trở về danh sách
               </Button>
             )}
             <Button
-              variant="primary"
+              variant="success"
               size="sm"
               className="mb-4"
               onClick={handleSaveDocument}
@@ -142,7 +164,7 @@ export default function AddDocument({ fileDetail }) {
               Lưu File
             </Button>
             <Button
-              variant="success"
+              variant="warning"
               size="sm"
               className="mb-4 ml-auto"
               onClick={handleNextFile}
@@ -150,7 +172,6 @@ export default function AddDocument({ fileDetail }) {
               File tiếp theo
             </Button>
           </div>
-          <p>Microphone: {listening ? "on" : "off"}</p>
           <p>{transcript}</p>
           <Form>
             <div className="grid grid-cols-12 gap-4">
@@ -159,7 +180,12 @@ export default function AddDocument({ fileDetail }) {
                   <div className="col-span-12">
                     <div className={formObj[key].className} key={key}>
                       <Form.Group className="mb-3">
-                        <Form.Label>{formObj[key].label}</Form.Label>
+                        <Form.Label>
+                          {formObj[key].label} {""}
+                          {formObj[key].rules?.includes("required") && (
+                            <span class="text-red-500">*</span>
+                          )}
+                        </Form.Label>
                         <div>
                           <Form.Control
                             type="text"

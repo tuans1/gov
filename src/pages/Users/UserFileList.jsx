@@ -146,6 +146,8 @@ export default function UserFileList() {
   }, [pagination]);
 
   const handleFetchList = () => {
+    console.log(pagination);
+    return;
     const userId = localStorage.getItem("userId");
     apiService
       .getListFile({
@@ -158,6 +160,9 @@ export default function UserFileList() {
         console.log(res.data.items.files);
         setListFile(res.data.items.files);
       });
+  };
+  const handleChangePage = (page) => {
+    setPagination({ ...pagination, page });
   };
   return (
     <>
@@ -211,7 +216,7 @@ export default function UserFileList() {
           })}
         </tbody>
       </Table>
-      <Pagination />
+      <Pagination onChangePage={handleChangePage} />
     </>
   );
 }

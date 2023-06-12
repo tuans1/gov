@@ -1,21 +1,19 @@
 import { NotificationManager } from "react-notifications";
 
 const createNotification = (type, msg) => {
+  const TIMER = 5000;
   switch (type) {
     case "info":
-      NotificationManager.info("Info message");
+      NotificationManager.info(msg);
       break;
     case "success":
-      console.log("OK");
       NotificationManager.success(msg);
       break;
     case "warning":
-      NotificationManager.warning(msg, 5000);
+      NotificationManager.warning(msg, "Cảnh báo", TIMER);
       break;
     case "error":
-      NotificationManager.error("Error message", "Click me!", 5000, () => {
-        alert("callback");
-      });
+      NotificationManager.error(msg, "Thất bại", TIMER);
       break;
   }
 };
