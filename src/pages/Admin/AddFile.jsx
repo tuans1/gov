@@ -6,6 +6,7 @@ import BaseModal from "../../components/BaseModal";
 import Pagination from "../../components/Pagination";
 import apiService from "../../api";
 import createNotification from "../../utils/notification";
+import ModalAssignee from "../../components/ModalAssignee";
 
 export default function EnhancedTable() {
   const [listFile, setListFile] = useState([]);
@@ -262,15 +263,13 @@ export default function EnhancedTable() {
           </tbody>
         </Table>
         <Pagination onChangePage={handleChangePage} />
-        <BaseModal
+        <ModalAssignee
+          assigner={assigner}
           show={modalShow}
-          size="sm"
           onHide={() => setModalShow(!modalShow)}
           title={modalTitle}
           onConfirm={() => handleConfirm(assigner.fullName)}
-        >
-          {viewModal}
-        </BaseModal>
+        />
       </div>
     </>
   );

@@ -146,8 +146,6 @@ export default function UserFileList() {
   }, [pagination]);
 
   const handleFetchList = () => {
-    console.log(pagination);
-    return;
     const userId = localStorage.getItem("userId");
     apiService
       .getListFile({
@@ -166,56 +164,60 @@ export default function UserFileList() {
   };
   return (
     <>
-      <Alert key={"success"} variant="success">
-        Tổng Đã Nhập : 200/600
-      </Alert>
-      <p>Filter theo Status</p>
-      <Form.Select
-        className="!w-80"
-        onChange={(e) =>
-          setPagination({ ...pagination, status: e.target.value })
-        }
-      >
-        <option value="0" defaultChecked="0">
-          Tất cả
-        </option>
-        <option value="2">Đã Nhập</option>
-        <option value="1">Chưa Nhập</option>
-      </Form.Select>
-      <p>Chọn file bạn muốn nhập</p>
-      <Table striped bordered hover size="sm">
-        <thead>
-          <tr>
-            {headCells.map((x, i) => {
-              return <td key={i}>{x.label}</td>;
+      <div className="container">
+        <Alert key={"success"} variant="success">
+          Tổng Đã Nhập : 200/600
+        </Alert>
+        <p>Filter theo Status</p>
+        <Form.Select
+          className="!w-80"
+          onChange={(e) =>
+            setPagination({ ...pagination, status: e.target.value })
+          }
+        >
+          <option value="0" defaultChecked="0">
+            Tất cả
+          </option>
+          <option value="2">Đã Nhập</option>
+          <option value="1">Chưa Nhập</option>
+        </Form.Select>
+      </div>
+      <div className="mx-2">
+        <p className="text-gray-400">Chọn file bạn muốn nhập</p>
+        <Table  bordered hover size="sm">
+          <thead>
+            <tr>
+              {headCells.map((x, i) => {
+                return <td key={i}>{x.label}</td>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {listFile.map((item, index) => {
+              return (
+                <tr
+                  className="cursor-pointer"
+                  key={item.id}
+                  onClick={() => handleRedirectToForm(item, index)}
+                >
+                  <td>{index + 1}</td>
+                  <td>{item.fileName}</td>
+                  <td>{item.subject}</td>
+                  <td>{item.profileNo}</td>
+                  <td>{item.numOfText}</td>
+                  <td>{item.folio}</td>
+                  <td>{item.profileCode}</td>
+                  <td>{item.seq}</td>
+                  <td>{item.fileDate}</td>
+                  <td>{item.organizationName}</td>
+                  <td>{item.numberOfPage}</td>
+                  <td>{item.updateTime}</td>
+                </tr>
+              );
             })}
-          </tr>
-        </thead>
-        <tbody>
-          {listFile.map((item, index) => {
-            return (
-              <tr
-                className="cursor-pointer"
-                key={item.id}
-                onClick={() => handleRedirectToForm(item, index)}
-              >
-                <td>{index + 1}</td>
-                <td>{item.fileName}</td>
-                <td>{item.subject}</td>
-                <td>{item.profileNo}</td>
-                <td>{item.numOfText}</td>
-                <td>{item.folio}</td>
-                <td>{item.profileCode}</td>
-                <td>{item.seq}</td>
-                <td>{item.fileDate}</td>
-                <td>{item.organizationName}</td>
-                <td>{item.numberOfPage}</td>
-                <td>{item.updateTime}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+          </tbody>
+        </Table>
+      </div>
       <Pagination onChangePage={handleChangePage} />
     </>
   );
