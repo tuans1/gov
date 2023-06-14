@@ -10,7 +10,11 @@ import ModalAssignee from "../../components/ModalAssignee";
 
 export default function EnhancedTable() {
   const [listFile, setListFile] = useState([]);
-  const [listUser, setListUser] = useState([]);
+  const [listUser, setListUser] = useState([
+    { fullName: "tuan", id: 1 },
+    { fullName: "xxx", id: 2 },
+    { fullName: "john", id: 3 },
+  ]);
   const [checkAll, setCheckAll] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [data, setData] = useState([
@@ -90,23 +94,22 @@ export default function EnhancedTable() {
     setData(newState);
   };
 
-  const handleConfirm = async (name) => {
-    if (window.confirm(`Bạn có chắc giao việc cho ${name} ?`) == true) {
+  const handleConfirmAssign = async (assignee) => {
+    if (
+      window.confirm(`Bạn có chắc giao việc cho ${assignee.fullName} ?`) == true
+    ) {
       const checkedList = listFile
         .filter((file) => file.isCheck)
         .map((file) => file.id);
-      const userId = localStorage.getItem("userId");
       await apiService
-        .assignUser({ fileId: checkedList, userId })
+        .assignUser({ fileId: checkedList, userId: assignee.id })
         .then((res) => {
           createNotification("success", "Giao viec thanh cong");
+          handleFetchListUser();
         })
         .catch((err) => {
           console.log(err);
         });
-      handleFetchListUser();
-    } else {
-      console.log("Hủy");
     }
   };
   const handleDeletePersonInCharge = () => {
@@ -264,11 +267,10 @@ export default function EnhancedTable() {
         </Table>
         <Pagination onChangePage={handleChangePage} />
         <ModalAssignee
-          assigner={assigner}
+          listUser={listUser}
           show={modalShow}
           onHide={() => setModalShow(!modalShow)}
-          title={modalTitle}
-          onConfirm={() => handleConfirm(assigner.fullName)}
+          onConfirm={handleConfirmAssign}
         />
       </div>
     </>
