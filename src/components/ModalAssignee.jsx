@@ -1,10 +1,19 @@
-import { useState } from "react";
-import Button from "react-bootstrap/Button";
+import { useEffect, useState } from "react";
 import BaseModal from "./BaseModal";
+import apiService from "../api";
 
-export default function ModalAssignee({ onHide, onConfirm, show, listUser }) {
+export default function ModalAssignee({ onHide, onConfirm, show }) {
   const [assigner, setAssigner] = useState({});
-
+  const [listUser, setListUser] = useState([
+    { fullName: "tuan", id: 1 },
+    { fullName: "xxx", id: 2 },
+    { fullName: "john", id: 3 },
+  ]);
+  useEffect(() => {
+    apiService.getListUser().then((res) => {
+      setListUser(res.data.items);
+    });
+  }, []);
   const handleConfirm = () => {
     onConfirm(assigner);
   };

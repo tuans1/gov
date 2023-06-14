@@ -155,7 +155,6 @@ export default function UserFileList() {
         status: pagination.status,
       })
       .then((res) => {
-        console.log(res.data.items.files);
         setListFile(res.data.items.files);
       });
   };
@@ -198,7 +197,7 @@ export default function UserFileList() {
                 <tr
                   className="cursor-pointer"
                   key={item.id}
-                  onClick={() => handleRedirectToForm(item, index)}
+                  onDoubleClick={() => handleRedirectToForm(item, index)}
                 >
                   <td>{index + 1}</td>
                   <td>{item.fileName}</td>

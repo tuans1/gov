@@ -5,9 +5,11 @@ const LOGIN_URIS = {
 };
 export default {
   login(data) {
-    return axios.post(LOGIN_URIS.LOGIN, data).then((res) => {
-      return res;
-    });
+    return axios
+      .post(LOGIN_URIS.LOGIN, data, { withCredentials: false })
+      .then((res) => {
+        return res;
+      });
   },
   test() {
     return axios

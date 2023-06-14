@@ -9,12 +9,13 @@ import createNotification from "../../utils/notification";
 import ModalAssignee from "../../components/ModalAssignee";
 
 export default function EnhancedTable() {
+  const [pagination, setPagination] = useState({
+    pageNum: 0,
+    totalPages: 1,
+    pageSize: 10,
+    status: "0",
+  });
   const [listFile, setListFile] = useState([]);
-  const [listUser, setListUser] = useState([
-    { fullName: "tuan", id: 1 },
-    { fullName: "xxx", id: 2 },
-    { fullName: "john", id: 3 },
-  ]);
   const [checkAll, setCheckAll] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [data, setData] = useState([
@@ -45,22 +46,15 @@ export default function EnhancedTable() {
   ]);
   const [assigner, setAssigner] = useState({});
   const [viewModal, setViewModal] = useState(null);
-  const [modalTitle, setModalTitle] = useState("");
   const [file, setFile] = useState(null);
+  const [showModalAssign, setShowModalAssign] = useState(false);
+  const [showModalAddFile, setShowModalAddFile] = useState(false);
   useEffect(() => {
     setModalShow(viewModal ? true : false);
   }, [viewModal]);
   useEffect(() => {
-    if (viewModal) {
-      setViewModal(ModalAssignJob);
-    }
-  }, [assigner]);
-  useEffect(() => {
-    apiService.getListUser().then((res) => {
-      setListUser(res.data.items);
-    });
     handleFetchListUser();
-  }, []);
+  }, [pagination]);
   const handleChecked = (index) => {
     const newState = [...listFile];
     newState[index].isCheck = newState[index].isCheck ? "" : "checked";
@@ -68,17 +62,22 @@ export default function EnhancedTable() {
     setData(newState);
   };
   const handleFetchListUser = () => {
-    apiService.getListFile().then((res) => {
-      console.log(res);
-      const convertedList = res.data.items.files.map((file) => {
-        return {
-          ...file,
-          isCheck: false,
-        };
+    apiService
+      .getListFile({
+        pageNum: pagination.pageNum,
+        pageSize: pagination.pageSize,
+        status: pagination.status,
+      })
+      .then((res) => {
+        const convertedList = res.data.items.files.map((file) => {
+          return {
+            ...file,
+            isCheck: false,
+          };
+        });
+        setListFile(convertedList);
+        setCheckAll("");
       });
-      setListFile(convertedList);
-      setCheckAll("");
-    });
   };
   const handleCheckedAll = () => {
     const newState = [...listFile];
@@ -104,7 +103,10 @@ export default function EnhancedTable() {
       await apiService
         .assignUser({ fileId: checkedList, userId: assignee.id })
         .then((res) => {
-          createNotification("success", "Giao viec thanh cong");
+          createNotification(
+            "success",
+            "Giao việc thành công cho " + assignee.fullName
+          );
           handleFetchListUser();
         })
         .catch((err) => {
@@ -131,26 +133,6 @@ export default function EnhancedTable() {
   };
   const handleChangePage = (page) => {
     console.log(page);
-  };
-  const ModalAssignJob = () => {
-    return (
-      <>
-        {listUser.map((user) => {
-          return (
-            <div
-              onClick={() => setAssigner(user)}
-              key={user.id}
-              className={
-                "hover:bg-slate-200 py-2 cursor-pointer " +
-                (assigner.id === user.id && "  bg-slate-200")
-              }
-            >
-              {user.fullName}
-            </div>
-          );
-        })}
-      </>
-    );
   };
 
   const ModalAddFile = (
@@ -180,38 +162,43 @@ export default function EnhancedTable() {
   return (
     <>
       <div className="p-4">
-        <Button
-          onClick={() => {
-            setViewModal(ModalAddFile);
-            setModalTitle("Thêm File");
-          }}
-          className="mb-2"
-        >
-          Thêm File
-        </Button>
-        {data.some((x) => x.isCheck) && (
-          <>
-            <Button
-              onClick={() => {
-                setViewModal(ModalAssignJob);
-                setModalTitle("Giao Việc");
-              }}
-            >
-              Giao Việc
-            </Button>
-            <Button
-              onClick={() => handleDeletePersonInCharge()}
-              variant="danger"
-            >
-              Xóa người Phụ trách
-            </Button>
-          </>
-        )}
+        <div className="mb-2">
+          <Button
+            onClick={() => {
+              setViewModal(ModalAddFile);
+            }}
+          >
+            Thêm File
+          </Button>
+          {data.some((x) => x.isCheck) && (
+            <>
+              <Button
+                onClick={() => {
+                  setShowModalAssign(true);
+                }}
+                className="mx-2"
+              >
+                Giao Việc
+              </Button>
+              <Button
+                onClick={() => handleDeletePersonInCharge()}
+                variant="danger"
+              >
+                Xóa người Phụ trách
+              </Button>
+            </>
+          )}
+        </div>
         <Alert key={"success"} variant="success">
           Tổng file đã giao việc : 200/600
         </Alert>
         <p>Filter theo Status</p>
-        <Form.Select className="!w-80">
+        <Form.Select
+          className="!w-80"
+          onChange={(e) =>
+            setPagination({ ...pagination, status: e.target.value })
+          }
+        >
           <option value="0" defaultChecked="0">
             Tất cả
           </option>
@@ -267,9 +254,8 @@ export default function EnhancedTable() {
         </Table>
         <Pagination onChangePage={handleChangePage} />
         <ModalAssignee
-          listUser={listUser}
-          show={modalShow}
-          onHide={() => setModalShow(!modalShow)}
+          show={showModalAssign}
+          onHide={() => setShowModalAssign(false)}
           onConfirm={handleConfirmAssign}
         />
       </div>

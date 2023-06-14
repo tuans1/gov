@@ -52,6 +52,12 @@ const headCells = [
   },
 ];
 export default function Statistic() {
+  const [pagination, setPagination] = useState({
+    pageNum: 0,
+    totalPages: 1,
+    pageSize: 10,
+    status: "0",
+  });
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [listUser, setListUser] = useState([]);
@@ -59,9 +65,18 @@ export default function Statistic() {
   const [fileDetail, setFileDetail] = useState({});
   const [reportStatus, setReportStatus] = useState({});
   useEffect(() => {
-    apiService.getListUser().then((res) => {
-      setListUser(res.data.items);
-    });
+    console.log("RUN");
+    apiService
+      .getListUser({
+        pageNum: pagination.pageNum,
+        pageSize: pagination.pageSize,
+        status: pagination.status,
+      })
+      .then((res) => {
+        setListUser(res.data.items);
+      });
+  }, [pagination]);
+  useEffect(() => {
     apiService.getListFile().then((res) => {
       setListFile(res.data.items.files);
     });
@@ -125,11 +140,25 @@ export default function Statistic() {
               return <option value={user.id}>{user.fullName}</option>;
             })}
           </Form.Select>
+          <Form.Select className="!w-80 mr-2">
+            <option
+              defaultChecked={true}
+              value="0"
+              onChange={(e) =>
+                setPagination({ ...pagination, status: e.target.value })
+              }
+            >
+              Tất cả
+            </option>
+            <option value="2">Đã Nhập</option>
+            <option value="1">Chưa Nhập</option>
+          </Form.Select>
           <Button onClick={handleExport}>
             <ExportIcon className="mr-2 w-5 h-5 float-left" fill="white" />
             Xuất EXCEL
           </Button>
         </div>
+        {JSON.stringify(pagination)}
         <div className="mx-2">
           <Table striped bordered hover size="sm">
             <thead>
