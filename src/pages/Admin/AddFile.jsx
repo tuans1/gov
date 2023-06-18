@@ -10,9 +10,8 @@ import ModalAssignee from "../../components/ModalAssignee";
 
 export default function EnhancedTable() {
   const [pagination, setPagination] = useState({
+    pageSize: 5,
     pageNum: 0,
-    totalPages: 1,
-    pageSize: 10,
     status: "0",
   });
   const [listFile, setListFile] = useState([]);
@@ -49,11 +48,11 @@ export default function EnhancedTable() {
   const [file, setFile] = useState(null);
   const [showModalAssign, setShowModalAssign] = useState(false);
   const [showModalAddFile, setShowModalAddFile] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(1);
+  const [page, setPage] = useState(1);
   useEffect(() => {
-    setModalShow(viewModal ? true : false);
-  }, [viewModal]);
-  useEffect(() => {
-    handleFetchListUser();
+    handleFetchListFile();
   }, [pagination]);
   const handleChecked = (index) => {
     const newState = [...listFile];
@@ -61,7 +60,7 @@ export default function EnhancedTable() {
     newState.every((x) => x.isCheck) ? setCheckAll("checked") : setCheckAll("");
     setData(newState);
   };
-  const handleFetchListUser = () => {
+  const handleFetchListFile = (pageNum) => {
     apiService
       .getListFile({
         pageNum: pagination.pageNum,
@@ -75,6 +74,9 @@ export default function EnhancedTable() {
             isCheck: false,
           };
         });
+        setTotalPages(res.data.items.totalPages);
+        setTotalItems(res.data.items.totalItems);
+        setPage(res.data.items.currentPage + 1);
         setListFile(convertedList);
         setCheckAll("");
       });
@@ -107,7 +109,7 @@ export default function EnhancedTable() {
             "success",
             "Giao việc thành công cho " + assignee.fullName
           );
-          handleFetchListUser();
+          handleFetchListFile();
         })
         .catch((err) => {
           console.log(err);
@@ -131,10 +133,11 @@ export default function EnhancedTable() {
       console.log("Hủy");
     }
   };
-  const handleChangePage = (page) => {
-    console.log(page);
+  const handleChangePage = async (pageNum) => {
+    setPagination({ ...pagination, pageNum });
+    // handleFetchListFile();
   };
-
+  console.log(pagination);
   const ModalAddFile = (
     <>
       <p className="!text-left">Bộ Phận</p>
@@ -252,7 +255,13 @@ export default function EnhancedTable() {
             })}
           </tbody>
         </Table>
-        <Pagination onChangePage={handleChangePage} />
+        <Pagination
+          onChangePage={handleChangePage}
+          pagination={pagination}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          page={page}
+        />
         <ModalAssignee
           show={showModalAssign}
           onHide={() => setShowModalAssign(false)}
