@@ -6,9 +6,11 @@ export default {
       `http://document-manager.herokuapp.com/api/v1/export-file?userId=&pageNum=0&pageSize=10`
     );
   },
-  reportStatus() {
-    return axios.get(PREFIX + "/api/v1/reportStatus").then((res) => {
-      return res;
-    });
+  reportStatus(data) {
+    return axios
+      .get(PREFIX + "/api/v1/reportStatus?" + new URLSearchParams(data))
+      .then((res) => {
+        return res;
+      });
   },
 };

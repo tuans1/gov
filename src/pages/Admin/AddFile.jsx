@@ -12,7 +12,7 @@ export default function EnhancedTable() {
   const [pagination, setPagination] = useState({
     pageSize: 5,
     pageNum: 0,
-    status: "0",
+    assignedStatus: "0",
   });
   const [listFile, setListFile] = useState([]);
   const [checkAll, setCheckAll] = useState(false);
@@ -65,7 +65,7 @@ export default function EnhancedTable() {
       .getListFile({
         pageNum: pagination.pageNum,
         pageSize: pagination.pageSize,
-        status: pagination.status,
+        assignedStatus: pagination.assignedStatus,
       })
       .then((res) => {
         const convertedList = res.data.items.files.map((file) => {
@@ -199,7 +199,7 @@ export default function EnhancedTable() {
         <Form.Select
           className="!w-80"
           onChange={(e) =>
-            setPagination({ ...pagination, status: e.target.value })
+            setPagination({ ...pagination, assignedStatus: e.target.value })
           }
         >
           <option value="0" defaultChecked="0">

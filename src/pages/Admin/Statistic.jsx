@@ -56,7 +56,7 @@ export default function Statistic() {
     pageNum: 0,
     totalPages: 1,
     pageSize: 10,
-    status: "0",
+    userId: "",
   });
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
@@ -65,7 +65,6 @@ export default function Statistic() {
   const [fileDetail, setFileDetail] = useState({});
   const [reportStatus, setReportStatus] = useState({});
   useEffect(() => {
-    console.log("RUN");
     apiService
       .getListUser({
         pageNum: pagination.pageNum,
@@ -77,14 +76,14 @@ export default function Statistic() {
       });
   }, [pagination]);
   useEffect(() => {
-    apiService.getListFile().then((res) => {
+    apiService.getListFile(pagination).then((res) => {
       setListFile(res.data.items.files);
     });
     apiService.reportStatus().then((res) => {
       const { totalInputted, totalFile, reportVoList } = res.data.items;
       setReportStatus({ totalInputted, totalFile, reportVoList });
     });
-  }, []);
+  }, [pagination]);
   const handleEditDocument = (file) => {
     setShow(true);
     setFileDetail(file);
@@ -134,8 +133,18 @@ export default function Statistic() {
           </Collapse>
         </div>
         <div className="flex container my-2">
-          <Form.Select className="!w-80 mr-2">
-            <option defaultChecked={true}>Tất cả</option>
+          <Form.Select
+            className="!w-80 mr-2"
+            onChange={(e) =>
+              setPagination({
+                ...pagination,
+                userId: e.target.value,
+              })
+            }
+          >
+            <option defaultChecked={true} value="">
+              Tất cả
+            </option>
             {listUser.map((user) => {
               return <option value={user.id}>{user.fullName}</option>;
             })}
