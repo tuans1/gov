@@ -10,7 +10,7 @@ import ModalAssignee from "../../components/ModalAssignee";
 import ModalImport from "../../components/ModalImport";
 
 export default function EnhancedTable() {
-  const [pagination, setPagination] = useState({
+  const [searchParams, setSearchParams] = useState({
     pageSize: 5,
     pageNum: 0,
     assignedStatus: "0",
@@ -44,17 +44,13 @@ export default function EnhancedTable() {
       isCheck: "",
     },
   ]);
-  const [assigner, setAssigner] = useState({});
-  const [viewModal, setViewModal] = useState(null);
   const [file, setFile] = useState(null);
   const [showModalAssign, setShowModalAssign] = useState(false);
   const [showModalAddFile, setShowModalAddFile] = useState(false);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalItems, setTotalItems] = useState(1);
-  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({});
   useEffect(() => {
     handleFetchListFile();
-  }, [pagination]);
+  }, [searchParams]);
   const handleChecked = (index) => {
     const newState = [...listFile];
     newState[index].isCheck = newState[index].isCheck ? "" : "checked";
@@ -64,9 +60,9 @@ export default function EnhancedTable() {
   const handleFetchListFile = (pageNum) => {
     apiService
       .getListFile({
-        pageNum: pagination.pageNum,
-        pageSize: pagination.pageSize,
-        assignedStatus: pagination.assignedStatus,
+        pageNum: searchParams.pageNum,
+        pageSize: searchParams.pageSize,
+        assignedStatus: searchParams.assignedStatus,
       })
       .then((res) => {
         const convertedList = res.data.items.files.map((file) => {
@@ -75,9 +71,11 @@ export default function EnhancedTable() {
             isCheck: false,
           };
         });
-        setTotalPages(res.data.items.totalPages);
-        setTotalItems(res.data.items.totalItems);
-        setPage(res.data.items.currentPage + 1);
+        setPagination({
+          totalPages: res.data.items.totalPages,
+          totalItems: res.data.items.totalItems,
+          page: res.data.items.currentPage + 1,
+        });
         setListFile(convertedList);
         setCheckAll("");
       });
@@ -135,7 +133,7 @@ export default function EnhancedTable() {
     }
   };
   const handleChangePage = async (pageNum) => {
-    setPagination({ ...pagination, pageNum });
+    setSearchParams({ ...searchParams, pageNum });
   };
   const handleImport = () => {
     const formData = new FormData();
@@ -179,7 +177,7 @@ export default function EnhancedTable() {
         <Form.Select
           className="!w-80"
           onChange={(e) =>
-            setPagination({ ...pagination, assignedStatus: e.target.value })
+            setSearchParams({ ...searchParams, assignedStatus: e.target.value })
           }
         >
           <option value="0" defaultChecked="0">
@@ -235,13 +233,7 @@ export default function EnhancedTable() {
             })}
           </tbody>
         </Table>
-        <Pagination
-          onChangePage={handleChangePage}
-          pagination={pagination}
-          totalPages={totalPages}
-          totalItems={totalItems}
-          page={page}
-        />
+        <Pagination onChangePage={handleChangePage} pagination={pagination} />
         <ModalAssignee
           show={showModalAssign}
           onHide={() => setShowModalAssign(false)}
@@ -249,7 +241,7 @@ export default function EnhancedTable() {
         />
         <ModalImport
           show={showModalAddFile}
-          onHide={() => setShowModalAssign(false)}
+          onHide={() => setShowModalAddFile(false)}
           onConfirm={handleImport}
         />
       </div>

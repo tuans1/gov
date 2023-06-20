@@ -1,6 +1,6 @@
 import { useState } from "react";
 import BaseModal from "./BaseModal";
-import { Form } from "react-router-dom";
+import Form from "react-bootstrap/Form";
 export default function ModalImport({ onHide, onConfirm, show }) {
   const [file, setFile] = useState();
   const handleConfirm = () => {
@@ -17,7 +17,7 @@ export default function ModalImport({ onHide, onConfirm, show }) {
       <p className="!text-left">Bộ Phận</p>
       <Form.Control type="text" placeholder="Nhập Bộ Phận" />
       <div className="border border-red-300">
-        <label for="myfile">Select a file:</label>
+        <label htmlFor="myfile">Select a file:</label>
         <input
           type="file"
           id="myfile"

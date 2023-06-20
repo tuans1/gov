@@ -34,7 +34,7 @@ export default function MenuNav() {
     ROLE_MENU.map((item) => {
       return (
         <Link key={item.url} to={item.url} className="nav-link">
-          <Nav.Link href={item.url}>{item.text}</Nav.Link>
+          {item.text}
         </Link>
       );
     });
@@ -56,7 +56,12 @@ export default function MenuNav() {
             >
               {MENU}
             </Nav>
-            <NavDropdown title={localStorage.getItem("roles") === "ADMIN" ? "ADMIN" : "USER"} id="navbarScrollingDropdown">
+            <NavDropdown
+              title={
+                localStorage.getItem("roles") === "ADMIN" ? "ADMIN" : "USER"
+              }
+              id="navbarScrollingDropdown"
+            >
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Another action
