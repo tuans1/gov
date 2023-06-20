@@ -2,6 +2,7 @@ import { useState } from "react";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 
 export default function Pagination({ onChangePage, pagination }) {
+  console.log(pagination)
   return (
     <PaginationControl
       page={pagination.page}

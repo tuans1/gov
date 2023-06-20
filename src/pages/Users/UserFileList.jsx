@@ -43,7 +43,8 @@ const headCells = [
   },
 ];
 export default function UserFileList() {
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState({});
+  const [searchParams, setSearchParams] = useState({
     pageNum: 0,
     totalPages: 1,
     pageSize: 10,
@@ -143,23 +144,28 @@ export default function UserFileList() {
   };
   useEffect(() => {
     handleFetchList();
-  }, [pagination]);
+  }, [searchParams]);
 
   const handleFetchList = () => {
     const userId = localStorage.getItem("userId");
     apiService
       .getListFile({
-        pageNum: pagination.pageNum,
-        pageSize: pagination.pageSize,
+        pageNum: searchParams.pageNum,
+        pageSize: searchParams.pageSize,
         userId,
-        status: pagination.status,
+        status: searchParams.status,
       })
       .then((res) => {
         setListFile(res.data.items.files);
+        setPagination({
+          totalPages: res.data.items.totalPages,
+          totalItems: res.data.items.totalItems,
+          page: res.data.items.currentPage + 1,
+        });
       });
   };
-  const handleChangePage = (page) => {
-    setPagination({ ...pagination, page });
+  const handleChangePage = (pageNum) => {
+    setSearchParams({ ...searchParams, pageNum });
   };
   return (
     <>
@@ -171,7 +177,7 @@ export default function UserFileList() {
         <Form.Select
           className="!w-80"
           onChange={(e) =>
-            setPagination({ ...pagination, status: e.target.value })
+            setSearchParams({ ...searchParams, status: e.target.value })
           }
         >
           <option value="0" defaultChecked="0">
@@ -183,7 +189,7 @@ export default function UserFileList() {
       </div>
       <div className="mx-2">
         <p className="text-gray-400">Chọn file bạn muốn nhập</p>
-        <Table  bordered hover size="sm">
+        <Table bordered hover size="sm">
           <thead>
             <tr>
               {headCells.map((x, i) => {
@@ -217,7 +223,7 @@ export default function UserFileList() {
           </tbody>
         </Table>
       </div>
-      <Pagination onChangePage={handleChangePage} />
+      <Pagination onChangePage={handleChangePage} pagination={pagination} />
     </>
   );
 }
