@@ -7,6 +7,7 @@ import Pagination from "../../components/Pagination";
 import apiService from "../../api";
 import createNotification from "../../utils/notification";
 import ModalAssignee from "../../components/ModalAssignee";
+import ModalImport from "../../components/ModalImport";
 
 export default function EnhancedTable() {
   const [pagination, setPagination] = useState({
@@ -135,28 +136,7 @@ export default function EnhancedTable() {
   };
   const handleChangePage = async (pageNum) => {
     setPagination({ ...pagination, pageNum });
-    // handleFetchListFile();
   };
-  console.log(pagination);
-  const ModalAddFile = (
-    <>
-      <p className="!text-left">Bộ Phận</p>
-      <Form.Control type="text" placeholder="Nhập Bộ Phận" />
-      <div className="border border-red-300">
-        <label for="myfile">Select a file:</label>
-        <input
-          type="file"
-          id="myfile"
-          name="myfile"
-          onChange={(e) => {
-            setFile(e.target.files[0]);
-            console.log(e);
-          }}
-          accept=".zip,.rar"
-        />
-      </div>
-    </>
-  );
   const handleImport = () => {
     const formData = new FormData();
     formData.append("uploadFiles", file);
@@ -168,7 +148,7 @@ export default function EnhancedTable() {
         <div className="mb-2">
           <Button
             onClick={() => {
-              setViewModal(ModalAddFile);
+              setShowModalAddFile(true);
             }}
           >
             Thêm File
@@ -266,6 +246,11 @@ export default function EnhancedTable() {
           show={showModalAssign}
           onHide={() => setShowModalAssign(false)}
           onConfirm={handleConfirmAssign}
+        />
+        <ModalImport
+          show={showModalAddFile}
+          onHide={() => setShowModalAssign(false)}
+          onConfirm={handleImport}
         />
       </div>
     </>
