@@ -107,7 +107,6 @@ export default function User() {
             })}
           </tbody>
         </Table>
-        <Pagination onChangePage={handleChangePage} />
       </div>
     </>
   );

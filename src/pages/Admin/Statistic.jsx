@@ -52,11 +52,11 @@ const headCells = [
   },
 ];
 export default function Statistic() {
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState({});
+  const [searchParams, setSearchParams] = useState({
     pageNum: 0,
-    totalPages: 1,
-    pageSize: 10,
-    userId: "",
+    pageSize: 5,
+    status: "0",
   });
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
@@ -65,31 +65,36 @@ export default function Statistic() {
   const [fileDetail, setFileDetail] = useState({});
   const [reportStatus, setReportStatus] = useState({});
   useEffect(() => {
-    apiService
-      .getListUser({
-        pageNum: pagination.pageNum,
-        pageSize: pagination.pageSize,
-        status: pagination.status,
-      })
-      .then((res) => {
-        setListUser(res.data.items);
-      });
-  }, [pagination]);
-  useEffect(() => {
-    apiService.getListFile(pagination).then((res) => {
-      setListFile(res.data.items.files);
+    apiService.getListUser().then((res) => {
+      setListUser(res.data.items);
     });
     apiService.reportStatus().then((res) => {
       const { totalInputted, totalFile, reportVoList } = res.data.items;
       setReportStatus({ totalInputted, totalFile, reportVoList });
     });
-  }, [pagination]);
+  }, []);
+  useEffect(() => {
+    handleFetchList();
+  }, [searchParams]);
   const handleEditDocument = (file) => {
     setShow(true);
     setFileDetail(file);
   };
+  const handleFetchList = () => {
+    apiService.getListFile(searchParams).then((res) => {
+      setListFile(res.data.items.files);
+      setPagination({
+        totalPages: res.data.items.totalPages,
+        totalItems: res.data.items.totalItems,
+        page: res.data.items.currentPage + 1,
+      });
+    });
+  };
   const handleExport = () => {
     apiService.exportDocument();
+  };
+  const handleChangePage = (pageNum) => {
+    setSearchParams({ ...searchParams, pageNum });
   };
   return (
     <>
@@ -136,8 +141,8 @@ export default function Statistic() {
           <Form.Select
             className="!w-80 mr-2"
             onChange={(e) =>
-              setPagination({
-                ...pagination,
+              setSearchParams({
+                ...searchParams,
                 userId: e.target.value,
               })
             }
@@ -154,7 +159,10 @@ export default function Statistic() {
               defaultChecked={true}
               value="0"
               onChange={(e) =>
-                setPagination({ ...pagination, status: e.target.value })
+                setSearchParams({
+                  ...searchParams,
+                  status: e.target.value,
+                })
               }
             >
               Tất cả
@@ -200,7 +208,7 @@ export default function Statistic() {
             </tbody>
           </Table>
         </div>
-        <Pagination />
+        <Pagination onChangePage={handleChangePage} pagination={pagination} />
       </div>
       <Modal
         show={show}
