@@ -8,6 +8,7 @@ import apiService from "../../api";
 import createNotification from "../../utils/notification";
 import ModalAssignee from "../../components/ModalAssignee";
 import ModalImport from "../../components/ModalImport";
+import { RingSpinnerOverlay } from "react-spinner-overlay";
 
 export default function EnhancedTable() {
   const [searchParams, setSearchParams] = useState({
@@ -17,7 +18,7 @@ export default function EnhancedTable() {
   });
   const [listFile, setListFile] = useState([]);
   const [checkAll, setCheckAll] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([
     {
       id: "512asfdasw512616",
@@ -58,6 +59,7 @@ export default function EnhancedTable() {
     setData(newState);
   };
   const handleFetchListFile = (pageNum) => {
+    setLoading(true);
     apiService
       .getListFile({
         pageNum: searchParams.pageNum,
@@ -78,6 +80,7 @@ export default function EnhancedTable() {
         });
         setListFile(convertedList);
         setCheckAll("");
+        setLoading(false);
       });
   };
   const handleCheckedAll = () => {
@@ -140,6 +143,10 @@ export default function EnhancedTable() {
     formData.append("uploadFiles", file);
     apiService.importFile(formData);
   };
+  const handleSelectDropdown = (key, value) => {
+    setPagination({ ...pagination, page: 1 });
+    setSearchParams({ ...searchParams, pageNum: 0, [key]: value });
+  };
   return (
     <>
       <div className="p-4">
@@ -177,7 +184,7 @@ export default function EnhancedTable() {
         <Form.Select
           className="!w-80"
           onChange={(e) =>
-            setSearchParams({ ...searchParams, assignedStatus: e.target.value })
+            handleSelectDropdown("assignedStatus", e.target.value)
           }
         >
           <option value="0" defaultChecked="0">
@@ -239,6 +246,7 @@ export default function EnhancedTable() {
           onHide={() => setShowModalAssign(false)}
           onConfirm={handleConfirmAssign}
         />
+        <RingSpinnerOverlay loading={loading} size={40} />
         <ModalImport
           show={showModalAddFile}
           onHide={() => setShowModalAddFile(false)}
