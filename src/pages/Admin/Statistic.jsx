@@ -55,8 +55,9 @@ export default function Statistic() {
   const [pagination, setPagination] = useState({});
   const [searchParams, setSearchParams] = useState({
     pageNum: 0,
-    pageSize: 5,
+    pageSize: 10,
     status: "0",
+    userId: "",
   });
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
@@ -95,6 +96,11 @@ export default function Statistic() {
   };
   const handleChangePage = (pageNum) => {
     setSearchParams({ ...searchParams, pageNum });
+  };
+  const handleSelectDropdown = (key, value) => {
+    console.log(key, value);
+    setSearchParams({ ...searchParams, pageNum: 0, [key]: value });
+    setPagination({ ...pagination, page: 1 });
   };
   return (
     <>
@@ -140,12 +146,7 @@ export default function Statistic() {
         <div className="flex container my-2">
           <Form.Select
             className="!w-80 mr-2"
-            onChange={(e) =>
-              setSearchParams({
-                ...searchParams,
-                userId: e.target.value,
-              })
-            }
+            onChange={(e) => handleSelectDropdown("userId", e.target.value)}
           >
             <option defaultChecked={true} value="">
               Tất cả
@@ -154,17 +155,11 @@ export default function Statistic() {
               return <option value={user.id}>{user.fullName}</option>;
             })}
           </Form.Select>
-          <Form.Select className="!w-80 mr-2">
-            <option
-              defaultChecked={true}
-              value="0"
-              onChange={(e) =>
-                setSearchParams({
-                  ...searchParams,
-                  status: e.target.value,
-                })
-              }
-            >
+          <Form.Select
+            className="!w-80 mr-2"
+            onChange={(e) => handleSelectDropdown("status", e.target.value)}
+          >
+            <option defaultChecked={true} value="0">
               Tất cả
             </option>
             <option value="2">Đã Nhập</option>
