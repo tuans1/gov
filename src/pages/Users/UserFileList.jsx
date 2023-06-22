@@ -147,7 +147,7 @@ export default function UserFileList() {
   }, [searchParams]);
 
   const handleFetchList = () => {
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("userId") || "";
     apiService
       .getListFile({
         pageNum: searchParams.pageNum,

@@ -98,7 +98,6 @@ export default function Statistic() {
     setSearchParams({ ...searchParams, pageNum });
   };
   const handleSelectDropdown = (key, value) => {
-    console.log(key, value);
     setSearchParams({ ...searchParams, pageNum: 0, [key]: value });
     setPagination({ ...pagination, page: 1 });
   };
