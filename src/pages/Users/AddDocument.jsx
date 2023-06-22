@@ -9,7 +9,11 @@ import SpeechRecognition, {
 import apiService from "../../api";
 import createNotification from "../../utils/notification";
 import { RingSpinnerOverlay } from "react-spinner-overlay";
-export default function AddDocument({ fileDetail }) {
+export default function AddDocument({
+  fileDetail,
+  indexFileProps,
+  listFileProps,
+}) {
   const [formObj, setFormObj] = useState({
     subject: {
       label: "Tiêu đề VB",
@@ -62,6 +66,7 @@ export default function AddDocument({ fileDetail }) {
   const [speechField, setSpeechField] = useState("");
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const [currentIndex, setCurrentIndex] = useState("");
+  const [listFile, setListFile] = useState([]);
   const [dirtyForm, setDirtyForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
@@ -76,12 +81,14 @@ export default function AddDocument({ fileDetail }) {
   }, [transcript]);
   useEffect(() => {
     const newFormObj = { ...formObj };
+    console.log(fileDetail);
     const formDetail = fileDetail.id ? fileDetail : location.state.data;
     Object.keys(newFormObj).forEach((key) => {
       newFormObj[key].value = formDetail[key] || "";
     });
+    setListFile(listFileProps || location.state.listFile);
     setFormObj(newFormObj);
-    setCurrentIndex(location.state.index);
+    setCurrentIndex(indexFileProps || location.state.index);
   }, []);
   const handleSpeech = (field) => {
     if (listening) {
@@ -113,7 +120,7 @@ export default function AddDocument({ fileDetail }) {
       payload[key] = formObj[key].value;
     });
     apiService
-      .saveDocument({ id: location.state.listFile[currentIndex].id, payload })
+      .saveDocument({ id: listFile[currentIndex].id, payload })
       .then((res) => {
         createNotification("success", "Lưu File thành công");
         setDirtyForm(false);
@@ -121,7 +128,6 @@ export default function AddDocument({ fileDetail }) {
       });
   };
   const handleNextFile = () => {
-    const { listFile } = location.state;
     if (currentIndex + 1 === listFile.length) {
       createNotification(
         "warning",
@@ -228,7 +234,7 @@ export default function AddDocument({ fileDetail }) {
           </Form>
         </div>
         <div className="col-span-7">
-          <PDFViewer fileUrl={location.state.listFile[currentIndex]?.fileUrl} />
+          <PDFViewer fileUrl={listFile[currentIndex]?.fileUrl} />
         </div>
       </div>
       <RingSpinnerOverlay loading={loading} size={40} />

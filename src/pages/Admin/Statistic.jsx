@@ -67,6 +67,7 @@ export default function Statistic() {
   const [listFile, setListFile] = useState([]);
   const [fileDetail, setFileDetail] = useState({});
   const [reportStatus, setReportStatus] = useState({});
+  const [currentIndex, setCurrentIndex] = useState("");
   useEffect(() => {
     apiService.getListUser().then((res) => {
       setListUser(res.data.items);
@@ -79,8 +80,9 @@ export default function Statistic() {
   useEffect(() => {
     handleFetchList();
   }, [searchParams]);
-  const handleEditDocument = (file) => {
+  const handleEditDocument = (file, index) => {
     setShow(true);
+    setCurrentIndex(index);
     setFileDetail(file);
   };
   const handleFetchList = () => {
@@ -155,7 +157,11 @@ export default function Statistic() {
               Tất cả
             </option>
             {listUser.map((user) => {
-              return <option value={user.id}>{user.fullName}</option>;
+              return (
+                <option value={user.id} key={user.id}>
+                  {user.fullName}
+                </option>
+              );
             })}
           </Form.Select>
           <Form.Select
@@ -186,7 +192,10 @@ export default function Statistic() {
             <tbody>
               {listFile.map((file, index) => {
                 return (
-                  <tr onClick={() => handleEditDocument(file)} key={file.id}>
+                  <tr
+                    onDoubleClick={() => handleEditDocument(file, index)}
+                    key={file.id}
+                  >
                     <td>{index + 1}</td>
                     <td>{file.userName}</td>
                     <td>{file.subject}</td>
@@ -220,7 +229,11 @@ export default function Statistic() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="test">
-          <FormInput fileDetail={fileDetail} />
+          <FormInput
+            fileDetail={fileDetail}
+            listFileProps={listFile}
+            indexFileProps={currentIndex}
+          />
         </Modal.Body>
       </Modal>
       <RingSpinnerOverlay loading={loading} size={40} />
