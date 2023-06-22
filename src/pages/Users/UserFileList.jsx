@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import Alert from "react-bootstrap/Alert";
 import apiService from "../../api";
+import { RingSpinnerOverlay } from "react-spinner-overlay";
 const headCells = [
   {
     label: "STT",
@@ -44,6 +45,7 @@ const headCells = [
 ];
 export default function UserFileList() {
   const [pagination, setPagination] = useState({});
+  const [loading, setLoading] = useState(false);
   const [searchParams, setSearchParams] = useState({
     pageNum: 0,
     totalPages: 1,
@@ -51,90 +53,90 @@ export default function UserFileList() {
     status: "0",
   });
   const [listFile, setListFile] = useState([
-    {
-      id: 14,
-      fileName: "filename3",
-      organizationName: "UBND Quận Cầu Giấy",
-      departmentName: "chủ tịch",
-      userName: "DVN",
-      subject: "tieu de3",
-      profileNo: "sokyhieu3",
-      numOfText: "sovanban3",
-      folio: "toso3",
-      profileCode: "mahoso3",
-      seq: 3,
-      fileDate: "12:22 14/05/2023",
-      numberOfPage: 4,
-      createTime: "12:22 14/05/2023",
-      createBy: "admin",
-      updateTime: "13:51 14/05/2023",
-      updateBy: "admin",
-      fileUrl:
-        "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
-    },
-    {
-      id: 1,
-      fileName: "filename0",
-      organizationName: "UBND Quận Cầu Giấy",
-      departmentName: "chủ tịch",
-      userName: "DVN",
-      subject: "tieu de0",
-      profileNo: "sokyhieu0",
-      numOfText: "sovanban0",
-      folio: "toso0",
-      profileCode: "mahoso0",
-      seq: 0,
-      fileDate: "12:22 14/05/2020",
-      numberOfPage: 4,
-      createTime: "12:22 14/05/2020",
-      createBy: "admin",
-      updateTime: "10:51 14/05/2020",
-      updateBy: "admin",
-      fileUrl:
-        "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
-    },
-    {
-      id: 10,
-      fileName: "xxxxxx",
-      organizationName: "UBND Quận Cầu Giấy",
-      departmentName: "chủ tịch",
-      userName: "DVN",
-      subject: "xxxxxx",
-      profileNo: "xxxxxx",
-      numOfText: "sovanbxxxxxxan0",
-      folio: "xxxxxx",
-      profileCode: "xxxxxx",
-      seq: 0,
-      fileDate: "12:22 14/05/2020",
-      numberOfPage: 4,
-      createTime: "12:22 14/05/2020",
-      createBy: "admin",
-      updateTime: "10:51 14/05/2020",
-      updateBy: "admin",
-      fileUrl:
-        "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
-    },
-    {
-      id: 19,
-      fileName: "lololololol",
-      organizationName: "UBND Quận Cầu Giấy",
-      departmentName: "chủ tịch",
-      userName: "DVN",
-      subject: "lololololol",
-      profileNo: "lololololol",
-      numOfText: "sovanblolololololan0",
-      folio: "lololololol",
-      profileCode: "lololololol",
-      seq: 0,
-      fileDate: "12:22 14/05/2020",
-      numberOfPage: 4,
-      createTime: "12:22 14/05/2020",
-      createBy: "admin",
-      updateTime: "10:51 14/05/2020",
-      updateBy: "admin",
-      fileUrl:
-        "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
-    },
+    // {
+    //   id: 14,
+    //   fileName: "filename3",
+    //   organizationName: "UBND Quận Cầu Giấy",
+    //   departmentName: "chủ tịch",
+    //   userName: "DVN",
+    //   subject: "tieu de3",
+    //   profileNo: "sokyhieu3",
+    //   numOfText: "sovanban3",
+    //   folio: "toso3",
+    //   profileCode: "mahoso3",
+    //   seq: 3,
+    //   fileDate: "12:22 14/05/2023",
+    //   numberOfPage: 4,
+    //   createTime: "12:22 14/05/2023",
+    //   createBy: "admin",
+    //   updateTime: "13:51 14/05/2023",
+    //   updateBy: "admin",
+    //   fileUrl:
+    //     "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
+    // },
+    // {
+    //   id: 1,
+    //   fileName: "filename0",
+    //   organizationName: "UBND Quận Cầu Giấy",
+    //   departmentName: "chủ tịch",
+    //   userName: "DVN",
+    //   subject: "tieu de0",
+    //   profileNo: "sokyhieu0",
+    //   numOfText: "sovanban0",
+    //   folio: "toso0",
+    //   profileCode: "mahoso0",
+    //   seq: 0,
+    //   fileDate: "12:22 14/05/2020",
+    //   numberOfPage: 4,
+    //   createTime: "12:22 14/05/2020",
+    //   createBy: "admin",
+    //   updateTime: "10:51 14/05/2020",
+    //   updateBy: "admin",
+    //   fileUrl:
+    //     "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
+    // },
+    // {
+    //   id: 10,
+    //   fileName: "xxxxxx",
+    //   organizationName: "UBND Quận Cầu Giấy",
+    //   departmentName: "chủ tịch",
+    //   userName: "DVN",
+    //   subject: "xxxxxx",
+    //   profileNo: "xxxxxx",
+    //   numOfText: "sovanbxxxxxxan0",
+    //   folio: "xxxxxx",
+    //   profileCode: "xxxxxx",
+    //   seq: 0,
+    //   fileDate: "12:22 14/05/2020",
+    //   numberOfPage: 4,
+    //   createTime: "12:22 14/05/2020",
+    //   createBy: "admin",
+    //   updateTime: "10:51 14/05/2020",
+    //   updateBy: "admin",
+    //   fileUrl:
+    //     "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
+    // },
+    // {
+    //   id: 19,
+    //   fileName: "lololololol",
+    //   organizationName: "UBND Quận Cầu Giấy",
+    //   departmentName: "chủ tịch",
+    //   userName: "DVN",
+    //   subject: "lololololol",
+    //   profileNo: "lololololol",
+    //   numOfText: "sovanblolololololan0",
+    //   folio: "lololololol",
+    //   profileCode: "lololololol",
+    //   seq: 0,
+    //   fileDate: "12:22 14/05/2020",
+    //   numberOfPage: 4,
+    //   createTime: "12:22 14/05/2020",
+    //   createBy: "admin",
+    //   updateTime: "10:51 14/05/2020",
+    //   updateBy: "admin",
+    //   fileUrl:
+    //     "filegovmanagement/UMs0kyffxz1j4uMC_13May2023032722GMT_1683948442291.pdf",
+    // },
   ]);
   const navigate = useNavigate();
   const handleRedirectToForm = (data, index) => {
@@ -147,6 +149,7 @@ export default function UserFileList() {
   }, [searchParams]);
 
   const handleFetchList = () => {
+    setLoading(true);
     const userId = localStorage.getItem("userId") || "";
     apiService
       .getListFile({
@@ -162,6 +165,7 @@ export default function UserFileList() {
           totalItems: res.data.items.totalItems,
           page: res.data.items.currentPage + 1,
         });
+        setLoading(false);
       });
   };
   const handleChangePage = (pageNum) => {
@@ -224,6 +228,7 @@ export default function UserFileList() {
         </Table>
       </div>
       <Pagination onChangePage={handleChangePage} pagination={pagination} />
+      <RingSpinnerOverlay loading={loading} size={40} />
     </>
   );
 }

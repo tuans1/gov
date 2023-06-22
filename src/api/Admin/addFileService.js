@@ -4,7 +4,9 @@ const URIS = {
   LIST_FILE: `${PREFIX}/get-file?`,
   ASSIGN_USER: `${PREFIX}/file/assign`,
   IMPORT_FILE: `${PREFIX}/import-file-zip`,
+  DELETE_ASSIGNEE: `${PREFIX}/file/remove-assign`,
 };
+
 export default {
   assignUser(data) {
     return axios.post(URIS.ASSIGN_USER, data).then((res) => {
@@ -27,5 +29,11 @@ export default {
     return axios
       .get(URIS.LIST_FILE + new URLSearchParams(data))
       .then((res) => res);
+  },
+  deleteAssignee(data) {
+    return axios.post(URIS.DELETE_ASSIGNEE, data).then((res) => {
+      console.log(res);
+      return res;
+    });
   },
 };

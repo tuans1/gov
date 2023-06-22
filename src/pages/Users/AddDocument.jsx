@@ -8,6 +8,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import apiService from "../../api";
 import createNotification from "../../utils/notification";
+import { RingSpinnerOverlay } from "react-spinner-overlay";
 export default function AddDocument({ fileDetail }) {
   const [formObj, setFormObj] = useState({
     subject: {
@@ -62,6 +63,7 @@ export default function AddDocument({ fileDetail }) {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const [currentIndex, setCurrentIndex] = useState("");
   const [dirtyForm, setDirtyForm] = useState(false);
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate("");
   useEffect(() => {
@@ -105,6 +107,7 @@ export default function AddDocument({ fileDetail }) {
       createNotification("warning", "Tiêu đề không được bỏ trống");
       return;
     }
+    setLoading(true);
     const payload = {};
     Object.keys(formObj).forEach((key) => {
       payload[key] = formObj[key].value;
@@ -114,6 +117,7 @@ export default function AddDocument({ fileDetail }) {
       .then((res) => {
         createNotification("success", "Lưu File thành công");
         setDirtyForm(false);
+        setLoading(false);
       });
   };
   const handleNextFile = () => {
@@ -227,6 +231,7 @@ export default function AddDocument({ fileDetail }) {
           <PDFViewer fileUrl={location.state.listFile[currentIndex]?.fileUrl} />
         </div>
       </div>
+      <RingSpinnerOverlay loading={loading} size={40} />
     </>
   );
 }

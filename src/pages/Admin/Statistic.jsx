@@ -10,6 +10,7 @@ import { ReactComponent as ExportIcon } from "../../assets/icons/export-file.svg
 import Pagination from "../../components/Pagination";
 import apiService from "../../api";
 import createNotification from "../../utils/notification";
+import { RingSpinnerOverlay } from "react-spinner-overlay";
 const headCells = [
   {
     label: "STT",
@@ -59,6 +60,7 @@ export default function Statistic() {
     status: "0",
     userId: "",
   });
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [listUser, setListUser] = useState([]);
@@ -82,6 +84,7 @@ export default function Statistic() {
     setFileDetail(file);
   };
   const handleFetchList = () => {
+    setLoading(true);
     apiService.getListFile(searchParams).then((res) => {
       setListFile(res.data.items.files);
       setPagination({
@@ -89,6 +92,7 @@ export default function Statistic() {
         totalItems: res.data.items.totalItems,
         page: res.data.items.currentPage + 1,
       });
+      setLoading(false);
     });
   };
   const handleExport = () => {
@@ -219,6 +223,7 @@ export default function Statistic() {
           <FormInput fileDetail={fileDetail} />
         </Modal.Body>
       </Modal>
+      <RingSpinnerOverlay loading={loading} size={40} />
     </>
   );
 }

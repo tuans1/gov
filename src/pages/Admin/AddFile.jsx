@@ -54,8 +54,8 @@ export default function EnhancedTable() {
   }, [searchParams]);
   const handleChecked = (index) => {
     const newState = [...listFile];
-    newState[index].isCheck = newState[index].isCheck ? "" : "checked";
-    newState.every((x) => x.isCheck) ? setCheckAll("checked") : setCheckAll("");
+    newState[index].isCheck = newState[index].isCheck ? false : true;
+    newState.every((x) => x.isCheck) ? setCheckAll(true) : setCheckAll(false);
     setData(newState);
   };
   const handleFetchListFile = (pageNum) => {
@@ -118,12 +118,14 @@ export default function EnhancedTable() {
         });
     }
   };
-  const handleDeletePersonInCharge = () => {
+  const handleDeleteAssignee = () => {
     if (window.confirm("Bạn có chắc chắn muốn xóa người phụ trách?") == true) {
-      createNotification("success", "Xóa người đảm nhiệm thành công");
-      console.log("Xóa ");
-    } else {
-      console.log("Hủy");
+      setLoading(true);
+      const fileId = data.filter((file) => file.isCheck).map((file) => file.id);
+      apiService.deleteAssignee({ fileId }).then(() => {
+        createNotification("success", "Xóa người phụ trách thành công");
+        handleFetchListFile();
+      });
     }
   };
   const handleDeleteFile = (file) => {
@@ -168,10 +170,7 @@ export default function EnhancedTable() {
               >
                 Giao Việc
               </Button>
-              <Button
-                onClick={() => handleDeletePersonInCharge()}
-                variant="danger"
-              >
+              <Button onClick={() => handleDeleteAssignee()} variant="danger">
                 Xóa người Phụ trách
               </Button>
             </>
@@ -241,18 +240,18 @@ export default function EnhancedTable() {
           </tbody>
         </Table>
         <Pagination onChangePage={handleChangePage} pagination={pagination} />
-        <ModalAssignee
-          show={showModalAssign}
-          onHide={() => setShowModalAssign(false)}
-          onConfirm={handleConfirmAssign}
-        />
-        <RingSpinnerOverlay loading={loading} size={40} />
-        <ModalImport
-          show={showModalAddFile}
-          onHide={() => setShowModalAddFile(false)}
-          onConfirm={handleImport}
-        />
       </div>
+      <ModalAssignee
+        show={showModalAssign}
+        onHide={() => setShowModalAssign(false)}
+        onConfirm={handleConfirmAssign}
+      />
+      <ModalImport
+        show={showModalAddFile}
+        onHide={() => setShowModalAddFile(false)}
+        onConfirm={handleImport}
+      />
+      <RingSpinnerOverlay loading={loading} size={40} />
     </>
   );
 }

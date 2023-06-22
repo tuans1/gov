@@ -4,6 +4,7 @@ import apiService from "../../api";
 import { formatDateTime } from "../../utils/dateTimeUtil";
 import Pagination from "../../components/Pagination";
 import createNotification from "../../utils/notification";
+import { RingSpinnerOverlay } from "react-spinner-overlay";
 export default function User() {
   const [account, setAccount] = useState({
     fullName: "",
@@ -11,12 +12,17 @@ export default function User() {
     password: "",
     roles: "USER",
   });
+  const [loading, setLoading] = useState(false);
   const [listUser, setListUser] = useState([]);
   useEffect(() => {
     fetchListUser();
   }, []);
   const fetchListUser = (page = 1) => {
-    apiService.getListUser({ page }).then((res) => setListUser(res.data.items));
+    setLoading(true);
+    apiService.getListUser({ page }).then((res) => {
+      setListUser(res.data.items);
+      setLoading(false);
+    });
   };
   const handleCreateUser = async () => {
     await apiService.createUser(account);
@@ -28,9 +34,6 @@ export default function User() {
       fullName: "",
       roles: "USER",
     });
-  };
-  const handleChangePage = (page) => {
-    fetchListUser(page);
   };
   return (
     <>
@@ -108,6 +111,7 @@ export default function User() {
           </tbody>
         </Table>
       </div>
+      <RingSpinnerOverlay loading={loading} size={40} />
     </>
   );
 }
