@@ -11,22 +11,26 @@ import createNotification from "../../utils/notification";
 export default function AddDocument({ fileDetail }) {
   const [formObj, setFormObj] = useState({
     subject: {
-      label: "Tiêu đề văn bản",
+      label: "Tiêu đề VB",
       value: "",
       isSpeech: true,
       rules: "required",
+      type: "textarea",
     },
     profileNo: {
       label: "Số và ký hiệu hồ sơ",
       value: "",
+      className: "col-span-6",
     },
     organizationName: {
-      label: "Tên cơ quan tổ chức ban hành văn bản",
+      label: "Tên cơ quan tổ chức ban hành VB",
       value: "",
+      className: "col-span-6",
     },
     seq: {
-      label: "Số thứ tự văn bản trong hồ sơ ( Dùng để tìm kiếm file )",
+      label: "STT VB trong hồ sơ",
       value: "",
+      className: "col-span-6",
     },
     folio: {
       label: "Tờ số",
@@ -39,17 +43,17 @@ export default function AddDocument({ fileDetail }) {
       className: "col-span-6",
     },
     numOfText: {
-      label: "Số của văn bản",
+      label: "Số của VB ( Dùng để tìm kiếm file )",
       value: "",
       className: "col-span-6",
     },
     fileDate: {
-      label: "Ngày tháng năm văn bản",
+      label: "Ngày tháng năm VB",
       value: "",
       className: "col-span-6",
     },
     numberOfPage: {
-      label: "Số lượng trang của văn bản",
+      label: "Số lượng trang của VB",
       value: "",
       className: "col-span-6",
     },
@@ -117,7 +121,7 @@ export default function AddDocument({ fileDetail }) {
     if (currentIndex + 1 === listFile.length) {
       createNotification(
         "warning",
-        "Đã đến file cuối cùng, vui lòng trở về danh sách"
+        "Đã đến file cuối cùng, vui lòng trở về danh sách để tiếp tục."
       );
       return;
     }
@@ -172,42 +176,47 @@ export default function AddDocument({ fileDetail }) {
               File tiếp theo
             </Button>
           </div>
-          <p>{transcript}</p>
           <Form>
             <div className="grid grid-cols-12 gap-4">
               {Object.keys(formObj).map((key) => {
                 return (
-                  <div className="col-span-12">
-                    <div className={formObj[key].className} key={key}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>
-                          {formObj[key].label} {""}
-                          {formObj[key].rules?.includes("required") && (
-                            <span class="text-red-500">*</span>
-                          )}
-                        </Form.Label>
-                        <div>
-                          <Form.Control
-                            type="text"
-                            placeholder={"Nhập " + formObj[key].label}
-                            value={formObj[key].value}
-                            onChange={(e) =>
-                              handleChangeInput(key, e.target.value)
-                            }
-                          />
-                          {formObj[key].isSpeech && (
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              className="mb-4 float-right"
-                              onClick={() => handleSpeech(key)}
-                            >
-                              {speechField === key ? "Tắt" : "Đọc"}
-                            </Button>
-                          )}
-                        </div>
-                      </Form.Group>
-                    </div>
+                  <div
+                    className={formObj[key].className || "col-span-12"}
+                    key={key}
+                  >
+                    <Form.Group className="mb-3">
+                      <Form.Label>
+                        {formObj[key].label} {""}
+                        {formObj[key].rules?.includes("required") && (
+                          <span class="text-red-500">*</span>
+                        )}
+                      </Form.Label>
+                      <div>
+                        <Form.Control
+                          type="text"
+                          as={
+                            formObj[key]?.type?.includes("textarea")
+                              ? "textarea"
+                              : "input"
+                          }
+                          placeholder={"Nhập " + formObj[key].label}
+                          value={formObj[key].value}
+                          onChange={(e) =>
+                            handleChangeInput(key, e.target.value)
+                          }
+                        />
+                        {formObj[key].isSpeech && (
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            className="mb-4 float-right"
+                            onClick={() => handleSpeech(key)}
+                          >
+                            {speechField === key ? "Tắt" : "Đọc"}
+                          </Button>
+                        )}
+                      </div>
+                    </Form.Group>
                   </div>
                 );
               })}

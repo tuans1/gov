@@ -12,13 +12,13 @@ const headCells = [
     label: "Tên File",
   },
   {
-    label: "Tiêu đề văn bản",
+    label: "Tiêu đề VB",
   },
   {
     label: "Số và ký hiệu hồ sơ",
   },
   {
-    label: "Số của văn bản ( Dùng để tìm kiếm file )",
+    label: "Số của VB ( Dùng để tìm kiếm file )",
   },
   {
     label: "Tờ Số",
@@ -27,16 +27,16 @@ const headCells = [
     label: "Mã hồ sơ",
   },
   {
-    label: "Số thứ tự văn bản trong hồ sơ",
+    label: "STT VB trong hồ sơ trong hồ sơ",
   },
   {
-    label: "Ngày tháng năm văn bản",
+    label: "Ngày tháng năm VB",
   },
   {
-    label: "Tên cơ quan tổ chức ban hành văn bản",
+    label: "Tên cơ quan tổ chức ban hành VB",
   },
   {
-    label: "Số lượng trang của văn bản",
+    label: "Số lượng trang của VB",
   },
   {
     label: "Ngày nhập",

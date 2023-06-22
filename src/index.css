@@ -106,3 +106,7 @@ body {
         padding: 40px 15px 15px 15px;
     }
 }
+
+textarea {
+    height: 100px;
+}
