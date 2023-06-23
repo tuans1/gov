@@ -46,7 +46,7 @@ function PDFViewer({ fileUrl }) {
   //   }, 1000);
   // };
   return (
-    <div className="overflow-y-scroll h-[calc(100vh-96px)]">
+    <div className="overflow-y-scroll h-[calc(100vh-150px)]">
       <div>
         <Worker
           textLayerRendered={true}

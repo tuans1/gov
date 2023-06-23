@@ -5,6 +5,7 @@ const URIS = {
   ASSIGN_USER: `${PREFIX}/file/assign`,
   IMPORT_FILE: `${PREFIX}/import-file-zip`,
   DELETE_ASSIGNEE: `${PREFIX}/file/remove-assign`,
+  DELETE_FILE: `${PREFIX}/remove-file`,
 };
 
 export default {
@@ -20,10 +21,10 @@ export default {
       return res;
     });
   },
-  deleteUser() {
-    return axios
-      .get("https://www.boredapi.com/api/activity")
-      .then((res) => res);
+  deleteFile(data) {
+    return axios.delete(URIS.DELETE_FILE, data).then((res) => {
+      return res;
+    });
   },
   getListFile(data) {
     return axios
@@ -32,7 +33,6 @@ export default {
   },
   deleteAssignee(data) {
     return axios.post(URIS.DELETE_ASSIGNEE, data).then((res) => {
-      console.log(res);
       return res;
     });
   },

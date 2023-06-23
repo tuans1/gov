@@ -88,7 +88,7 @@ export default function AddDocument({
     });
     setListFile(listFileProps || location.state.listFile);
     setFormObj(newFormObj);
-    setCurrentIndex(indexFileProps || location.state.index);
+    setCurrentIndex(indexFileProps || location?.state?.index || 0);
   }, []);
   const handleSpeech = (field) => {
     if (listening) {

@@ -45,7 +45,6 @@ export default function EnhancedTable() {
       isCheck: "",
     },
   ]);
-  const [file, setFile] = useState(null);
   const [showModalAssign, setShowModalAssign] = useState(false);
   const [showModalAddFile, setShowModalAddFile] = useState(false);
   const [pagination, setPagination] = useState({});
@@ -96,14 +95,13 @@ export default function EnhancedTable() {
     });
     setData(newState);
   };
-
+  const checkedList = listFile
+    .filter((file) => file.isCheck)
+    .map((file) => file.id);
   const handleConfirmAssign = async (assignee) => {
     if (
       window.confirm(`Bạn có chắc giao việc cho ${assignee.fullName} ?`) == true
     ) {
-      const checkedList = listFile
-        .filter((file) => file.isCheck)
-        .map((file) => file.id);
       await apiService
         .assignUser({ fileId: checkedList, userId: assignee.id })
         .then((res) => {
@@ -121,26 +119,24 @@ export default function EnhancedTable() {
   const handleDeleteAssignee = () => {
     if (window.confirm("Bạn có chắc chắn muốn xóa người phụ trách?") == true) {
       setLoading(true);
-      const fileId = data.filter((file) => file.isCheck).map((file) => file.id);
-      apiService.deleteAssignee({ fileId }).then(() => {
+      apiService.deleteAssignee({ fileId: checkedList }).then(() => {
         createNotification("success", "Xóa người phụ trách thành công");
         handleFetchListFile();
       });
     }
   };
-  const handleDeleteFile = (file) => {
-    if (
-      window.confirm(`Bạn có chắc chắn muốn xóa File ${file.tenFile} ?`) == true
-    ) {
-      console.log("Xóa ");
-    } else {
-      console.log("Hủy");
+  const handleDeleteFile = () => {
+    if (window.confirm(`Bạn có chắc chắn muốn xóa File đã chọn?`) == true) {
+      apiService.deleteFile({ fileId: checkedList }).then(() => {
+        createNotification("success", "Xóa File thành công");
+        handleFetchListFile();
+      });
     }
   };
   const handleChangePage = async (pageNum) => {
     setSearchParams({ ...searchParams, pageNum });
   };
-  const handleImport = () => {
+  const handleImport = (file) => {
     const formData = new FormData();
     formData.append("uploadFiles", file);
     apiService.importFile(formData);
@@ -152,7 +148,7 @@ export default function EnhancedTable() {
   return (
     <>
       <div className="p-4">
-        <div className="mb-2">
+        <div className="mb-2 flex">
           <Button
             onClick={() => {
               setShowModalAddFile(true);
@@ -170,8 +166,15 @@ export default function EnhancedTable() {
               >
                 Giao Việc
               </Button>
-              <Button onClick={() => handleDeleteAssignee()} variant="danger">
+              <Button
+                onClick={() => handleDeleteAssignee()}
+                className="ml-auto mr-2"
+                variant="danger"
+              >
                 Xóa người Phụ trách
+              </Button>
+              <Button onClick={handleDeleteFile} variant="danger">
+                Xóa File
               </Button>
             </>
           )}
@@ -225,15 +228,6 @@ export default function EnhancedTable() {
                   <td>{x.fileName}</td>
                   <td>{x.departmentName}</td>
                   <td>{x.createTime}</td>
-                  <td>
-                    <Button
-                      size="sm"
-                      variant="danger"
-                      onClick={() => handleDeleteFile(x)}
-                    >
-                      Xóa
-                    </Button>
-                  </td>
                 </tr>
               );
             })}
