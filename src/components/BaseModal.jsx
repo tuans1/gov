@@ -8,6 +8,7 @@ export default function BaseModal({
   show,
   onHide,
   onConfirm,
+  disabled
 }) {
   return (
     <Modal onHide={onHide} show={show} size={size} centered>
@@ -16,7 +17,7 @@ export default function BaseModal({
       </Modal.Header>
       <Modal.Body className="text-center">{children}</Modal.Body>
       <Modal.Footer>
-        <Button onClick={onConfirm}>Đồng ý</Button>
+        <Button onClick={onConfirm} disabled={disabled}>Đồng ý</Button>
       </Modal.Footer>
     </Modal>
   );

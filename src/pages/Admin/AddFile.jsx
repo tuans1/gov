@@ -102,6 +102,9 @@ export default function EnhancedTable() {
     if (
       window.confirm(`Bạn có chắc giao việc cho ${assignee.fullName} ?`) == true
     ) {
+      setShowModalAssign(false);
+      setLoading(true);
+      return;
       await apiService
         .assignUser({ fileId: checkedList, userId: assignee.id })
         .then((res) => {
@@ -180,21 +183,41 @@ export default function EnhancedTable() {
           )}
         </div>
         <Alert key={"success"} variant="success">
-          Tổng file đã giao việc : 200/600
+          Tổng file đã giao : 200/600
         </Alert>
-        <p>Filter theo Status</p>
-        <Form.Select
-          className="!w-80"
-          onChange={(e) =>
-            handleSelectDropdown("assignedStatus", e.target.value)
-          }
-        >
-          <option value="0" defaultChecked="0">
-            Tất cả
-          </option>
-          <option value="2">Đã Giao</option>
-          <option value="1">Chưa Giao</option>
-        </Form.Select>
+        <div className="flex">
+          <div>
+            <span className="!text-left">Trạng thái File</span>
+            <Form.Select
+              className="!w-80"
+              onChange={(e) =>
+                handleSelectDropdown("assignedStatus", e.target.value)
+              }
+            >
+              <option value="0" defaultChecked="0">
+                Tất cả
+              </option>
+              <option value="2">Đã Giao</option>
+              <option value="1">Chưa Giao</option>
+            </Form.Select>
+          </div>
+          <div className="ml-2">
+            <span className="!text-left">Bộ Phận</span>
+            <Form.Select
+              className="!w-80"
+              onChange={(e) =>
+                handleSelectDropdown("assignedStatus", e.target.value)
+              }
+            >
+              <option value="0" defaultChecked="0">
+                Tất cả
+              </option>
+              <option value="2">Văn Phòng</option>
+              <option value="3">Công Chứng</option>
+              <option value="1">Chủ Tịch</option>
+            </Form.Select>
+          </div>
+        </div>
         <Table striped bordered hover size="sm">
           <thead>
             <tr>

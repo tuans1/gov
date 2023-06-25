@@ -14,7 +14,11 @@ export default function ModalImport({ onHide, onConfirm, show }) {
       onHide={onHide}
       onConfirm={handleConfirm}
     >
-      <p className="!text-left">Bộ Phận</p>
+      <Form.Select className="!w-80">
+        <option value="2">Văn Phòng</option>
+        <option value="3">Công Chứng</option>
+        <option value="1">Chủ Tịch</option>
+      </Form.Select>
       <Form.Control type="text" placeholder="Nhập Bộ Phận" />
       <div className="border border-red-300">
         <label htmlFor="myfile">Select a file:</label>

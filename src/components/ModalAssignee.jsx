@@ -24,6 +24,7 @@ export default function ModalAssignee({ onHide, onConfirm, show }) {
       show={show}
       onHide={onHide}
       onConfirm={handleConfirm}
+      disabled={assigner.id ? false : true}
     >
       {listUser.map((user) => {
         return (
