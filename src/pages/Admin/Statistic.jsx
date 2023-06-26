@@ -49,6 +49,9 @@ const headCells = [
     label: "Người chỉnh sửa cuối",
   },
   {
+    label: "Checker",
+  },
+  {
     label: "Ngày nhập",
   },
 ];
@@ -174,6 +177,16 @@ export default function Statistic() {
             <option value="2">Đã Nhập</option>
             <option value="1">Chưa Nhập</option>
           </Form.Select>
+          <Form.Select
+            className="!w-80 mr-2"
+            onChange={(e) => handleSelectDropdown("status", e.target.value)}
+          >
+            <option defaultChecked={true} value="0">
+              Tất cả
+            </option>
+            <option value="2">Đã Check</option>
+            <option value="1">Chưa Check</option>
+          </Form.Select>
           <Button onClick={handleExport}>
             <ExportIcon className="mr-2 w-5 h-5 float-left" fill="white" />
             Xuất EXCEL
@@ -208,6 +221,7 @@ export default function Statistic() {
                     <td>{file.organizationName}</td>
                     <td>{file.numberOfPage}</td>
                     <td>{file.updateBy}</td>
+                    <td>Checker {index + 1}</td>
                     <td>{file.updateTime}</td>
                   </tr>
                 );

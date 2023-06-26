@@ -29,7 +29,7 @@ export default function ModalImport({ onHide, onConfirm, show }) {
     e.stopPropagation();
     const { files } = e.dataTransfer || e.target;
     if (!files[0].name.includes("zip")) {
-      createNotification("warning", "Vui lòng tải file Zip");
+      createNotification("warning", "Vui lòng chọn file Zip");
       return;
     }
     setFile(files[0]);

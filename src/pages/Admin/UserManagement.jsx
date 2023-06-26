@@ -14,8 +14,11 @@ export default function User() {
   });
   const [loading, setLoading] = useState(false);
   const [listUser, setListUser] = useState([]);
+  const [listDepartment, setListDepartment] = useState([]);
+  const [department, setDepartment] = useState("");
   useEffect(() => {
     fetchListUser();
+    fetchDepartment();
   }, []);
   const fetchListUser = (page = 1) => {
     setLoading(true);
@@ -23,6 +26,11 @@ export default function User() {
       setListUser(res.data.items);
       setLoading(false);
     });
+  };
+  const fetchDepartment = () => {
+    apiService
+      .getListDepartment()
+      .then((res) => setListDepartment(res.data.items));
   };
   const handleCreateUser = async () => {
     await apiService.createUser(account);
@@ -34,6 +42,11 @@ export default function User() {
       fullName: "",
       roles: "USER",
     });
+  };
+  const handleCreateDepartment = () => {
+    apiService
+      .createDepartment({ text: department })
+      .then(() => console.log("DONE"));
   };
   return (
     <>
@@ -132,58 +145,41 @@ export default function User() {
               <Form.Control
                 type="text"
                 placeholder="Nhập bộ phận"
-                value={account.fullName}
-                onChange={(e) =>
-                  setAccount({ ...account, ["fullName"]: e.target.value })
-                }
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
               />
             </div>
             <div>
-              <Button
-                onClick={handleCreateUser}
-                disabled={Object.values(account).some((value) => !value)}
-              >
+              <Button onClick={handleCreateDepartment} disabled={!department}>
                 Tạo Bộ Phận
               </Button>
             </div>
           </div>
-          <Table striped bordered hover size="sm">
-            <thead>
-              <tr>
-                <th>STT</th>
-                <th>Bộ Phận</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Đoàn Thanh Niên</td>
-                <td>
-                  <Button variant="danger" size="sm">
-                    Xóa
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Chủ Tịch</td>
-                <td>
-                  <Button variant="danger" size="sm">
-                    Xóa
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Công Chứng</td>
-                <td>
-                  <Button variant="danger" size="sm">
-                    Xóa
-                  </Button>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
+          <div className="overflow-y-auto h-[219px]">
+            <Table striped bordered hover size="sm">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Bộ Phận</th>
+                </tr>
+              </thead>
+              <tbody>
+                {listDepartment.map((department, index) => {
+                  return (
+                    <tr key={department.id}>
+                      <td>{index + 1}</td>
+                      <td>{department.departmentName}</td>
+                      <td>
+                        <Button variant="danger" size="sm">
+                          Xóa
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </div>
         </div>
       </div>
       <RingSpinnerOverlay loading={loading} size={40} />

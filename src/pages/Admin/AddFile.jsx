@@ -57,7 +57,7 @@ export default function EnhancedTable() {
     setData(newState);
   };
   const handleFetchListFile = (pageNum) => {
-    setLoading(false);
+    setLoading(true);
     apiService
       .getListFile({
         pageNum: searchParams.pageNum,
