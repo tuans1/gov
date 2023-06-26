@@ -14,6 +14,11 @@ export default function ModalAssignee({ onHide, onConfirm, show }) {
       setListUser(res.data.items);
     });
   }, []);
+  useEffect(() => {
+    if (!show) {
+      setAssigner({});
+    }
+  }, [show]);
   const handleConfirm = () => {
     onConfirm(assigner);
   };

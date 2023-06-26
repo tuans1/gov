@@ -2,7 +2,6 @@ import { Alert, Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import { useState, useEffect } from "react";
-import BaseModal from "../../components/BaseModal";
 import Pagination from "../../components/Pagination";
 import apiService from "../../api";
 import createNotification from "../../utils/notification";
@@ -58,7 +57,7 @@ export default function EnhancedTable() {
     setData(newState);
   };
   const handleFetchListFile = (pageNum) => {
-    setLoading(true);
+    setLoading(false);
     apiService
       .getListFile({
         pageNum: searchParams.pageNum,
@@ -104,7 +103,6 @@ export default function EnhancedTable() {
     ) {
       setShowModalAssign(false);
       setLoading(true);
-      return;
       await apiService
         .assignUser({ fileId: checkedList, userId: assignee.id })
         .then((res) => {
