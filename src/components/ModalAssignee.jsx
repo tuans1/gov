@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import BaseModal from "./BaseModal";
 import apiService from "../api";
+import { Form } from "react-bootstrap";
 
 export default function ModalAssignee({ onHide, onConfirm, show }) {
   const [assigner, setAssigner] = useState({});
+  const [checker, setChecker] = useState({});
   const [listUser, setListUser] = useState([
     { fullName: "tuan", id: 1 },
     { fullName: "xxx", id: 2 },
@@ -19,32 +21,49 @@ export default function ModalAssignee({ onHide, onConfirm, show }) {
       setAssigner({});
     }
   }, [show]);
-  const handleConfirm = () => {
-    onConfirm(assigner);
+  const handleSelectUser = (e) => {
+    const user = listUser.find((us) => us.id.toString() === e.target.value);
+    setAssigner(user);
   };
+  const handleSelectChecker = (e) => {
+    const user = listUser.find((us) => us.id.toString() === e.target.value);
+    setChecker(user);
+  };
+  const handleConfirm = () => {
+    onConfirm({ assigner, checker });
+  };
+
   return (
     <BaseModal
       size="sm"
-      title="Chọn Nhân Viên"
+      title="Chọn Người đảm nhiệm"
       show={show}
       onHide={onHide}
       onConfirm={handleConfirm}
-      disabled={assigner.id ? false : true}
+      disabled={assigner.id && checker.id ? false : true}
     >
-      {listUser.map((user) => {
-        return (
-          <div
-            key={user.id}
-            className={
-              "hover:bg-slate-200 py-2 cursor-pointer " +
-              (assigner.id === user.id && "  bg-slate-200")
-            }
-            onClick={() => setAssigner(user)}
-          >
-            {user.fullName}
-          </div>
-        );
-      })}
+      <div className="text-left mb-2">
+        <span>User</span>
+        <Form.Select onChange={handleSelectUser}>
+          <option selected={true} disabled>
+            <b>Chọn User</b>
+          </option>
+          {listUser.map((user) => {
+            return <option value={user.id}>{user.fullName}</option>;
+          })}
+        </Form.Select>
+      </div>
+      <div className="text-left">
+        <span>Checker</span>
+        <Form.Select onChange={handleSelectChecker}>
+          <option selected={true} disabled>
+            <b>Chọn người Check</b>
+          </option>
+          <option value="2">LAT</option>
+          <option value="3">NVT</option>
+          <option value="1">HDD</option>
+        </Form.Select>
+      </div>
     </BaseModal>
   );
 }

@@ -99,10 +99,13 @@ export default function EnhancedTable() {
     .map((file) => file.id);
   const handleConfirmAssign = async (assignee) => {
     if (
-      window.confirm(`Bạn có chắc giao việc cho ${assignee.fullName} ?`) == true
+      window.confirm(
+        `Bạn có chắc giao việc cho ${assignee.assigner.fullName} và ${assignee.checker.fullName} ?`
+      ) == true
     ) {
       setShowModalAssign(false);
       setLoading(true);
+      return;
       await apiService
         .assignUser({ fileId: checkedList, userId: assignee.id })
         .then((res) => {
