@@ -228,6 +228,7 @@ export default function EnhancedTable() {
               </th>
               <th>#</th>
               <th>Người Phụ Trách</th>
+              <th>Người Check</th>
               <th>Tên File</th>
               <th>Bộ Phận</th>
               <th>Ngày Thêm</th>
@@ -246,6 +247,7 @@ export default function EnhancedTable() {
                   </td>
                   <td>{index + 1}</td>
                   <td>{x.userName}</td>
+                  <td>Checker{index + 1}</td>
                   <td>{x.fileName}</td>
                   <td>{x.departmentName}</td>
                   <td>{x.createTime}</td>

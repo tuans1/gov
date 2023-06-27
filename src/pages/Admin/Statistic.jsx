@@ -1,4 +1,4 @@
-import { Button } from "react-bootstrap";
+import { Badge, Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -64,13 +64,14 @@ export default function Statistic() {
     userId: "",
   });
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [show, setShow] = useState(false);
+  const [expandReport, setExpandReport] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
   const [listUser, setListUser] = useState([]);
   const [listFile, setListFile] = useState([]);
   const [fileDetail, setFileDetail] = useState({});
   const [reportStatus, setReportStatus] = useState({});
   const [currentIndex, setCurrentIndex] = useState("");
+  const [fetchListAfterSaved, setFetchListAfterSaved] = useState(false);
   useEffect(() => {
     apiService.getListUser().then((res) => {
       setListUser(res.data.items);
@@ -83,8 +84,14 @@ export default function Statistic() {
   useEffect(() => {
     handleFetchList();
   }, [searchParams]);
+  const reportTotal = reportStatus?.reportVoList?.reduce((acc, cur) => {
+    return {
+      totalFile: acc.totalFile + cur.totalFile || 0,
+      totalInputtedFile: acc.totalInputtedFile + cur.inputtedFile || 0,
+    };
+  }, {});
   const handleEditDocument = (file, index) => {
-    setShow(true);
+    setShowModalEdit(true);
     setCurrentIndex(index);
     setFileDetail(file);
   };
@@ -110,19 +117,26 @@ export default function Statistic() {
     setSearchParams({ ...searchParams, pageNum: 0, [key]: value });
     setPagination({ ...pagination, page: 1 });
   };
+  const handleHideFormModal = () => {
+    setShowModalEdit(false);
+    if (fetchListAfterSaved) {
+      handleFetchList();
+      setFetchListAfterSaved(false);
+    }
+  };
   return (
     <>
       <div>
         <div className="mt-8 container">
           <Button
-            onClick={() => setOpen(!open)}
+            onClick={() => setExpandReport(!expandReport)}
             aria-controls="example-collapse-text"
-            aria-expanded={open}
+            aria-expanded={expandReport}
           >
             Tổng File đã hoàn thành
             <ArrowIcon className="mt-1 ml-2 w-4 h-4 float-right" fill="white" />
           </Button>
-          <Collapse in={open}>
+          <Collapse in={expandReport}>
             <div id="example-collapse-text">
               <Table striped bordered hover size="sm">
                 <thead>
@@ -144,7 +158,16 @@ export default function Statistic() {
                       );
                     })}
                   <tr>
-                    <td colSpan={3}>Tổng Đã Hoàn Thành : 200/600</td>
+                    <td colSpan={3}>
+                      Tổng Đã Hoàn Thành :{"  "}
+                      <Badge bg="success">
+                        <span className="text-sm">
+                          {reportTotal?.totalInputtedFile +
+                            " / " +
+                            reportTotal?.totalFile}
+                        </span>
+                      </Badge>
+                    </td>
                   </tr>
                 </tbody>
               </Table>
@@ -152,49 +175,59 @@ export default function Statistic() {
           </Collapse>
         </div>
         <div className="flex container my-2">
-          <Form.Select
-            className="!w-80 mr-2"
-            onChange={(e) => handleSelectDropdown("userId", e.target.value)}
-          >
-            <option defaultChecked={true} value="">
-              Tất cả
-            </option>
-            {listUser.map((user) => {
-              return (
-                <option value={user.id} key={user.id}>
-                  {user.fullName}
-                </option>
-              );
-            })}
-          </Form.Select>
-          <Form.Select
-            className="!w-80 mr-2"
-            onChange={(e) => handleSelectDropdown("status", e.target.value)}
-          >
-            <option defaultChecked={true} value="0">
-              Tất cả
-            </option>
-            <option value="2">Đã Nhập</option>
-            <option value="1">Chưa Nhập</option>
-          </Form.Select>
-          <Form.Select
-            className="!w-80 mr-2"
-            onChange={(e) => handleSelectDropdown("status", e.target.value)}
-          >
-            <option defaultChecked={true} value="0">
-              Tất cả
-            </option>
-            <option value="2">Đã Check</option>
-            <option value="1">Chưa Check</option>
-          </Form.Select>
-          <Button onClick={handleExport}>
-            <ExportIcon className="mr-2 w-5 h-5 float-left" fill="white" />
-            Xuất EXCEL
-          </Button>
+          <div>
+            <span>User</span>
+            <Form.Select
+              className="!w-80 mr-2"
+              onChange={(e) => handleSelectDropdown("userId", e.target.value)}
+            >
+              <option defaultChecked={true} value="">
+                Tất cả
+              </option>
+              {listUser.map((user) => {
+                return (
+                  <option value={user.id} key={user.id}>
+                    {user.fullName}
+                  </option>
+                );
+              })}
+            </Form.Select>
+          </div>
+          <div>
+            <span>Trạng thái Nhập</span>
+            <Form.Select
+              className="!w-80 mr-2"
+              onChange={(e) => handleSelectDropdown("status", e.target.value)}
+            >
+              <option defaultChecked={true} value="0">
+                Tất cả
+              </option>
+              <option value="2">Đã Nhập</option>
+              <option value="1">Chưa Nhập</option>
+            </Form.Select>
+          </div>
+          <div>
+            <span>Trạng thái Check</span>
+            <Form.Select
+              className="!w-80 mr-2"
+              onChange={(e) => handleSelectDropdown("status", e.target.value)}
+            >
+              <option defaultChecked={true} value="0">
+                Tất cả
+              </option>
+              <option value="2">Đã Check</option>
+              <option value="1">Chưa Check</option>
+            </Form.Select>
+          </div>
+          <div className="self-end">
+            <Button onClick={handleExport}>
+              <ExportIcon className="mr-2 w-5 h-5 float-left" fill="white" />
+              Xuất EXCEL
+            </Button>
+          </div>
         </div>
-        {JSON.stringify(pagination)}
         <div className="mx-2">
-          <Table striped bordered hover size="sm">
+          <Table bordered hover size="sm">
             <thead>
               <tr>
                 {headCells.map((x, i) => {
@@ -208,6 +241,7 @@ export default function Statistic() {
                   <tr
                     onDoubleClick={() => handleEditDocument(file, index)}
                     key={file.id}
+                    className="cursor-pointer"
                   >
                     <td>{index + 1}</td>
                     <td>{file.userName}</td>
@@ -232,9 +266,9 @@ export default function Statistic() {
         <Pagination onChangePage={handleChangePage} pagination={pagination} />
       </div>
       <Modal
-        show={show}
+        show={showModalEdit}
         fullscreen={true}
-        onHide={() => setShow(!show)}
+        onHide={handleHideFormModal}
         aria-labelledby="example-custom-modal-styling-title"
       >
         <Modal.Header closeButton>
@@ -247,6 +281,7 @@ export default function Statistic() {
             fileDetail={fileDetail}
             listFileProps={listFile}
             indexFileProps={currentIndex}
+            onSaveFileCallback={() => setFetchListAfterSaved(true)}
           />
         </Modal.Body>
       </Modal>

@@ -53,6 +53,9 @@ export default function ModalImport({ onHide, onConfirm, show }) {
       <div className="text-left mb-4" draggable>
         <span>Bộ Phận</span>
         <Form.Select>
+          <option selected="true" disabled="disabled">
+            <b>Chọn Bộ phận</b>
+          </option>
           <option value="2">Văn Phòng</option>
           <option value="3">Công Chứng</option>
           <option value="1">Chủ Tịch</option>
@@ -74,7 +77,7 @@ export default function ModalImport({ onHide, onConfirm, show }) {
           <>
             <p>{fileName}</p>
             <DeleteFileIcon
-              className="ml-0.5 cursor-pointer w-6 h-6"
+              className="ml-0.5 cursor-pointer w-6 h-6 m-auto"
               onClick={() => {
                 setFile("");
                 setFileName("");

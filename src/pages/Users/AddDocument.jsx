@@ -9,10 +9,12 @@ import SpeechRecognition, {
 import apiService from "../../api";
 import createNotification from "../../utils/notification";
 import { RingSpinnerOverlay } from "react-spinner-overlay";
+
 export default function AddDocument({
   fileDetail,
   indexFileProps,
   listFileProps,
+  onSaveFileCallback,
 }) {
   const [formObj, setFormObj] = useState({
     subject: {
@@ -110,6 +112,7 @@ export default function AddDocument({
     setDirtyForm(true);
   };
   const handleSaveDocument = () => {
+    onSaveFileCallback();
     if (!formObj.subject.value) {
       createNotification("warning", "Tiêu đề không được bỏ trống");
       return;
@@ -198,7 +201,7 @@ export default function AddDocument({
                       <Form.Label>
                         {formObj[key].label} {""}
                         {formObj[key].rules?.includes("required") && (
-                          <span class="text-red-500">*</span>
+                          <span className="text-red-500">*</span>
                         )}
                       </Form.Label>
                       <div>
@@ -243,4 +246,5 @@ export default function AddDocument({
 }
 AddDocument.defaultProps = {
   fileDetail: {},
+  onSaveFileCallback: () => {},
 };

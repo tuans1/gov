@@ -109,3 +109,10 @@ body {
 textarea {
   height: 100px;
 }
+
+.modal-backdrop{
+  z-index: 80 !important;
+}
+.modal {
+  z-index: 99 !important;
+}
