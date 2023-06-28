@@ -48,6 +48,20 @@ export default function User() {
       .createDepartment({ text: department })
       .then(() => console.log("DONE"));
   };
+  const handleDeleteDepartment = (department) => {
+    // apiService.deleteDepartment()
+    if (
+      window.confirm(
+        `Bạn có chắc chắn muốn xóa Bộ phận "${department.departmentName}"`
+      ) == true
+    ) {
+      setLoading(true);
+      apiService.deleteDepartment(department.id).then(() => {
+        createNotification("success", "Xóa bộ phận thành công");
+        fetchDepartment();
+      });
+    }
+  };
   return (
     <>
       <div className="p-4">
@@ -170,7 +184,11 @@ export default function User() {
                       <td>{index + 1}</td>
                       <td>{department.departmentName}</td>
                       <td>
-                        <Button variant="danger" size="sm">
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleDeleteDepartment(department)}
+                        >
                           Xóa
                         </Button>
                       </td>

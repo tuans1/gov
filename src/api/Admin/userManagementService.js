@@ -5,17 +5,13 @@ const USER_URIS = {
   CREATE_USER: `${PREFIX}/user`,
   LIST_DEPARTMENT: `${PREFIX}/department/get-all`,
   CREATE_DEPARTMENT: `${PREFIX}/department/save`,
+  DELETE_DEPARTMENT: `${PREFIX}/department/delete/`,
 };
 export default {
   createUser(data) {
     return axios.post(USER_URIS.CREATE_USER, data).then((res) => {
       return res;
     });
-  },
-  deleteUser() {
-    return axios
-      .get("https://www.boredapi.com/api/activity")
-      .then((res) => res);
   },
   getListUser(data) {
     return axios
@@ -29,5 +25,8 @@ export default {
     return axios.post(USER_URIS.CREATE_DEPARTMENT, data).then((res) => {
       return res;
     });
+  },
+  deleteDepartment(id) {
+    return axios.delete(USER_URIS.DELETE_DEPARTMENT + id).then((res) => res);
   },
 };

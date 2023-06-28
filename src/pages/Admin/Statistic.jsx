@@ -25,7 +25,7 @@ const headCells = [
     label: "Số và ký hiệu hồ sơ",
   },
   {
-    label: "Số của văn bản ( Dùng để tìm kiếm file )",
+    label: "Số của văn bản",
   },
   {
     label: "Tờ Số",
@@ -96,7 +96,7 @@ export default function Statistic() {
     setFileDetail(file);
   };
   const handleFetchList = () => {
-    setLoading(true);
+    setLoading(false);
     apiService.getListFile(searchParams).then((res) => {
       setListFile(res.data.items.files);
       setPagination({
@@ -174,6 +174,7 @@ export default function Statistic() {
             </div>
           </Collapse>
         </div>
+        <hr />
         <div className="flex container my-2">
           <div>
             <span>User</span>
@@ -226,12 +227,20 @@ export default function Statistic() {
             </Button>
           </div>
         </div>
-        <div className="mx-2">
+        <div className="mx-2 overflow-x-auto">
           <Table bordered hover size="sm">
             <thead>
               <tr>
                 {headCells.map((x, i) => {
-                  return <td key={i}>{x.label}</td>;
+                  return (
+                    <td
+                      key={i}
+                      className="font-bold"
+                      style={{ color: "#332f2e" }}
+                    >
+                      {x.label}
+                    </td>
+                  );
                 })}
               </tr>
             </thead>
@@ -244,19 +253,19 @@ export default function Statistic() {
                     className="cursor-pointer"
                   >
                     <td>{index + 1}</td>
-                    <td>{file.userName}</td>
-                    <td>{file.subject}</td>
-                    <td>{file.profileNo}</td>
-                    <td>{file.numOfText}</td>
-                    <td>{file.seq}</td>
-                    <td>{file.folio}</td>
-                    <td>{file.profileCode}</td>
-                    <td>{file.fileDate}</td>
-                    <td>{file.organizationName}</td>
-                    <td>{file.numberOfPage}</td>
-                    <td>{file.updateBy}</td>
-                    <td>Checker {index + 1}</td>
-                    <td>{file.updateTime}</td>
+                    <td className="min-w-[200px]">{file.userName}</td>
+                    <td className="min-w-[800px]">{file.subject}</td>
+                    <td className="min-w-[200px]">{file.profileNo}</td>
+                    <td className="min-w-[150px]">{file.numOfText}</td>
+                    <td className="min-w-[100px]">{file.seq}</td>
+                    <td className="min-w-[150px]">{file.folio}</td>
+                    <td className="min-w-[150px]">{file.profileCode}</td>
+                    <td className="min-w-[150px]">{file.fileDate}</td>
+                    <td className="min-w-[200px]">{file.organizationName}</td>
+                    <td className="min-w-[150px]">{file.numberOfPage}</td>
+                    <td className="min-w-[200px]">{file.updateBy}</td>
+                    <td className="min-w-[200px]">Checker {index + 1}</td>
+                    <td className="min-w-[150px]">{file.updateTime}</td>
                   </tr>
                 );
               })}
