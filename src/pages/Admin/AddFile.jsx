@@ -8,7 +8,33 @@ import createNotification from "../../utils/notification";
 import ModalAssignee from "../../components/ModalAssignee";
 import ModalImport from "../../components/ModalImport";
 import { RingSpinnerOverlay } from "react-spinner-overlay";
+import BaseTable from "../../components/BaseTable";
 
+const headCells = [
+  {
+    label: "STT",
+  },
+  {
+    label: "Người Phụ Trách",
+    key: "userName",
+  },
+  {
+    label: "Người Check",
+    key: "checker",
+  },
+  {
+    label: "Tên File",
+    key: "fileName",
+  },
+  {
+    label: "Bộ Phận",
+    key: "departmentName",
+  },
+  {
+    label: "Ngày Thêm",
+    key: "createTime",
+  },
+];
 export default function EnhancedTable() {
   const [searchParams, setSearchParams] = useState({
     pageSize: 5,
@@ -18,32 +44,6 @@ export default function EnhancedTable() {
   const [listFile, setListFile] = useState([]);
   const [checkAll, setCheckAll] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([
-    {
-      id: "512asfdasw512616",
-      user: "",
-      tenFile: "00.0092.HS.49.2019.pdf",
-      ngayThem: "15/10/2018",
-      boPhan: "Văn Thư",
-      isCheck: "",
-    },
-    {
-      id: "3215asd6236asd",
-      user: "natuan3",
-      tenFile: "00.0093.HS.49.2019.pdf",
-      ngayThem: "15/10/2018",
-      boPhan: "Văn Thư",
-      isCheck: "",
-    },
-    {
-      id: "65123adasdsad",
-      user: "",
-      tenFile: "00.0093.HS.22.2019.pdf",
-      ngayThem: "15/10/2018",
-      boPhan: "Công Chứng",
-      isCheck: "",
-    },
-  ]);
   const [showModalAssign, setShowModalAssign] = useState(false);
   const [showModalAddFile, setShowModalAddFile] = useState(false);
   const [pagination, setPagination] = useState({});
@@ -54,7 +54,7 @@ export default function EnhancedTable() {
     const newState = [...listFile];
     newState[index].isCheck = newState[index].isCheck ? false : true;
     newState.every((x) => x.isCheck) ? setCheckAll(true) : setCheckAll(false);
-    setData(newState);
+    setListFile(newState);
   };
   const handleFetchListFile = (pageNum) => {
     setLoading(true);
@@ -92,7 +92,7 @@ export default function EnhancedTable() {
         setCheckAll("checked");
       }
     });
-    setData(newState);
+    setListFile(newState);
   };
   const checkedList = listFile
     .filter((file) => file.isCheck)
@@ -160,7 +160,7 @@ export default function EnhancedTable() {
           >
             Thêm File
           </Button>
-          {data.some((x) => x.isCheck) && (
+          {listFile.some((x) => x.isCheck) && (
             <>
               <Button
                 onClick={() => {
@@ -260,6 +260,13 @@ export default function EnhancedTable() {
           </tbody>
         </Table>
         <Pagination onChangePage={handleChangePage} pagination={pagination} />
+        <BaseTable
+          data={listFile}
+          header={headCells}
+          onCheckAll={handleCheckedAll}
+          onChecked={handleChecked}
+          showCheckbox={true}
+        />
       </div>
       <ModalAssignee
         show={showModalAssign}

@@ -34,3 +34,29 @@ const headCells = [
       label: "Ngày thêm",
     },
   ];
+
+
+  AddFile =     {
+      id: "512asfdasw512616",
+      user: "",
+      tenFile: "00.0092.HS.49.2019.pdf",
+      ngayThem: "15/10/2018",
+      boPhan: "Văn Thư",
+      isCheck: "",
+    },
+    {
+      id: "3215asd6236asd",
+      user: "natuan3",
+      tenFile: "00.0093.HS.49.2019.pdf",
+      ngayThem: "15/10/2018",
+      boPhan: "Văn Thư",
+      isCheck: "",
+    },
+    {
+      id: "65123adasdsad",
+      user: "",
+      tenFile: "00.0093.HS.22.2019.pdf",
+      ngayThem: "15/10/2018",
+      boPhan: "Công Chứng",
+      isCheck: "",
+    },

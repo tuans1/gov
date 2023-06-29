@@ -1,8 +1,6 @@
-import logo from "../assets/images/twitter-logo.png";
-import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
+import logo from "../assets/images/flag.png";
+import { Link, useLocation } from "react-router-dom";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
@@ -11,17 +9,19 @@ import { useEffect } from "react";
 
 export default function MenuNav() {
   const navigate = useNavigate("");
+  const pathname = useLocation().pathname;
+  const isLogin = Boolean(localStorage.getItem("isLogin"));
   useEffect(() => {
-    if (localStorage.getItem("isLogin") !== "true") {
+    if (!isLogin) {
       navigate("/dang-nhap");
     }
   }, []);
   const ADMIN_MENUS = [
-    { text: "Danh Sách File", url: "/danh-sach-file" },
+    { text: "Danh Sách File", url: "/" },
     { text: "Thống Kê", url: "/thong-ke" },
     { text: "Quản Trị Nhân Viên", url: "/nhan-vien" },
   ];
-  const USER_MENUS = [{ text: "Danh Sách Nhập", url: "/" }];
+  const USER_MENUS = [{ text: "Danh Sách Nhập", url: "/danh-sach-file" }];
   const CURRENT_ROLE = localStorage.getItem("roles");
   const ROLE_MENU =
     CURRENT_ROLE === "ADMIN"
@@ -33,7 +33,15 @@ export default function MenuNav() {
     ROLE_MENU &&
     ROLE_MENU.map((item) => {
       return (
-        <Link key={item.url} to={item.url} className="nav-link">
+        <Link
+          key={item.url}
+          to={item.url}
+          className={
+            pathname === item.url
+              ? "nav-link !text-blue-600 !font-bold !underline"
+              : "nav-link"
+          }
+        >
           {item.text}
         </Link>
       );
@@ -46,7 +54,7 @@ export default function MenuNav() {
     <>
       <Navbar bg="light" expand="lg">
         <Container fluid>
-          <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+          {isLogin && <img src={logo} alt="" width={50} className="mr-10" />}
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
@@ -74,18 +82,6 @@ export default function MenuNav() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      {/* <Link to="/" className="nav-link">
-        <Button>Trang Chủ</Button>
-      </Link>
-      <Link to="/" className="nav-link">
-        <Button>Thống Kê</Button>
-      </Link>
-      <Link to="/lich-su" className="nav-link">
-        <Button>Lịch Sử</Button>
-      </Link>
-      <Link to="/nhap-ho-so" className="nav-link">
-        <Button>Nhập Hồ sơ</Button>
-      </Link> */}
     </>
   );
 }

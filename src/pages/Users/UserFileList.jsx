@@ -5,42 +5,54 @@ import Pagination from "../../components/Pagination";
 import Alert from "react-bootstrap/Alert";
 import apiService from "../../api";
 import { RingSpinnerOverlay } from "react-spinner-overlay";
+import BaseTable from "../../components/BaseTable";
 const headCells = [
   {
     label: "STT",
   },
   {
     label: "Tên File",
+    key: "fileName",
   },
   {
     label: "Tiêu đề VB",
+    key: "subject",
   },
   {
     label: "Số và ký hiệu hồ sơ",
+    key: "profileNo",
   },
   {
     label: "Số của VB ( Dùng để tìm kiếm file )",
+    key: "numOfText",
   },
   {
     label: "Tờ Số",
+    key: "folio",
   },
   {
     label: "Mã hồ sơ",
+    key: "profileCode",
   },
   {
     label: "STT VB trong hồ sơ trong hồ sơ",
+    key: "seq",
   },
   {
     label: "Ngày tháng năm VB",
+    key: "fileDate",
   },
   {
     label: "Tên cơ quan tổ chức ban hành VB",
+    key: "organizationName",
   },
   {
     label: "Số lượng trang của VB",
+    key: "numberOfPage",
   },
   {
     label: "Ngày nhập",
+    key: "updateTime",
   },
 ];
 export default function UserFileList() {
@@ -226,6 +238,11 @@ export default function UserFileList() {
             })}
           </tbody>
         </Table>
+        {/* <BaseTable
+          data={listFile}
+          header={headCells}
+          handleDbClick={handleRedirectToForm}
+        /> */}
       </div>
       <Pagination onChangePage={handleChangePage} pagination={pagination} />
       <RingSpinnerOverlay loading={loading} size={40} />

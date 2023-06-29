@@ -9,18 +9,56 @@ import UserManagement from "./pages/Admin/UserManagement";
 import UserFileList from "./pages/Users/UserFileList";
 import Login from "./pages/Users/Login";
 import { NotificationContainer } from "react-notifications";
+import ProtectedRoute from "./components/ProtectedRoute";
 export default function App() {
+  const ROLE_USER = "USER";
+  const adminRoute = [
+    {
+      path: "/nhap-ho-so",
+      element: <AddDocument />,
+      role: ROLE_USER,
+    },
+    {
+      path: "/danh-sach-file",
+      element: <UserFileList />,
+      role: ROLE_USER,
+    },
+    {
+      path: "/thong-ke",
+      element: <Statistic />,
+    },
+    {
+      path: "/nhan-vien",
+      element: <UserManagement />,
+    },
+    {
+      path: "/",
+      element: <AddFile />,
+    },
+  ];
   return (
     <>
       <Box height={"calc(100vh - 100.5px)"}>
         <Navbar />
         <Routes>
-          <Route path="/" element={<UserFileList />} />
-          <Route path="/danh-sach-file" element={<AddFile />} />
-          <Route path="/nhap-ho-so" element={<AddDocument />} />
-          <Route path="/thong-ke" element={<Statistic />} />
           <Route path="/dang-nhap" element={<Login />} />
-          <Route path="/nhan-vien" element={<UserManagement />} />
+          {adminRoute.map((route) => {
+            return (
+              <Route
+                path={route.path}
+                key={route.path}
+                element={
+                  <ProtectedRoute
+                    path={route.path}
+                    role={route.role || "ADMIN"}
+                  >
+                    {route.element}
+                  </ProtectedRoute>
+                }
+              />
+            );
+          })}
+          <Route path="*" element={<p>TRANG KHÔNG TỒN TẠI</p>} />
         </Routes>
       </Box>
       <NotificationContainer />
