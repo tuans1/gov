@@ -6,9 +6,10 @@ import { ReactComponent as DeleteFileIcon } from "../assets/icons/delete_file_ic
 import { Button } from "react-bootstrap";
 import createNotification from "../utils/notification";
 
-export default function ModalImport({ onHide, onConfirm, show }) {
+export default function ModalImport({ onHide, onConfirm, show, department }) {
   const [file, setFile] = useState();
   const [fileName, setFileName] = useState("");
+  const [departmentId, setDepartmentId] = useState("");
   const inputFileRef = useRef(null);
   useEffect(() => {
     if (!show) {
@@ -17,7 +18,7 @@ export default function ModalImport({ onHide, onConfirm, show }) {
     }
   }, [show]);
   const handleConfirm = () => {
-    onConfirm(file);
+    onConfirm({ file, departmentId });
   };
 
   const handleDragOver = (e) => {
@@ -41,6 +42,7 @@ export default function ModalImport({ onHide, onConfirm, show }) {
   const handleChooseFile = () => {
     inputFileRef.current.click();
   };
+  console.log(department);
   return (
     <BaseModal
       size="sm"
@@ -52,13 +54,18 @@ export default function ModalImport({ onHide, onConfirm, show }) {
     >
       <div className="text-left mb-4" draggable>
         <span>Bộ Phận</span>
-        <Form.Select>
-          <option selected="true" disabled="disabled">
-            <b>Chọn Bộ phận</b>
+        <Form.Select onChange={(e) => setDepartmentId(e.target.value)}>
+          <option value="" defaultChecked="">
+            Tất cả
           </option>
-          <option value="2">Văn Phòng</option>
-          <option value="3">Công Chứng</option>
-          <option value="1">Chủ Tịch</option>
+          {department &&
+            department.map((dep) => {
+              return (
+                <option value={dep.id} key={dep.id}>
+                  {dep.departmentName}
+                </option>
+              );
+            })}
         </Form.Select>
       </div>
       <div

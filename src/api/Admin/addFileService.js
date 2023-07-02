@@ -22,7 +22,7 @@ export default {
     });
   },
   deleteFile(data) {
-    return axios.delete(URIS.DELETE_FILE, data).then((res) => {
+    return axios.post(URIS.DELETE_FILE, data).then((res) => {
       return res;
     });
   },

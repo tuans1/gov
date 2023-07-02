@@ -27,10 +27,11 @@ export default function User() {
       setLoading(false);
     });
   };
-  const fetchDepartment = () => {
-    apiService
-      .getListDepartment()
-      .then((res) => setListDepartment(res.data.items));
+  const fetchDepartment = async () => {
+    await apiService.getListDepartment().then((res) => {
+      setListDepartment(res.data.items);
+    });
+    setLoading(false);
   };
   const handleCreateUser = async () => {
     await apiService.createUser(account);
@@ -118,7 +119,7 @@ export default function User() {
             Tạo Nhân viên
           </Button>
         </div>
-        <div className="h-[450px] overflow-auto ">
+        <div className="h-[400px] overflow-auto ">
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
@@ -138,7 +139,7 @@ export default function User() {
                     <td>{user.fullName}</td>
                     <td>{user.username}</td>
                     <td>{user.password}</td>
-                    <td>{index % 2 == 0 ? "User" : "Checker"}</td>
+                    <td>{user.roles}</td>
                     <td>{formatDateTime(user.createTime)}</td>
                     <td>
                       <Button variant="danger" size="sm">
@@ -169,7 +170,7 @@ export default function User() {
               </Button>
             </div>
           </div>
-          <div className="overflow-y-auto h-[219px]">
+          <div className="overflow-y-auto h-[269px]">
             <Table striped bordered hover size="sm">
               <thead>
                 <tr>

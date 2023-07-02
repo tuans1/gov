@@ -39,7 +39,8 @@ export default function EnhancedTable() {
   const [searchParams, setSearchParams] = useState({
     pageSize: 5,
     pageNum: 0,
-    assignedStatus: "0",
+    assigned: "0",
+    departmentId: "",
   });
   const [listFile, setListFile] = useState([]);
   const [checkAll, setCheckAll] = useState(false);
@@ -47,6 +48,13 @@ export default function EnhancedTable() {
   const [showModalAssign, setShowModalAssign] = useState(false);
   const [showModalAddFile, setShowModalAddFile] = useState(false);
   const [pagination, setPagination] = useState({});
+  const [department, setDepartment] = useState([]);
+  useEffect(() => {
+    apiService.getListDepartment().then((res) => {
+      setDepartment(res.data.items);
+    });
+  }, []);
+
   useEffect(() => {
     handleFetchListFile();
   }, [searchParams]);
@@ -62,7 +70,8 @@ export default function EnhancedTable() {
       .getListFile({
         pageNum: searchParams.pageNum,
         pageSize: searchParams.pageSize,
-        assignedStatus: searchParams.assignedStatus,
+        assigned: searchParams.assigned,
+        departmentId: searchParams.departmentId,
       })
       .then((res) => {
         const convertedList = res.data.items.files.map((file) => {
@@ -105,9 +114,12 @@ export default function EnhancedTable() {
     ) {
       setShowModalAssign(false);
       setLoading(true);
-      return;
       await apiService
-        .assignUser({ fileId: checkedList, userId: assignee.id })
+        .assignUser({
+          fileId: checkedList,
+          userId: assignee.id,
+          checkerId: assignee.checker,
+        })
         .then((res) => {
           createNotification(
             "success",
@@ -131,21 +143,30 @@ export default function EnhancedTable() {
   };
   const handleDeleteFile = () => {
     if (window.confirm(`Bạn có chắc chắn muốn xóa File đã chọn?`) == true) {
-      apiService.deleteFile({ fileId: checkedList }).then(() => {
-        createNotification("success", "Xóa File thành công");
-        handleFetchListFile();
-      });
+      setLoading(true);
+      apiService
+        .deleteFile({ fileId: checkedList })
+        .then(() => {
+          createNotification("success", "Xóa File thành công");
+          handleFetchListFile();
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
     }
   };
   const handleChangePage = async (pageNum) => {
     setSearchParams({ ...searchParams, pageNum });
   };
-  const handleImport = (file) => {
+  const handleImport = ({ file, departmentId }) => {
     const formData = new FormData();
     formData.append("uploadFiles", file);
+    formData.append("departmentId", departmentId);
     apiService.importFile(formData);
   };
   const handleSelectDropdown = (key, value) => {
+    console.log(key, value);
     setPagination({ ...pagination, page: 1 });
     setSearchParams({ ...searchParams, pageNum: 0, [key]: value });
   };
@@ -191,9 +212,7 @@ export default function EnhancedTable() {
             <span className="!text-left">Trạng thái File</span>
             <Form.Select
               className="!w-80"
-              onChange={(e) =>
-                handleSelectDropdown("assignedStatus", e.target.value)
-              }
+              onChange={(e) => handleSelectDropdown("assigned", e.target.value)}
             >
               <option value="0" defaultChecked="0">
                 Tất cả
@@ -207,15 +226,19 @@ export default function EnhancedTable() {
             <Form.Select
               className="!w-80"
               onChange={(e) =>
-                handleSelectDropdown("assignedStatus", e.target.value)
+                handleSelectDropdown("departmentId", e.target.value)
               }
             >
-              <option value="0" defaultChecked="0">
+              <option value="" defaultChecked="">
                 Tất cả
               </option>
-              <option value="2">Văn Phòng</option>
-              <option value="3">Công Chứng</option>
-              <option value="1">Chủ Tịch</option>
+              {department.map((dep) => {
+                return (
+                  <option value={dep.id} key={dep.id}>
+                    {dep.departmentName}
+                  </option>
+                );
+              })}
             </Form.Select>
           </div>
         </div>
@@ -250,7 +273,7 @@ export default function EnhancedTable() {
                   </td>
                   <td>{index + 1}</td>
                   <td>{x.userName}</td>
-                  <td>Checker{index + 1}</td>
+                  <td>{x.checkerName}</td>
                   <td>{x.fileName}</td>
                   <td>{x.departmentName}</td>
                   <td>{x.createTime}</td>
@@ -260,13 +283,13 @@ export default function EnhancedTable() {
           </tbody>
         </Table>
         <Pagination onChangePage={handleChangePage} pagination={pagination} />
-        <BaseTable
+        {/* <BaseTable
           data={listFile}
           header={headCells}
           onCheckAll={handleCheckedAll}
           onChecked={handleChecked}
           showCheckbox={true}
-        />
+        /> */}
       </div>
       <ModalAssignee
         show={showModalAssign}
@@ -277,6 +300,7 @@ export default function EnhancedTable() {
         show={showModalAddFile}
         onHide={() => setShowModalAddFile(false)}
         onConfirm={handleImport}
+        department={department}
       />
       <RingSpinnerOverlay loading={loading} size={40} />
     </>

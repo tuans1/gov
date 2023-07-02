@@ -62,6 +62,7 @@ export default function Statistic() {
     pageSize: 10,
     status: "0",
     userId: "",
+    checked: "",
   });
   const [loading, setLoading] = useState(false);
   const [expandReport, setExpandReport] = useState(false);
@@ -211,9 +212,9 @@ export default function Statistic() {
             <span>Trạng thái Check</span>
             <Form.Select
               className="!w-80 mr-2"
-              onChange={(e) => handleSelectDropdown("status", e.target.value)}
+              onChange={(e) => handleSelectDropdown("checked", e.target.value)}
             >
-              <option defaultChecked={true} value="0">
+              <option defaultChecked={true} value="">
                 Tất cả
               </option>
               <option value="2">Đã Check</option>
@@ -264,7 +265,7 @@ export default function Statistic() {
                     <td className="min-w-[200px]">{file.organizationName}</td>
                     <td className="min-w-[150px]">{file.numberOfPage}</td>
                     <td className="min-w-[200px]">{file.updateBy}</td>
-                    <td className="min-w-[200px]">Checker {index + 1}</td>
+                    <td className="min-w-[200px]">{file.checkerName}</td>
                     <td className="min-w-[150px]">{file.updateTime}</td>
                   </tr>
                 );
