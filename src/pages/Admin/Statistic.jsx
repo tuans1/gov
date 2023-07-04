@@ -59,7 +59,7 @@ export default function Statistic() {
   const [pagination, setPagination] = useState({});
   const [searchParams, setSearchParams] = useState({
     pageNum: 0,
-    pageSize: 10,
+    pageSize: 20,
     status: "0",
     userId: "",
     checked: "",

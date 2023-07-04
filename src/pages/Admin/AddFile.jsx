@@ -117,13 +117,13 @@ export default function EnhancedTable() {
       await apiService
         .assignUser({
           fileId: checkedList,
-          userId: assignee.id,
-          checkerId: assignee.checker,
+          userId: assignee.assigner.id,
+          checkerId: assignee.checker.id,
         })
         .then((res) => {
           createNotification(
             "success",
-            "Giao việc thành công cho " + assignee.fullName
+            `Giao việc thành công cho ${assignee.assigner.fullName} và ${assignee.checker.fullName}`
           );
           handleFetchListFile();
         })

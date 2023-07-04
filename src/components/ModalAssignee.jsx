@@ -11,9 +11,22 @@ export default function ModalAssignee({ onHide, onConfirm, show }) {
     { fullName: "xxx", id: 2 },
     { fullName: "john", id: 3 },
   ]);
+  const [listChecker, setListChecker] = useState([]);
   useEffect(() => {
     apiService.getListUser().then((res) => {
-      setListUser(res.data.items);
+      const users = [];
+      const checkers = [];
+      res.data.items.forEach((user) => {
+        if (user.roles === "CHECKER") {
+          checkers.push(user);
+        }
+        if (user.roles === "USER") {
+          users.push(user);
+        }
+      });
+      setListChecker(checkers);
+      setListUser(users);
+      console.log(checkers);
     });
   }, []);
   useEffect(() => {
@@ -26,8 +39,10 @@ export default function ModalAssignee({ onHide, onConfirm, show }) {
     setAssigner(user);
   };
   const handleSelectChecker = (e) => {
-    const user = listUser.find((us) => us.id.toString() === e.target.value);
-    setChecker(user);
+    const checker = listChecker.find(
+      (us) => us.id.toString() === e.target.value
+    );
+    setChecker(checker);
   };
   const handleConfirm = () => {
     onConfirm({ assigner, checker });
@@ -59,9 +74,9 @@ export default function ModalAssignee({ onHide, onConfirm, show }) {
           <option selected={true} disabled>
             <b>Chọn người Check</b>
           </option>
-          <option value="2">LAT</option>
-          <option value="3">NVT</option>
-          <option value="1">HDD</option>
+          {listChecker.map((checker) => {
+            return <option value={checker.id}>{checker.fullName}</option>;
+          })}
         </Form.Select>
       </div>
     </BaseModal>
