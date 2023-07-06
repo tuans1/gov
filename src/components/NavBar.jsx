@@ -6,11 +6,12 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-
+import { useCookies } from "react-cookie";
 export default function MenuNav() {
   const navigate = useNavigate("");
   const pathname = useLocation().pathname;
   const isLogin = Boolean(localStorage.getItem("isLogin"));
+  const [, , removeCookie] = useCookies(["token_login"]);
   useEffect(() => {
     if (!isLogin) {
       navigate("/dang-nhap");
@@ -48,6 +49,7 @@ export default function MenuNav() {
     });
   const handleLogOut = () => {
     localStorage.clear();
+    removeCookie("token_login");
     navigate("/dang-nhap");
   };
   return (

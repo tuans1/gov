@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import apiService from "../../api/index";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 export default function Login() {
   const [account, setAccount] = useState({
     username: "",
     password: "",
   });
+  const [, setCookie] = useCookies(["token_login"]);
   const navigate = useNavigate();
   useEffect(() => {
     if (localStorage.getItem("isLogin") === "true") {
@@ -29,6 +31,9 @@ export default function Login() {
         localStorage.setItem("roles", res.data.items.roles);
         localStorage.setItem("isLogin", "true");
         localStorage.setItem("userId", res.data.items.user_id);
+        setCookie("token_login", res.data.items.token_login, {
+          maxAge: 259200,
+        });
         if (res.data.items.roles === "ADMIN") {
           navigate("/danh-sach-file");
         } else {
