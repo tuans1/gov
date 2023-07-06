@@ -26,7 +26,6 @@ export default function ModalAssignee({ onHide, onConfirm, show }) {
       });
       setListChecker(checkers);
       setListUser(users);
-      console.log(checkers);
     });
   }, []);
   useEffect(() => {

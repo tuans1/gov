@@ -73,6 +73,7 @@ export default function AddDocument({
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate("");
+  const isRoleChecker = localStorage.getItem("roles") === "CHECKER";
   useEffect(() => {
     if (speechField) {
       const clone = structuredClone(formObj);
@@ -130,6 +131,13 @@ export default function AddDocument({
         setLoading(false);
       });
   };
+  const handleCheckDocument = () => {
+    apiService.confirmChecked([listFile[currentIndex].id]).then((res) => {
+      createNotification("success", "Lưu File thành công");
+      setDirtyForm(false);
+      setLoading(false);
+    });
+  };
   const handleNextFile = () => {
     if (currentIndex + 1 === listFile.length) {
       createNotification(
@@ -179,6 +187,14 @@ export default function AddDocument({
               onClick={handleSaveDocument}
             >
               Lưu File
+            </Button>
+            <Button
+              variant="success"
+              size="sm"
+              className="mb-4"
+              onClick={handleCheckDocument}
+            >
+              Check File
             </Button>
             <Button
               variant="warning"

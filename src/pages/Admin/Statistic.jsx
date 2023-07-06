@@ -60,14 +60,16 @@ export default function Statistic() {
   const [searchParams, setSearchParams] = useState({
     pageNum: 0,
     pageSize: 20,
-    status: "0",
+    inputStatus: "0",
     userId: "",
     checked: "",
+    checkerId: "",
   });
   const [loading, setLoading] = useState(false);
   const [expandReport, setExpandReport] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [listUser, setListUser] = useState([]);
+  const [listChecker, setListChecker] = useState([]);
   const [listFile, setListFile] = useState([]);
   const [fileDetail, setFileDetail] = useState({});
   const [reportStatus, setReportStatus] = useState({});
@@ -75,7 +77,18 @@ export default function Statistic() {
   const [fetchListAfterSaved, setFetchListAfterSaved] = useState(false);
   useEffect(() => {
     apiService.getListUser().then((res) => {
-      setListUser(res.data.items);
+      const users = [];
+      const checkers = [];
+      res.data.items.forEach((user) => {
+        if (user.roles === "CHECKER") {
+          checkers.push(user);
+        }
+        if (user.roles === "USER") {
+          users.push(user);
+        }
+      });
+      setListChecker(checkers);
+      setListUser(users);
     });
     apiService.reportStatus().then((res) => {
       const { totalInputted, totalFile, reportVoList } = res.data.items;
@@ -180,7 +193,7 @@ export default function Statistic() {
           <div>
             <span>User</span>
             <Form.Select
-              className="!w-80 mr-2"
+              className="!w-40 mr-2"
               onChange={(e) => handleSelectDropdown("userId", e.target.value)}
             >
               <option defaultChecked={true} value="">
@@ -196,10 +209,32 @@ export default function Statistic() {
             </Form.Select>
           </div>
           <div>
+            <span>Checker</span>
+            <Form.Select
+              className="!w-40 mr-2"
+              onChange={(e) =>
+                handleSelectDropdown("checkerId", e.target.value)
+              }
+            >
+              <option defaultChecked={true} value="">
+                Tất cả
+              </option>
+              {listChecker.map((checker) => {
+                return (
+                  <option value={checker.id} key={checker.id}>
+                    {checker.fullName}
+                  </option>
+                );
+              })}
+            </Form.Select>
+          </div>
+          <div>
             <span>Trạng thái Nhập</span>
             <Form.Select
-              className="!w-80 mr-2"
-              onChange={(e) => handleSelectDropdown("status", e.target.value)}
+              className="!w-40 mr-2"
+              onChange={(e) =>
+                handleSelectDropdown("inputStatus", e.target.value)
+              }
             >
               <option defaultChecked={true} value="0">
                 Tất cả
@@ -211,7 +246,7 @@ export default function Statistic() {
           <div>
             <span>Trạng thái Check</span>
             <Form.Select
-              className="!w-80 mr-2"
+              className="!w-40 mr-2"
               onChange={(e) => handleSelectDropdown("checked", e.target.value)}
             >
               <option defaultChecked={true} value="">

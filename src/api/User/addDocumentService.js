@@ -6,4 +6,9 @@ export default {
       .post(PREFIX + `/api/v1/file/${id}/save`, payload)
       .then((res) => res);
   },
+  confirmChecked(listId) {
+    return axios
+      .post(PREFIX + `/api/v1/file/confirm-checked`, listId)
+      .then((res) => res);
+  },
 };
