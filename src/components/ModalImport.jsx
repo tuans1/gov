@@ -42,7 +42,6 @@ export default function ModalImport({ onHide, onConfirm, show, department }) {
   const handleChooseFile = () => {
     inputFileRef.current.click();
   };
-  console.log(department);
   return (
     <BaseModal
       size="sm"

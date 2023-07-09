@@ -63,7 +63,7 @@ export default function ModalAssignee({ onHide, onConfirm, show }) {
             <b>Chọn User</b>
           </option>
           {listUser.map((user) => {
-            return <option value={user.id}>{user.fullName}</option>;
+            return <option value={user.id} key={user.id}>{user.fullName}</option>;
           })}
         </Form.Select>
       </div>
@@ -74,7 +74,7 @@ export default function ModalAssignee({ onHide, onConfirm, show }) {
             <b>Chọn người Check</b>
           </option>
           {listChecker.map((checker) => {
-            return <option value={checker.id}>{checker.fullName}</option>;
+            return <option value={checker.id} key={checker.id}>{checker.fullName}</option>;
           })}
         </Form.Select>
       </div>

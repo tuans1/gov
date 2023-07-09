@@ -8,6 +8,7 @@ import Statistic from "./pages/Admin/Statistic";
 import UserManagement from "./pages/Admin/UserManagement";
 import UserFileList from "./pages/Users/UserFileList";
 import Login from "./pages/Users/Login";
+import Checker from "./pages/Checker";
 import { NotificationContainer } from "react-notifications";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Cookies } from "react-cookie";
@@ -15,6 +16,7 @@ const cookies = new Cookies();
 export default function App() {
   const navigate = useNavigate("");
   const ROLE_USER = "USER";
+  const ROLE_CHECKER = "CHECKER";
   const adminRoute = [
     {
       path: "/nhap-ho-so",
@@ -35,11 +37,19 @@ export default function App() {
       element: <UserManagement />,
     },
     {
+      path: "/checker",
+      role: ROLE_CHECKER,
+      element: <Checker />,
+    },
+    {
       path: "/",
       element: <AddFile />,
     },
   ];
-  if (!cookies.get("token_login")) {
+  if (
+    !cookies.get("token_login") &&
+    localStorage.getItem("isLogin") === "true"
+  ) {
     localStorage.clear();
     navigate("/dang-nhap");
   }

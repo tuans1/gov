@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Form, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
-import Alert from "react-bootstrap/Alert";
 import apiService from "../../api";
 import { RingSpinnerOverlay } from "react-spinner-overlay";
 import BaseTable from "../../components/BaseTable";
+import AlertComponent from "../../components/Alert";
 const headCells = [
   {
     label: "STT",
@@ -186,9 +186,10 @@ export default function UserFileList() {
   return (
     <>
       <div className="container">
-        <Alert key={"success"} variant="success">
-          Tổng Đã Nhập : 200/600
-        </Alert>
+        <AlertComponent
+          content="Tổng Số File"
+          totalItems={pagination.totalItems}
+        />
         <p>Filter theo Status</p>
         <Form.Select
           className="!w-80"
@@ -204,7 +205,6 @@ export default function UserFileList() {
         </Form.Select>
       </div>
       <div className="mx-2">
-        <p className="text-gray-400">Chọn file bạn muốn nhập</p>
         <Table bordered hover size="sm">
           <thead>
             <tr>

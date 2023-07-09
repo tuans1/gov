@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body,
+      p {
+        padding: 0;
+        margin: 0;
+        color: #3c3c43;
+        font-family: "Open Sans", sans-serif;
+      }
+      .container {
+        width: 100%;
+        height: 100vh;
+        background-color: gainsboro;
+      }
+      .block {
+        width: calc(720px - 48px);
+        min-height: 22px;
+        background-color: white;
+        padding: 24px;
+      }
+      .block:not(:first-child) {
+        margin-top: 20px;
+      }
+      .block-header {
+        display: flex;
+        cursor: pointer;
+        justify-content: space-between;
+        align-items: center;
+        height: 22px;
+      }
+      .block-header_title {
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 120%;
+      }
+      .block-content {
+        color: #3c3c43;
+        margin-top: 18px;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 140%;
+        transition: height 0.2s, opacity 0.2s, margin 0.2s;
+        opacity: 1;
+        height: 50px;
+      }
+      .hidden {
+        height: 0;
+        opacity: 0;
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container"></main>
+    <script>
+      const BLOCK_LIST = [
+        {
+          id: 1,
+          title: "Block Title",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, tortor sed commodo rhoncus, nulla mauris euismod neque, ac lacinia nisl nibh in mi.",
+        },
+        {
+          id: 2,
+          title: "Block Title",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, tortor sed commodo rhoncus, nulla mauris euismod neque, ac lacinia nisl nibh in mi.",
+        },
+        {
+          id: 3,
+          title: "Block Title",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, tortor sed commodo rhoncus, nulla mauris euismod neque, ac lacinia nisl nibh in mi.",
+        },
+      ];
+      const closeBtn = `   <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M6.16158 16.3292C5.84517 16.6456 5.8301 17.2107 6.16911 17.5421C6.50058 17.8736 7.06559 17.8661 7.382 17.5497L11.9925 12.9316L16.6105 17.5497C16.9345 17.8736 17.4919 17.8736 17.8234 17.5421C18.1473 17.2031 18.1549 16.6532 17.8234 16.3292L13.2129 11.7112L17.8234 7.10072C18.1549 6.77678 18.1549 6.2193 17.8234 5.88783C17.4844 5.56389 16.9345 5.55636 16.6105 5.8803L11.9925 10.4983L7.382 5.8803C7.06559 5.56389 6.49305 5.54882 6.16911 5.88783C5.83764 6.2193 5.84517 6.78431 6.16158 7.10072L10.7796 11.7112L6.16158 16.3292Z"
+            fill="black"
+          />
+        </svg>`;
+      const plusBtn = `
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M6.54577 12.5625H11.1412V17.1579C11.1412 17.625 11.5254 18.0167 12 18.0167C12.4746 18.0167 12.8588 17.625 12.8588 17.1579V12.5625H17.4542C17.9213 12.5625 18.3131 12.1783 18.3131 11.7037C18.3131 11.2291 17.9213 10.8449 17.4542 10.8449H12.8588V6.24944C12.8588 5.78237 12.4746 5.39062 12 5.39062C11.5254 5.39062 11.1412 5.78237 11.1412 6.24944V10.8449H6.54577C6.07869 10.8449 5.68695 11.2291 5.68695 11.7037C5.68695 12.1783 6.07869 12.5625 6.54577 12.5625Z"
+            fill="black"
+          />
+        </svg>
+
+      `;
+
+      function renderBlock() {
+        const parent = document.querySelector("main");
+
+        if (!parent) return;
+
+        BLOCK_LIST.forEach((item) => {
+          parent.insertAdjacentHTML(
+            "beforeend",
+            `
+        <div class="block" id="${item.id}" onclick="handleCollapse(${item.id})">
+            <div class="block-header">
+                <p class="block-header_title">${item.title}</p>
+                <p class="block-header_button" ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M6.54577 12.5625H11.1412V17.1579C11.1412 17.625 11.5254 18.0167 12 18.0167C12.4746 18.0167 12.8588 17.625 12.8588 17.1579V12.5625H17.4542C17.9213 12.5625 18.3131 12.1783 18.3131 11.7037C18.3131 11.2291 17.9213 10.8449 17.4542 10.8449H12.8588V6.24944C12.8588 5.78237 12.4746 5.39062 12 5.39062C11.5254 5.39062 11.1412 5.78237 11.1412 6.24944V10.8449H6.54577C6.07869 10.8449 5.68695 11.2291 5.68695 11.7037C5.68695 12.1783 6.07869 12.5625 6.54577 12.5625Z"
+            fill="black"
+          />
+        </svg></p>
+            </div>
+            <p class="block-content hidden">
+                ${item.content}
+            </p>
+        </div>
+          `
+          );
+        });
+      }
+      renderBlock();
+      function handleCollapse(id) {
+        let currentBlock = document.getElementsByClassName("block");
+        for (let i = 0; i < currentBlock.length; i++) {
+          let currentBlockContent =
+            currentBlock[i].querySelector(".block-content");
+          if (
+            currentBlock[i].id === id.toString() &&
+            currentBlockContent.className.includes("hidden")
+          ) {
+            currentBlock[i].querySelector(".block-header_button").innerHTML =
+              closeBtn;
+            currentBlockContent.classList.remove("hidden");
+          } else {
+            currentBlock[i].querySelector(".block-header_button").innerHTML =
+              plusBtn;
+            currentBlockContent.classList.add("hidden");
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -84,6 +84,7 @@ export default function EnhancedTable() {
           totalPages: res.data.items.totalPages,
           totalItems: res.data.items.totalItems,
           page: res.data.items.currentPage + 1,
+          totalAssignedFiles: res.data.items.totalAssignedFiles,
         });
         setListFile(convertedList);
         setCheckAll("");
@@ -205,7 +206,8 @@ export default function EnhancedTable() {
           )}
         </div>
         <Alert key={"success"} variant="success">
-          Tổng file đã giao : 200/600
+          Tổng file đã giao :{" "}
+          {pagination.totalAssignedFiles + " / " + pagination.totalItems}
         </Alert>
         <div className="flex">
           <div>

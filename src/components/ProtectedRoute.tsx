@@ -17,5 +17,8 @@ export default function ProtectedRoute(props: Props) {
   if (currentUserRole === "ADMIN" && props.role !== currentUserRole) {
     return <Navigate to="/" replace />;
   }
+  if (currentUserRole === "CHECKER" && props.role !== currentUserRole) {
+    return <Navigate to="/checker" replace />;
+  }
   return <>{props.children}</>;
 }

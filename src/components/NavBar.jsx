@@ -17,19 +17,17 @@ export default function MenuNav() {
       navigate("/dang-nhap");
     }
   }, []);
-  const ADMIN_MENUS = [
-    { text: "Danh Sách File", url: "/" },
-    { text: "Thống Kê", url: "/thong-ke" },
-    { text: "Quản Trị Nhân Viên", url: "/nhan-vien" },
-  ];
-  const USER_MENUS = [{ text: "Danh Sách Nhập", url: "/danh-sach-file" }];
+  const MENUS = {
+    ADMIN: [
+      { text: "Danh Sách File", url: "/" },
+      { text: "Thống Kê", url: "/thong-ke" },
+      { text: "Quản Trị Nhân Viên", url: "/nhan-vien" },
+    ],
+    USER: [{ text: "Danh Sách Nhập", url: "/danh-sach-file" }],
+    CHECKER: [{ text: "Checker", url: "/checker" }],
+  };
   const CURRENT_ROLE = localStorage.getItem("roles");
-  const ROLE_MENU =
-    CURRENT_ROLE === "ADMIN"
-      ? ADMIN_MENUS
-      : CURRENT_ROLE === "USER"
-      ? USER_MENUS
-      : null;
+  const ROLE_MENU = MENUS[CURRENT_ROLE];
   const MENU =
     ROLE_MENU &&
     ROLE_MENU.map((item) => {
@@ -59,17 +57,15 @@ export default function MenuNav() {
           {isLogin && <img src={logo} alt="" width={50} className="mr-10" />}
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
-            <Nav
-              className="me-auto my-2 my-lg-0"
+            <div
+              className="me-auto my-2 my-lg-0 flex gap-4"
               style={{ maxHeight: "100px" }}
-              navbarScroll
+              
             >
               {MENU}
-            </Nav>
+            </div>
             <NavDropdown
-              title={
-                localStorage.getItem("roles") === "ADMIN" ? "ADMIN" : "USER"
-              }
+              title={localStorage.getItem("roles")}
               id="navbarScrollingDropdown"
             >
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>

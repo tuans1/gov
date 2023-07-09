@@ -132,11 +132,13 @@ export default function AddDocument({
       });
   };
   const handleCheckDocument = () => {
-    apiService.confirmChecked([listFile[currentIndex].id]).then((res) => {
-      createNotification("success", "Lưu File thành công");
-      setDirtyForm(false);
-      setLoading(false);
-    });
+    apiService
+      .confirmChecked({ fileId: [listFile[currentIndex].id] })
+      .then((res) => {
+        createNotification("success", "Check File thành công");
+        setDirtyForm(false);
+        setLoading(false);
+      });
   };
   const handleNextFile = () => {
     if (currentIndex + 1 === listFile.length) {
@@ -188,14 +190,16 @@ export default function AddDocument({
             >
               Lưu File
             </Button>
-            <Button
-              variant="success"
-              size="sm"
-              className="mb-4"
-              onClick={handleCheckDocument}
-            >
-              Check File
-            </Button>
+            {localStorage.getItem("roles") === "CHECKER" && (
+              <Button
+                variant="success"
+                size="sm"
+                className="ml-2 mb-4"
+                onClick={handleCheckDocument}
+              >
+                Check File
+              </Button>
+            )}
             <Button
               variant="warning"
               size="sm"
