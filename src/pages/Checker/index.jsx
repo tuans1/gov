@@ -4,6 +4,7 @@ import apiService from "../../api";
 import { Modal, Table, Form } from "react-bootstrap";
 import FormInput from "../Users/AddDocument";
 import Alert from "../../components/Alert";
+import { RingSpinnerOverlay } from "react-spinner-overlay";
 
 const headCells = [
   {
@@ -11,6 +12,12 @@ const headCells = [
   },
   {
     label: "Người Đảm Nhiệm",
+  },
+  {
+    label: "Người chỉnh sửa cuối",
+  },
+  {
+    label: "Checker",
   },
   {
     label: "Tiêu đề văn bản",
@@ -40,12 +47,6 @@ const headCells = [
     label: "Số lượng trang của văn bản",
   },
   {
-    label: "Người chỉnh sửa cuối",
-  },
-  {
-    label: "Checker",
-  },
-  {
     label: "Ngày nhập",
   },
 ];
@@ -70,7 +71,7 @@ export default function Checker() {
     handleFetchList();
   }, [searchParams]);
   const handleFetchList = () => {
-    setLoading(false);
+    setLoading(true);
     apiService.getListFile(searchParams).then((res) => {
       setListFile(res.data.items.files);
       setPagination({
@@ -146,6 +147,8 @@ export default function Checker() {
                   >
                     <td>{index + 1}</td>
                     <td className="min-w-[200px]">{file.userName}</td>
+                    <td className="min-w-[200px]">{file.updateBy}</td>
+                    <td className="min-w-[200px]">{file.checkerName}</td>
                     <td className="min-w-[800px]">{file.subject}</td>
                     <td className="min-w-[200px]">{file.profileNo}</td>
                     <td className="min-w-[150px]">{file.numOfText}</td>
@@ -155,8 +158,6 @@ export default function Checker() {
                     <td className="min-w-[150px]">{file.fileDate}</td>
                     <td className="min-w-[200px]">{file.organizationName}</td>
                     <td className="min-w-[150px]">{file.numberOfPage}</td>
-                    <td className="min-w-[200px]">{file.updateBy}</td>
-                    <td className="min-w-[200px]">{file.checkerName}</td>
                     <td className="min-w-[150px]">{file.updateTime}</td>
                   </tr>
                 );
@@ -186,6 +187,7 @@ export default function Checker() {
           />
         </Modal.Body>
       </Modal>
+      <RingSpinnerOverlay loading={loading} size={40} />
     </>
   );
 }

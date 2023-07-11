@@ -105,7 +105,7 @@ export default function User() {
             <Form.Select
               className="!w-28"
               onChange={(e) =>
-                setAccount({ ...account, ["role"]: e.target.value })
+                setAccount({ ...account, ["roles"]: e.target.value })
               }
             >
               <option value="USER">User</option>

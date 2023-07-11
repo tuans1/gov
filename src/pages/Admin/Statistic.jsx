@@ -19,6 +19,12 @@ const headCells = [
     label: "Người Đảm Nhiệm",
   },
   {
+    label: "Người chỉnh sửa cuối",
+  },
+  {
+    label: "Checker",
+  },
+  {
     label: "Tiêu đề văn bản",
   },
   {
@@ -44,12 +50,6 @@ const headCells = [
   },
   {
     label: "Số lượng trang của văn bản",
-  },
-  {
-    label: "Người chỉnh sửa cuối",
-  },
-  {
-    label: "Checker",
   },
   {
     label: "Ngày nhập",
@@ -290,6 +290,8 @@ export default function Statistic() {
                   >
                     <td>{index + 1}</td>
                     <td className="min-w-[200px]">{file.userName}</td>
+                    <td className="min-w-[200px]">{file.updateBy}</td>
+                    <td className="min-w-[200px]">{file.checkerName}</td>
                     <td className="min-w-[800px]">{file.subject}</td>
                     <td className="min-w-[200px]">{file.profileNo}</td>
                     <td className="min-w-[150px]">{file.numOfText}</td>
@@ -299,8 +301,7 @@ export default function Statistic() {
                     <td className="min-w-[150px]">{file.fileDate}</td>
                     <td className="min-w-[200px]">{file.organizationName}</td>
                     <td className="min-w-[150px]">{file.numberOfPage}</td>
-                    <td className="min-w-[200px]">{file.updateBy}</td>
-                    <td className="min-w-[200px]">{file.checkerName}</td>
+
                     <td className="min-w-[150px]">{file.updateTime}</td>
                   </tr>
                 );
